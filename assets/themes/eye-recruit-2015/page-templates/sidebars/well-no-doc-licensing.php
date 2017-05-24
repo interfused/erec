@@ -1,0 +1,6 @@
+<div class="well no_document">
+	<p><img src="<?php  echo get_stylesheet_directory_uri(); ?>/img/green_checklg.jpg"> <span>You haven’t saved any of your Licenses!</span></p>
+	<p>Licensure is a vital aspect to the profession and the mark of a professional.  It’s a standard recognized by employers and their clients, but governments and by the general public.  It is an assurance of skill, quality and / or aptitude.  While not every jurisdiction has difficult barriers to entry, many States have multiple types of licensing, based on levels of qualification and tenure.  Licensing and continuing education mandates is a trend that is almost certain to continue in the future.</p>
+	<p>Be proud of what you have obtained.  Get a quality scan of all of your licensing documents and present them for the potential Employer to see.  Many of our clients put not only their State Professional Licensing, but their Firearms Identification Card, concealed weapon permits, drivers license and other licenses that a potential employer would most likely request.  </p>
+	<p>What you post for review and mark as available is up to you.  It is our belief that whatever makes it easier for the Decision Maker, makes it easier for you.  That is the goal.</p>
+</div>

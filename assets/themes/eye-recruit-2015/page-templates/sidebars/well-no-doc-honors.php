@@ -1,0 +1,7 @@
+<div class="well no_document">
+	<p><img src="<?php  echo get_stylesheet_directory_uri(); ?>/img/green_checklg.jpg"> <span>You haven’t saved any of your Honors &amp; Awards!</span></p>
+	<p>Honors &amp; Awards tell a potential Employer a lot about you, not only as a candidate, but also as a potential member of the team.  In a competitive job market, especially when other applicants have similar academic or work histories, there are some significant things that can set you apart. </p>
+	<p>Managers, Human Resource professionals and Executives all have a habit of using the phrase: Past achievement usually predicts future performance.  They are the same group that also knows that high achievers and self-starters are the most motivated; and could be an asset to their company. </p>
+	<p>Honors, Awards and accomplishments are earned for exceeding average standards in academics, athletics, Military, Law Enforcement or in a work environment. Providing a digital history of your Honors & Awards quickly gains you positive attention and recognition as someone that exceeds expectations and averages.</p>
+	<p>Take as much time as we need to collect all of our Honors &amp; Awards, it will take time to get your hands on them.  If you need to come back to this step, it’s OK.  We highly suggest getting the best-looking documents you can and sometimes that requires you to scan documents and then upload them later.</p>
+</div>

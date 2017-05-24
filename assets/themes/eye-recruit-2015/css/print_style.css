@@ -1,0 +1,49 @@
+
+
+@page {
+    size: A4;
+    margin: 0.5cm;
+}
+
+@media print{
+
+	body {
+		font: 14pt "Open Sans",sans-serif;
+		line-height: 1.4;
+		-webkit-print-color-adjust: exact;
+	}
+	ul,ol,dl{ page-break-before: avoid } 
+	h1 {
+	font-size: 30pt;
+	}
+
+	h2 {
+	font-size: 26pt;
+	margin-top: 25px;
+	}
+
+	h3 {
+	font-size: 22pt;
+	margin-top: 25px;
+	}
+
+	h4 {
+	font-size: 18pt;
+	margin-top: 25px;
+	}
+
+	h5 {
+	font-size: 14pt;
+	margin-top: 25px;
+	}
+	.sprofile_header{background-color:#ffffff; }
+    header, footer, .sidebar,.profiletask_title span, .container-fluid > div > .col-lg-2.col-md-3{display: none;}
+    .container-fluid > div > div{width: 100%;}
+    a{display: none;}
+    /*.seekr_profile{min-width: 1000px}*/
+    .sprofile_content .row > div{padding: 0 15px}
+    .profiletask_title{padding-left: 0;margin: 30px 0 0px}
+    .sprofile_header .thumbnail{margin: 22px auto 10px}
+    .sprofile_header .sprofile_title h2{background: #ffffff;}
+    .candidatepro_title{margin-bottom: 15px;}
+}

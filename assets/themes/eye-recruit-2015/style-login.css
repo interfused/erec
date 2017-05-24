@@ -1,0 +1,95 @@
+@charset "UTF-8";
+/* CSS Document */
+
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i');
+
+@font-face {
+  font-family: 'SynchroLetPlain';
+  src: url('fonts/SynchroLetPlain.eot?#iefix') format('embedded-opentype'),  url('fonts/SynchroLetPlain.woff') format('woff'), url('fonts/SynchroLetPlain.ttf')  format('truetype'), url('fonts/SynchroLetPlain.svg#SynchroLetPlain') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+
+body.login {/*background:url(images/pixel-bg.png);*/ background: #000; color:#fff;position: relative;font-family: 'SynchroLetPlain';}
+body.login div#login {width: 464px; max-width: 100%;  position: relative;padding: 7% 0 0;}
+body.login div#login:after {content: 'Unauthorized use of this system is strictly prohibited by international law.  Unauthorized users should terminate access now or consider membership so we can give you a legal option for employment opportunities using your skills.  Persons using this system, without proper written authority of the Agency, are hereby notified, that all actions are subject to consequences.  We do not need Law Enforcement intervention or assistance to locate you regardless of country of origin or geographical location.  All parties, including any associates who assisted in the breach, will be hired to work behind a desk for a minimum of 40-hours per week, in an undisclosed location, in a nondescript office building, and more than likely, without a window.  You will be required to wear “business attire” and be monitored and recorded by authorized agency employees just like if you enter this site without authorization.';top: 100%;margin:250px -42% 0;text-align: center;text-transform: uppercase;line-height: 22px;font-size: 10px;display: block;}
+/*body.login div#login:after {content: 'Exit this page';position: absolute;top: 125%;text-transform: uppercase;color: #fff;border-radius: 20px;border: 1px solid #9d253f;left: 50%;padding: 6px 40px;font-size: 11px;margin-left: -78px;}*/
+body.login div#login h1 {position: relative;}
+body.login div#login h1:after {content: 'Restricted Access Terminal';text-transform: uppercase; color: #ae1915;font-size: 26px;font-family:'SynchroLetPlain';font-weight: 400;margin: 80px 0;display: block;}
+body.login div#login h1 a {
+	background-image:url(images/logo-icon.png);
+	width:300px; height:170px;
+	background-size:cover;
+	color:#900;
+	text-indent:-9999px;
+}
+body.login p.message{color:#000;display: none; font-family: "Open Sans",sans-serif;}
+body.login div#login_error {color:#f00; font-family: "Open Sans",sans-serif;}
+
+body.login div#login form#loginform {background: #000;border: 3px solid #8e120e;position: relative !important;padding-bottom: 14px;overflow: visible;position: relative;padding:12px 166px 12px 28px;}
+body.login div#login form#loginform:after {content: '';position: absolute;width: 106px;height: 142px;background:url(images/thumbsprint.png);right: 15px;top: 50%;margin-top: -71px;}
+body.login div#login form#loginform p label {color: #fff;text-transform: uppercase;}
+body.login div#login form#loginform input {font-size: 14px;margin:8px 0 14px; height: 28px; line-height: 22px; font-weight: 400; font-family: "Open Sans",sans-serif;}
+body.login div#login form#loginform input#user_pass {margin-bottom: 3px}
+body.login div#login form#loginform input#user_login {}
+body.login div#login form#loginform input#user_pass {}
+body.login div#login form#loginform p.forgetmenot {display: none;}
+body.login div#login form#loginform p.forgetmenot input#rememberme {}
+body.login div#login form#loginform p.submit {position: absolute;right: 0;margin: 10px 35px 0 10px;top: 100%;}
+body.login div#login form#loginform p.submit input#wp-submit {background: #000;color: #fff;border-radius: 20px;border: 3px solid #941310;box-shadow: none;text-transform: uppercase;font-size: 13px; line-height: 18px; padding: 2px 40px;height: auto;text-shadow: none;font-family: 'SynchroLetPlain';
+	-webkit-transition: all .3s ease;
+	   -moz-transition: all .3s ease;
+	    -ms-transition: all .3s ease;
+	     -o-transition: all .3s ease;
+	        transition: all .3s ease;
+}
+body.login div#login form#loginform p.submit input#wp-submit:hover {background: #941310;}
+body.login div#login p#nav {margin: 15px 0px 0px;padding-left:7px;font-size: 12px;}
+body.login div#login p#nav a {color:#900; text-transform: uppercase;}
+body.login div#login p#nav a:focus {outline: none;box-shadow: none;}
+body.login div#login p#backtoblog {display:none;}
+body.login div#login p#backtoblog a {color:#900;}
+body.login .loginexit_page{text-decoration: none; text-transform: uppercase;color: #fff;border-radius: 20px;border: 3px solid #941310;padding: 2px 24px;font-size: 11px;margin: 0;display: inline-block;
+	-webkit-transition: all .3s ease;
+	   -moz-transition: all .3s ease;
+	    -ms-transition: all .3s ease;
+	     -o-transition: all .3s ease;
+	        transition: all .3s ease;
+}
+body.login .loginexit_page:hover, body.login .loginexit_page:focus{color: #fff; background: #941310}
+body.login .text-center{text-align: center;margin: 22px 0 100px}
+
+body.login p#login_message_normal{background:#900; color:#fff; padding:1rem; margin-bottom:1rem;}
+
+
+
+@media(max-width: 1199px){
+	body.login div#login h1:after{margin: 50px 0}
+	body.login div#login:after{margin-top: 70px}
+	body.login .text-center{margin-bottom: 60px}
+}
+@media(max-width: 991px){
+	body.login div#login:after {margin-left: -20%;margin-right: -20%;}
+	/*body.login div#login:after {top: 132%;}*/
+	body.login div#login{padding-top: 14%}
+}
+@media(max-width: 767px){
+	body.login div#login{padding-top: 60px; width: 420px;}
+}
+@media(max-width: 640px){
+	body.login div#login:after {margin-left: 0;margin-right: 0;padding: 0 10px}
+}
+@media(max-width: 440px){
+	body.login div#login {margin: 0 15px;width: auto;padding-top: 30px;}
+	body.login div#login:after {margin-top: 40px;}
+	body.login div#login form#loginform {padding: 12px 20px;}
+	body.login div#login form#loginform:after {display: block;position: static;margin: 20px auto 3px}
+	body.login div#login h1:after {line-height: 28px;margin: 30px 0;}
+	body.login div#login form#loginform p.submit{margin-right: 0;}
+	body.login .text-center {margin-bottom: 30px;}
+	body.login div#login h1 a {color: #900;height: 126px;width: 220px;}
+}
+@media(max-width: 380px){
+	body.login div#login:after {top: 155%;}
+}

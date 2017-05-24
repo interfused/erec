@@ -1,0 +1,1849 @@
+<?php
+
+add_action( 'show_user_profile', 'eyerecruit_extra_profile_fields' );
+add_action( 'edit_user_profile', 'eyerecruit_extra_profile_fields' );
+
+function eyerecruit_extra_profile_fields( $user ) { 
+
+
+	//$value = get_cimyFieldValue($user->ID, 'FIELD_LICENSE_STATE');
+
+	//var_dump( $value );
+
+
+	$rfname = get_the_author_meta( 'rfname', $user->ID ); 
+	$rfemail = get_the_author_meta( 'rfemail', $user->ID ); ?>
+
+	<h3>Recommend Friends & Colleagues</h3>
+
+	<table id="userdetail_all_fields" class="form-table"> <?php
+
+	if ( !empty( $rfname ) ) {
+		
+		$count_rf =  count( $rfname );
+		$count = 1;
+
+		for ( $i=0; $i <= $count_rf; $i++ ) {  
+
+			if ( isset( $rfname[$i] ) ) {
+				$name = $rfname[$i];
+			}
+			else{
+				$name = '';
+			}
+
+			if ( isset( $rfemail[$i] ) ) {
+				$email = $rfemail[$i];
+			}
+			else{
+				$email = '';
+			}
+
+			?>
+			<thead id="userdetail_pr_<?php echo $count; ?>" class="edit-main-dv">
+				<tr>
+					<th><label for="name">Name</label></th>
+					<td>
+						<input id="rfname_<?php echo $count; ?>" class="regular-text code form-control" name="rfname[]" type="text" value="<?php echo $name; ?>" >
+					</td>
+				</tr>
+
+				<tr>
+					<th><label for="email">Email</label></th>
+					<td>
+						<input id="rfemail_<?php echo $count; ?>" class="regular-text code form-control" name="rfemail[]" type="text" value="<?php echo $email; ?>" >
+					</td>
+				</tr>
+
+				<?php 
+				if ( $count != 1) { ?>
+					<tr>
+						<th class="remove_btn">
+							<span class="remove_edu button-secondary" id="remove_edu_<?php echo $count; ?>" rel="<?php echo $count; ?>">remove</span>
+						</th>
+					</tr> <?php 
+				} ?>
+
+			</thead> <?php 
+			$count++;
+		} 
+	}
+	else{ 
+		$count_rf = 1;
+		?>
+		<thead id="userdetail_pr_1" class="edit-main-dv">
+			<tr>
+				<th><label for="name">Name</label></th>
+				<td>
+					<input id="rfname_1" class="regular-text code form-control" name="rfname[]" type="text">
+				</td>
+			</tr>
+
+			<tr>
+				<th><label for="email">Email</label></th>
+				<td>
+					<input id="rfemail_1" class="regular-text code form-control" name="rfemail[]" type="text">
+				</td>
+			</tr>
+		</thead> <?php
+	}
+	?>
+	</table>
+
+	<table>
+		<tr>
+			<th class="remove_btn">
+			
+				<button id="userdetail_add_more" count="<?php echo $count_rf; ?>" class="userdetail_add_more button-primary-toolset" type="button">Add More</button>
+			</th>
+		</tr>
+	</table>
+
+
+	<h3>List Languages and proficiency level:</h3>
+
+	<?php
+	 $rating_arr = array('Beginner', 'Intermediate', 'Expert', 'Competent', 'Advanced');
+	 $th_url = get_stylesheet_directory_uri().'/img/';
+	?>
+
+	<script type="text/javascript">
+		jQuery('.lang_rating').live('click', function() {
+			var rate = jQuery(this).attr('rat');
+			var lang = jQuery(this).attr('lang');
+			var no = jQuery(this).attr('no');
+			jQuery('input[name="'+lang+'"]').val(rate);
+
+
+			for (var i = 1; i <= no; i++) {
+				jQuery('img[rtno="'+lang+'_'+i+'"]').css('color', '#a12641');
+				jQuery('img[rtno="'+lang+'_'+i+'"]').attr('src', '<?php echo $th_url.star_r.png ?>');
+				jQuery('img[rtno="'+lang+'_'+i+'"]').removeClass('fa-star-o');
+			}
+
+			if ( no < 5 ) {
+				for (var i = parseInt(no)+1; i <= 5; i++) {
+					jQuery('img[rtno="'+lang+'_'+i+'"]').removeAttr('style');
+					jQuery('img[rtno="'+lang+'_'+i+'"]').addClass('fa-star-o');
+					jQuery('img[rtno="'+lang+'_'+i+'"]').removeClass('fa-star');
+				}
+			}
+
+		});
+	</script>
+
+	<table>
+		<tr>
+			<th>
+				<label><input id="mandarin" name="list_languages_mandarin" <?php if ( !empty( get_the_author_meta('list_languages_mandarin', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Mandarin"> Mandarin</label>
+				<h5>Rate Now</h5>
+				<?php
+					$mandarin_rating = get_the_author_meta('mandarin_rating', $user->ID);
+					$star = 'star_b.png'
+				?>
+				
+				<input type="text" name="mandarin_rating" value="<?php echo $mandarin_rating; ?>">
+				<img class="lang_rating" lang="mandarin_rating" no="1" rtno="mandarin_rating_1" rat="Beginner" src="<?php echo $th_url.$star; ?>">
+				<img class="lang_rating" lang="mandarin_rating" no="2" rtno="mandarin_rating_2" rat="Intermediate" src="<?php echo $th_url.$star; ?>">
+				<img class="lang_rating" lang="mandarin_rating" no="3" rtno="mandarin_rating_3" rat="Expert" src="<?php echo $th_url.$star; ?>">
+				<img class="lang_rating" lang="mandarin_rating" no="4" rtno="mandarin_rating_4" rat="Competent" src="<?php echo $th_url.$star; ?>">
+				<img class="lang_rating" lang="mandarin_rating" no="5" rtno="mandarin_rating_5" rat="Advanced" src="<?php echo $th_url.$star; ?>">
+				
+				<select name="mandarin_rating">
+					<option value="">none</option>
+					<?php
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $mandarin_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+
+
+			<th>
+				<label><input id="vietnamese" name="list_languages_vietnamese" <?php if ( !empty( get_the_author_meta('list_languages_vietnamese', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Vietnamese"> Vietnamese</label>
+				<h5>Rate Now</h5>
+				<select name="vietnamese_rating">
+					<option value="">none</option>
+					<?php
+					$vietnamese_rating = get_the_author_meta('vietnamese_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $vietnamese_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+
+			</th>
+		
+			<th>
+				<label><input id="english" name="list_languages_english" <?php if ( !empty( get_the_author_meta('list_languages_english', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="English"> English</label>
+				<h5>Rate Now</h5>
+				<select name="english_rating">
+					<option value="">none</option>
+					<?php
+					$english_rating = get_the_author_meta('english_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $english_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="javanese" name="list_languages_javanese" <?php if ( !empty( get_the_author_meta('list_languages_javanese', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Javanese"> Javanese</label>
+				<h5>Rate Now</h5>
+				<select name="javanese_rating">
+					<option value="">none</option>
+					<?php
+					$javanese_rating = get_the_author_meta('javanese_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $javanese_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="spanish" name="list_languages_spanish" <?php if ( !empty( get_the_author_meta('list_languages_spanish', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Spanish"> Spanish</label>
+				<h5>Rate Now</h5>
+				<select name="spanish_rating">
+					<option value="">none</option>
+					<?php
+					$spanish_rating = get_the_author_meta('spanish_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $spanish_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+		</tr>
+
+		<tr>
+
+			<th>
+				<label><input id="tamil" name="list_languages_tamil" <?php if ( !empty( get_the_author_meta('list_languages_tamil', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Tamil"> Tamil</label>
+				<h5>Rate Now</h5>
+				<select name="tamil_rating">
+					<option value="">none</option>
+					<?php
+					$tamil_rating = get_the_author_meta('tamil_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $tamil_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="hindi" name="list_languages_hindi" <?php if ( !empty( get_the_author_meta('list_languages_hindi', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Hindi"> Hindi</label>
+				<h5>Rate Now</h5>
+				<select name="hindi_rating">
+					<option value="">none</option>
+					<?php
+					$hindi_rating = get_the_author_meta('hindi_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $hindi_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="Korean" name="list_languages_Korean" <?php if ( !empty( get_the_author_meta('list_languages_Korean', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Korean"> Korean</label>
+				<h5>Rate Now</h5>
+				<select name="Korean_rating">
+					<option value="">none</option>
+					<?php
+					$Korean_rating = get_the_author_meta('Korean_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $Korean_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="russian" name="list_languages_russian" <?php if ( !empty( get_the_author_meta('list_languages_russian', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Russian"> Russian</label>
+				<h5>Rate Now</h5>
+				<select name="russian_rating">
+					<option value="">none</option>
+					<?php
+					$russian_rating = get_the_author_meta('russian_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $russian_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="turkish" name="list_languages_turkish" <?php if ( !empty( get_the_author_meta('list_languages_turkish', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Turkish"> Turkish</label>
+				<h5>Rate Now</h5>
+				<select name="turkish_rating">
+					<option value="">none</option>
+					<?php
+					$turkish_rating = get_the_author_meta('turkish_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $turkish_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+		</tr>
+
+		<tr>
+
+			<th>
+				<label><input id="arabic" name="list_languages_arabic" <?php if ( !empty( get_the_author_meta('list_languages_arabic', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Arabic"> Arabic</label>
+				<h5>Rate Now</h5>
+				<select name="arabic_rating">
+					<option value="">none</option>
+					<?php
+					$arabic_rating = get_the_author_meta('arabic_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $arabic_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="telugu" name="list_languages_telugu" <?php if ( !empty( get_the_author_meta('list_languages_telugu', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Telugu"> Telugu</label>
+				<h5>Rate Now</h5>
+				<select name="telugu_rating">
+					<option value="">none</option>
+					<?php
+					$telugu_rating = get_the_author_meta('telugu_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $telugu_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="portuguese" name="list_languages_portuguese" <?php if ( !empty( get_the_author_meta('list_languages_portuguese', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Portuguese"> Portuguese</label>
+				<h5>Rate Now</h5>
+				<select name="portuguese_rating">
+					<option value="">none</option>
+					<?php
+					$portuguese_rating = get_the_author_meta('portuguese_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $portuguese_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="marathi" name="list_languages_marathi" <?php if ( !empty( get_the_author_meta('list_languages_marathi', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Marathi"> Marathi</label>
+				<h5>Rate Now</h5>
+				<select name="marathi_rating">
+					<option value="">none</option>
+					<?php
+					$marathi_rating = get_the_author_meta('marathi_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $marathi_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="bengali" name="list_languages_bengali" <?php if ( !empty( get_the_author_meta('list_languages_bengali', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Bengali"> Bengali</label>
+				<h5>Rate Now</h5>
+				<select name="bengali_rating">
+					<option value="">none</option>
+					<?php
+					$bengali_rating = get_the_author_meta('bengali_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $bengali_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+		</tr>
+
+		<tr>
+
+			<th>
+				<label><input id="italian" name="list_languages_italian" <?php if ( !empty( get_the_author_meta('list_languages_italian', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Italian"> Italian</label>
+				<h5>Rate Now</h5>
+				<select name="italian_rating">
+					<option value="">none</option>
+					<?php
+					$italian_rating = get_the_author_meta('italian_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $italian_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="french" name="list_languages_french" <?php if ( !empty( get_the_author_meta('list_languages_french', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="French"> French</label>
+				<h5>Rate Now</h5>
+				<select name="french_rating">
+					<option value="">none</option>
+					<?php
+					$french_rating = get_the_author_meta('french_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $french_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="thai" name="list_languages_thai" <?php if ( !empty( get_the_author_meta('list_languages_thai', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Thai"> Thai</label>
+				<h5>Rate Now</h5>
+				<select name="thai_rating">
+					<option value="">none</option>
+					<?php
+					$thai_rating = get_the_author_meta('thai_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $thai_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="malay" name="list_languages_malay" <?php if ( !empty( get_the_author_meta('list_languages_malay', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Malay, Indonesian"> Malay, Indonesian</label>
+				<h5>Rate Now</h5>
+				<select name="malay_rating">
+					<option value="">none</option>
+					<?php
+					$malay_rating = get_the_author_meta('malay_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $malay_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="burmese" name="list_languages_burmese" <?php if ( !empty( get_the_author_meta('list_languages_burmese', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Burmese"> Burmese</label>
+				<h5>Rate Now</h5>
+				<select name="burmese_rating">
+					<option value="">none</option>
+					<?php
+					$burmese_rating = get_the_author_meta('burmese_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $burmese_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+		</tr>
+
+		<tr>
+
+			<th>
+				<label><input id="german" name="list_languages_german" <?php if ( !empty( get_the_author_meta('list_languages_german', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="German"> German</label>
+				<h5>Rate Now</h5>
+				<select name="german_rating">
+					<option value="">none</option>
+					<?php
+					$german_rating = get_the_author_meta('german_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $german_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="cantonese" name="list_languages_cantonese" <?php if ( !empty( get_the_author_meta('list_languages_cantonese', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Cantonese"> Cantonese</label>
+				<h5>Rate Now</h5>
+				<select name="cantonese_rating">
+					<option value="">none</option>
+					<?php
+					$cantonese_rating = get_the_author_meta('cantonese_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $cantonese_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="japanese" name="list_languages_japanese" <?php if ( !empty( get_the_author_meta('list_languages_japanese', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Japanese"> Japanese</label>
+				<h5>Rate Now</h5>
+				<select name="japanese_rating">
+					<option value="">none</option>
+					<?php
+					$japanese_rating = get_the_author_meta('japanese_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $japanese_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="kannada" name="list_languages_kannada" <?php if ( !empty( get_the_author_meta('list_languages_kannada', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Kannada"> Kannada</label>
+				<h5>Rate Now</h5>
+				<select name="kannada_rating">
+					<option value="">none</option>
+					<?php
+					$kannada_rating = get_the_author_meta('kannada_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $kannada_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="farsi" name="list_languages_farsi" <?php if ( !empty( get_the_author_meta('list_languages_farsi', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Farsi (Persian)"> Farsi (Persian)</label>
+				<h5>Rate Now</h5>
+				<select name="farsi_rating">
+					<option value="">none</option>
+					<?php
+					$farsi_rating = get_the_author_meta('farsi_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $farsi_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+		</tr>
+
+		<tr>
+
+			<th>
+				<label><input id="gujarati" name="list_languages_gujarati" <?php if ( !empty( get_the_author_meta('list_languages_gujarati', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Gujarati"> Gujarati</label>
+				<h5>Rate Now</h5>
+				<select name="gujarati_rating">
+					<option value="">none</option>
+					<?php
+					$gujarati_rating = get_the_author_meta('gujarati_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $gujarati_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="urdu" name="list_languages_urdu" <?php if ( !empty( get_the_author_meta('list_languages_urdu', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Urdu"> Urdu</label>
+				<h5>Rate Now</h5>
+				<select name="urdu_rating">
+					<option value="">none</option>
+					<?php
+					$urdu_rating = get_the_author_meta('urdu_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $urdu_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="polish" name="list_languages_polish" <?php if ( !empty( get_the_author_meta('list_languages_polish', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Polish"> Polish</label>
+				<h5>Rate Now</h5>
+				<select name="polish_rating">
+					<option value="">none</option>
+					<?php
+					$polish_rating = get_the_author_meta('polish_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $polish_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="punjabi" name="list_languages_punjabi" <?php if ( !empty( get_the_author_meta('list_languages_punjabi', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Punjabi"> Punjabi</label>
+				<h5>Rate Now</h5>
+				<select name="punjabi_rating">
+					<option value="">none</option>
+					<?php
+					$punjabi_rating = get_the_author_meta('punjabi_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $punjabi_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+			<th>
+				<label><input id="wu" name="list_languages_wu" <?php if ( !empty( get_the_author_meta('list_languages_wu', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="Wu"> Wu</label>
+				<h5>Rate Now</h5>
+				<select name="wu_rating">
+					<option value="">none</option>
+					<?php
+					$wu_rating = get_the_author_meta('wu_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $wu_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+		</tr>
+
+		<tr>
+
+			<th>
+				<label><input id="other" name="list_languages_other" <?php if ( !empty( get_the_author_meta('list_languages_other', $user->ID) ) ) { echo "checked"; } ?> type="checkbox" value="OTHER"> OTHER</label>
+			</th>
+			<th>
+				<?php
+					$list_languages_text = get_the_author_meta('list_languages_text', $user->ID);
+				?>
+				<input class="form-control" type="text" value="<?php echo $list_languages_text; ?>" name="list_languages_text">
+				<h5>Rate Now</h5>
+				<select name="other_rating">
+					<option value="">none</option>
+					<?php
+					$other_rating = get_the_author_meta('other_rating', $user->ID);
+					foreach ($rating_arr as $value) { ?>
+
+						<option value="<?php echo $value; ?>" <?php if( $other_rating == $value ){ echo "selected"; } ?> ><?php echo $value; ?></option>
+
+						<?php
+					}
+					?>
+				</select>
+			</th>
+
+		</tr>
+	</table>
+
+
+	<script type="text/javascript">
+	    jQuery(document).ready( function(){
+
+	    	jQuery('#docs-achievements, #acc2_body, #docs-bgchecks').hide();
+	    	
+	        jQuery('.userdetail_add_more').live('click', function(){
+
+	            var ln_no = jQuery(this).attr('count');
+
+	            var count = parseInt(ln_no)+1;
+
+	            jQuery("#userdetail_all_fields").append('<thead class="edit-main-dv" id="userdetail_pr_'+count+'" ><tr><th><label for="name">Name</label></th><td><input type="text" name="rfname[]" id="rfname_'+count+'" class="regular-text code form-control"></td></tr><tr><th><label for="email">Email</label></th><td><input type="text" name="rfemail[]" id="rfemail_'+count+'" class="regular-text code form-control"></td></tr><tr><th class="remove_btn"><span class="remove_edu button-secondary" id="remove_edu_'+count+'" rel="'+count+'">remove</span></th></tr></thead>');
+
+	            jQuery(this).attr('count', count);
+	        });
+
+
+	        jQuery('.remove_edu').live('click', function(){
+	            var rel = jQuery(this).attr('rel');
+	            jQuery('#userdetail_pr_'+rel).remove();
+	            jQuery('#remove_edu_'+rel).remove();
+	        });
+
+	        var count_add = parseInt( jQuery('#userdetail_add_more').attr('count') ) + 1;
+
+	        for (var j = 2; j <= count_add; j++) {
+
+	            if ( jQuery('#rfemail_'+j).val() == '' && jQuery('#rfname_'+j).val() == '' ) {
+
+	                jQuery('#userdetail_pr_'+j).remove();
+	            }
+	            
+	        };
+
+	    });
+
+	</script>
+
+	<?php 
+}
+
+
+
+add_action( 'personal_options_update', 'eyerecruit_extra_profile_fields_save' );
+add_action( 'edit_user_profile_update', 'eyerecruit_extra_profile_fields_save' );
+
+function eyerecruit_extra_profile_fields_save( $user_id ) {
+
+	if ( !current_user_can( 'edit_user', $user_id ) )
+		return false;
+
+	update_usermeta( $user_id, 'rfname', $_POST['rfname'] );
+	update_usermeta( $user_id, 'rfemail', $_POST['rfemail'] );
+
+
+	update_usermeta( $user_id, 'list_languages_mandarin', $_POST['list_languages_mandarin'] );
+	update_usermeta( $user_id, 'list_languages_vietnamese', $_POST['list_languages_vietnamese'] );
+	update_usermeta( $user_id, 'list_languages_english', $_POST['list_languages_english'] );
+	update_usermeta( $user_id, 'list_languages_javanese', $_POST['list_languages_javanese'] );
+	update_usermeta( $user_id, 'list_languages_spanish', $_POST['list_languages_spanish'] );
+	update_usermeta( $user_id, 'list_languages_tamil', $_POST['list_languages_tamil'] );
+
+	update_usermeta( $user_id, 'list_languages_hindi', $_POST['list_languages_hindi'] );
+	update_usermeta( $user_id, 'list_languages_Korean', $_POST['list_languages_Korean'] );
+	update_usermeta( $user_id, 'list_languages_russian', $_POST['list_languages_russian'] );
+	update_usermeta( $user_id, 'list_languages_turkish', $_POST['list_languages_turkish'] );
+	update_usermeta( $user_id, 'list_languages_arabic', $_POST['list_languages_arabic'] );
+	update_usermeta( $user_id, 'list_languages_telugu', $_POST['list_languages_telugu'] );
+
+	update_usermeta( $user_id, 'list_languages_portuguese', $_POST['list_languages_portuguese'] );
+	update_usermeta( $user_id, 'list_languages_marathi', $_POST['list_languages_marathi'] );
+	update_usermeta( $user_id, 'list_languages_bengali', $_POST['list_languages_bengali'] );
+	update_usermeta( $user_id, 'list_languages_italian', $_POST['list_languages_italian'] );
+	update_usermeta( $user_id, 'list_languages_french', $_POST['list_languages_french'] );
+	update_usermeta( $user_id, 'list_languages_thai', $_POST['list_languages_thai'] );
+
+	update_usermeta( $user_id, 'list_languages_malay', $_POST['list_languages_malay'] );
+	update_usermeta( $user_id, 'list_languages_burmese', $_POST['list_languages_burmese'] );
+	update_usermeta( $user_id, 'list_languages_german', $_POST['list_languages_german'] );
+	update_usermeta( $user_id, 'list_languages_cantonese', $_POST['list_languages_cantonese'] );
+	update_usermeta( $user_id, 'list_languages_japanese', $_POST['list_languages_japanese'] );
+	update_usermeta( $user_id, 'list_languages_kannada', $_POST['list_languages_kannada'] );
+
+	update_usermeta( $user_id, 'list_languages_farsi', $_POST['list_languages_farsi'] );
+	update_usermeta( $user_id, 'list_languages_gujarati', $_POST['list_languages_gujarati'] );
+	update_usermeta( $user_id, 'list_languages_urdu', $_POST['list_languages_urdu'] );
+	update_usermeta( $user_id, 'list_languages_polish', $_POST['list_languages_polish'] );
+	update_usermeta( $user_id, 'list_languages_punjabi', $_POST['list_languages_punjabi'] );
+	update_usermeta( $user_id, 'list_languages_wu', $_POST['list_languages_wu'] );
+
+	update_usermeta( $user_id, 'list_languages_other', $_POST['list_languages_other'] );
+	update_usermeta( $user_id, 'list_languages_text', $_POST['list_languages_text'] );
+
+
+	/*Save Rating*/
+
+	update_usermeta( $user_id, 'mandarin_rating', $_POST['mandarin_rating'] );
+	update_usermeta( $user_id, 'vietnamese_rating', $_POST['vietnamese_rating'] );
+	update_usermeta( $user_id, 'english_rating', $_POST['english_rating'] );
+	update_usermeta( $user_id, 'javanese_rating', $_POST['javanese_rating'] );
+	update_usermeta( $user_id, 'spanish_rating', $_POST['spanish_rating'] );
+	update_usermeta( $user_id, 'tamil_rating', $_POST['tamil_rating'] );
+
+	update_usermeta( $user_id, 'hindi_rating', $_POST['hindi_rating'] );
+	update_usermeta( $user_id, 'Korean_rating', $_POST['Korean_rating'] );
+	update_usermeta( $user_id, 'russian_rating', $_POST['russian_rating'] );
+	update_usermeta( $user_id, 'turkish_rating', $_POST['turkish_rating'] );
+	update_usermeta( $user_id, 'arabic_rating', $_POST['arabic_rating'] );
+	update_usermeta( $user_id, 'telugu_rating', $_POST['telugu_rating'] );
+
+	update_usermeta( $user_id, 'portuguese_rating', $_POST['portuguese_rating'] );
+	update_usermeta( $user_id, 'marathi_rating', $_POST['marathi_rating'] );
+	update_usermeta( $user_id, 'bengali_rating', $_POST['bengali_rating'] );
+	update_usermeta( $user_id, 'italian_rating', $_POST['italian_rating'] );
+	update_usermeta( $user_id, 'french_rating', $_POST['french_rating'] );
+	update_usermeta( $user_id, 'thai_rating', $_POST['thai_rating'] );
+
+	update_usermeta( $user_id, 'malay_rating', $_POST['malay_rating'] );
+	update_usermeta( $user_id, 'burmese_rating', $_POST['burmese_rating'] );
+	update_usermeta( $user_id, 'german_rating', $_POST['german_rating'] );
+	update_usermeta( $user_id, 'cantonese_rating', $_POST['cantonese_rating'] );
+	update_usermeta( $user_id, 'japanese_rating', $_POST['japanese_rating'] );
+	update_usermeta( $user_id, 'kannada_rating', $_POST['kannada_rating'] );
+
+	update_usermeta( $user_id, 'farsi_rating', $_POST['farsi_rating'] );
+	update_usermeta( $user_id, 'gujarati_rating', $_POST['gujarati_rating'] );
+	update_usermeta( $user_id, 'urdu_rating', $_POST['urdu_rating'] );
+	update_usermeta( $user_id, 'polish_rating', $_POST['polish_rating'] );
+	update_usermeta( $user_id, 'punjabi_rating', $_POST['punjabi_rating'] );
+	update_usermeta( $user_id, 'wu_rating', $_POST['wu_rating'] );
+
+	update_usermeta( $user_id, 'other_rating', $_POST['other_rating'] );
+
+}
+
+
+/*..............AjAx Update jobseeker ProFile FiELDS..................*/
+
+add_action('wp_ajax_jobseeker_profile_data_lang', 'jobseeker_profile_data_lang');
+add_action('wp_ajax_nopriv_jobseeker_profile_data_lang', 'jobseeker_profile_data_lang');
+
+function jobseeker_profile_data_lang() {
+
+	if ( isset($_POST['user_id']) && !empty($_POST['user_id']) ) {
+		
+		$user_id = multi_base64_decode($_POST['user_id']);
+	}
+	else{
+		die();
+	}
+
+
+	if ( isset( $_POST['form_id'] ) ) {
+		$form_id = $_POST['form_id'];
+	}
+	else{
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4347' ) {
+		
+
+		update_usermeta( $user_id, 'list_languages_mandarin', $_POST['list_languages_mandarin'] );
+		update_usermeta( $user_id, 'list_languages_vietnamese', $_POST['list_languages_vietnamese'] );
+		update_usermeta( $user_id, 'list_languages_english', $_POST['list_languages_english'] );
+		update_usermeta( $user_id, 'list_languages_javanese', $_POST['list_languages_javanese'] );
+		update_usermeta( $user_id, 'list_languages_spanish', $_POST['list_languages_spanish'] );
+		update_usermeta( $user_id, 'list_languages_tamil', $_POST['list_languages_tamil'] );
+
+		update_usermeta( $user_id, 'list_languages_hindi', $_POST['list_languages_hindi'] );
+		update_usermeta( $user_id, 'list_languages_Korean', $_POST['list_languages_Korean'] );
+		update_usermeta( $user_id, 'list_languages_russian', $_POST['list_languages_russian'] );
+		update_usermeta( $user_id, 'list_languages_turkish', $_POST['list_languages_turkish'] );
+		update_usermeta( $user_id, 'list_languages_arabic', $_POST['list_languages_arabic'] );
+		update_usermeta( $user_id, 'list_languages_telugu', $_POST['list_languages_telugu'] );
+
+		update_usermeta( $user_id, 'list_languages_portuguese', $_POST['list_languages_portuguese'] );
+		update_usermeta( $user_id, 'list_languages_marathi', $_POST['list_languages_marathi'] );
+		update_usermeta( $user_id, 'list_languages_bengali', $_POST['list_languages_bengali'] );
+		update_usermeta( $user_id, 'list_languages_italian', $_POST['list_languages_italian'] );
+		update_usermeta( $user_id, 'list_languages_french', $_POST['list_languages_french'] );
+		update_usermeta( $user_id, 'list_languages_thai', $_POST['list_languages_thai'] );
+
+		update_usermeta( $user_id, 'list_languages_malay', $_POST['list_languages_malay'] );
+		update_usermeta( $user_id, 'list_languages_burmese', $_POST['list_languages_burmese'] );
+		update_usermeta( $user_id, 'list_languages_german', $_POST['list_languages_german'] );
+		update_usermeta( $user_id, 'list_languages_cantonese', $_POST['list_languages_cantonese'] );
+		update_usermeta( $user_id, 'list_languages_japanese', $_POST['list_languages_japanese'] );
+		update_usermeta( $user_id, 'list_languages_kannada', $_POST['list_languages_kannada'] );
+
+		update_usermeta( $user_id, 'list_languages_farsi', $_POST['list_languages_farsi'] );
+		update_usermeta( $user_id, 'list_languages_gujarati', $_POST['list_languages_gujarati'] );
+		update_usermeta( $user_id, 'list_languages_urdu', $_POST['list_languages_urdu'] );
+		update_usermeta( $user_id, 'list_languages_polish', $_POST['list_languages_polish'] );
+		update_usermeta( $user_id, 'list_languages_punjabi', $_POST['list_languages_punjabi'] );
+		update_usermeta( $user_id, 'list_languages_wu', $_POST['list_languages_wu'] );
+
+		update_usermeta( $user_id, 'list_languages_other', $_POST['list_languages_other'] );
+		update_usermeta( $user_id, 'list_languages_text', $_POST['list_languages_text'] );
+
+
+		/*Save Rating*/
+
+		update_usermeta( $user_id, 'mandarin_rating', $_POST['mandarin_rating'] );
+		update_usermeta( $user_id, 'vietnamese_rating', $_POST['vietnamese_rating'] );
+		update_usermeta( $user_id, 'english_rating', $_POST['english_rating'] );
+		update_usermeta( $user_id, 'javanese_rating', $_POST['javanese_rating'] );
+		update_usermeta( $user_id, 'spanish_rating', $_POST['spanish_rating'] );
+		update_usermeta( $user_id, 'tamil_rating', $_POST['tamil_rating'] );
+
+		update_usermeta( $user_id, 'hindi_rating', $_POST['hindi_rating'] );
+		update_usermeta( $user_id, 'Korean_rating', $_POST['Korean_rating'] );
+		update_usermeta( $user_id, 'russian_rating', $_POST['russian_rating'] );
+		update_usermeta( $user_id, 'turkish_rating', $_POST['turkish_rating'] );
+		update_usermeta( $user_id, 'arabic_rating', $_POST['arabic_rating'] );
+		update_usermeta( $user_id, 'telugu_rating', $_POST['telugu_rating'] );
+
+		update_usermeta( $user_id, 'portuguese_rating', $_POST['portuguese_rating'] );
+		update_usermeta( $user_id, 'marathi_rating', $_POST['marathi_rating'] );
+		update_usermeta( $user_id, 'bengali_rating', $_POST['bengali_rating'] );
+		update_usermeta( $user_id, 'italian_rating', $_POST['italian_rating'] );
+		update_usermeta( $user_id, 'french_rating', $_POST['french_rating'] );
+		update_usermeta( $user_id, 'thai_rating', $_POST['thai_rating'] );
+
+		update_usermeta( $user_id, 'malay_rating', $_POST['malay_rating'] );
+		update_usermeta( $user_id, 'burmese_rating', $_POST['burmese_rating'] );
+		update_usermeta( $user_id, 'german_rating', $_POST['german_rating'] );
+		update_usermeta( $user_id, 'cantonese_rating', $_POST['cantonese_rating'] );
+		update_usermeta( $user_id, 'japanese_rating', $_POST['japanese_rating'] );
+		update_usermeta( $user_id, 'kannada_rating', $_POST['kannada_rating'] );
+
+		update_usermeta( $user_id, 'farsi_rating', $_POST['farsi_rating'] );
+		update_usermeta( $user_id, 'gujarati_rating', $_POST['gujarati_rating'] );
+		update_usermeta( $user_id, 'urdu_rating', $_POST['urdu_rating'] );
+		update_usermeta( $user_id, 'polish_rating', $_POST['polish_rating'] );
+		update_usermeta( $user_id, 'punjabi_rating', $_POST['punjabi_rating'] );
+		update_usermeta( $user_id, 'wu_rating', $_POST['wu_rating'] );
+
+		update_usermeta( $user_id, 'other_rating', $_POST['other_rating'] );
+
+		die();
+	}
+
+	die();
+
+}
+
+
+
+/*..............AjAx Update jobseeker ProFile FiELDS..................*/
+
+add_action('wp_ajax_jobseeker_profile_data', 'jobseeker_profile_data');
+add_action('wp_ajax_nopriv_jobseeker_profile_data', 'jobseeker_profile_data');
+
+function jobseeker_profile_data() {
+
+	if ( isset($_POST['user_id']) && !empty($_POST['user_id']) ) {
+		
+		$user_id = multi_base64_decode($_POST['user_id']);
+	}
+	else{
+		die();
+	}
+
+
+	if ( isset( $_POST['form_id'] ) ) {
+		$form_id = $_POST['form_id'];
+	}
+	else{
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4338' ) {
+		
+		if ( isset($_POST['AGREE_TO_RESPOND']) ) {
+
+			$AGREE_TO_RESPOND 		= $_POST['AGREE_TO_RESPOND'];
+			set_cimyFieldValue($user_id, 'AGREE_TO_RESPOND', $AGREE_TO_RESPOND );
+		}
+		die();
+	}
+
+
+	if ( $form_id == 'profilebuder4390' ) {
+
+		if ( isset($_POST['SYSTEM_AND_PROCE']) ) {
+			$SYSTEM_AND_PROCE 		= $_POST['SYSTEM_AND_PROCE'];
+			set_cimyFieldValue($user_id, 'SYSTEM_AND_PROCE', $SYSTEM_AND_PROCE);
+		}
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4340' ) {
+		
+		if ( isset($_POST['BEST_INDUSTRY']) ) {
+			$BEST_INDUSTRY 			= $_POST['BEST_INDUSTRY'];
+			set_cimyFieldValue($user_id, 'BEST_INDUSTRY', $BEST_INDUSTRY);
+		}
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4342' ) {
+		
+		if ( isset($_POST['HIGHEST_EDUCATION']) ) {
+			$HIGHEST_EDUCATION 		= $_POST['HIGHEST_EDUCATION'];
+			set_cimyFieldValue($user_id, 'HIGHEST_EDUCATION', $HIGHEST_EDUCATION);
+		}
+		
+		if ( isset($_POST['AREA_OF_STUDY']) ) {
+			$AREA_OF_STUDY 			= $_POST['AREA_OF_STUDY'];
+			set_cimyFieldValue($user_id, 'AREA_OF_STUDY', $AREA_OF_STUDY);
+		}
+		
+		if ( isset($_POST['SCHOOL_NAME']) ) {
+			$SCHOOL_NAME 			= $_POST['SCHOOL_NAME'];
+			set_cimyFieldValue($user_id, 'SCHOOL_NAME', $SCHOOL_NAME);
+		}
+		
+		if ( isset($_POST['STUDY_YEAR']) ) {
+			$STUDY_YEAR 			= $_POST['STUDY_YEAR'];
+			set_cimyFieldValue($user_id, 'STUDY_YEAR', $STUDY_YEAR);
+		}
+		
+		if ( isset($_POST['STUDY_MAJOR']) ) {
+			$STUDY_MAJOR 			= $_POST['STUDY_MAJOR'];
+			set_cimyFieldValue($user_id, 'STUDY_MAJOR', $STUDY_MAJOR);
+		}
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4343' ) {
+		
+		if ( isset($_POST['TYPE_OF_OPPORTUNITY']) ) {
+			$TYPE_OF_OPPORTUNITY 	= $_POST['TYPE_OF_OPPORTUNITY'];
+			set_cimyFieldValue($user_id, 'TYPE_OF_OPPORTUNITY', implode(',', $TYPE_OF_OPPORTUNITY) );
+		}
+
+		if ( isset($_POST['JOB_SEARCH_RADIUS']) ) {
+			$JOB_SEARCH_RADIUS 		= $_POST['JOB_SEARCH_RADIUS'];
+			set_cimyFieldValue($user_id, 'JOB_SEARCH_RADIUS', $JOB_SEARCH_RADIUS);
+		}
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4344' ) {
+
+		if ( isset($_POST['US_ELIGIBLE']) ) {
+			$US_ELIGIBLE 			= $_POST['US_ELIGIBLE'];
+			set_cimyFieldValue($user_id, 'US_ELIGIBLE', $US_ELIGIBLE);
+		}
+
+		if ( isset($_POST['SECURITY_CLEAR_YN']) ) {
+			$SECURITY_CLEAR_YN 		= $_POST['SECURITY_CLEAR_YN'];
+			set_cimyFieldValue($user_id, 'SECURITY_CLEAR_YN', $SECURITY_CLEAR_YN);
+		}
+
+		if ( isset($_POST['OVER_18_YN']) ) {
+			$OVER_18_YN 			= $_POST['OVER_18_YN'];
+			set_cimyFieldValue($user_id, 'OVER_18_YN', $OVER_18_YN);
+		}
+		die();
+	}
+
+
+	if ( $form_id == 'profilebuder4345' ) {
+		
+		if ( isset($_POST['POSSES_DRIVER_LICENS']) ) {
+			$POSSES_DRIVER_LICENS 	= $_POST['POSSES_DRIVER_LICENS'];
+			set_cimyFieldValue($user_id, 'POSSES_DRIVER_LICENS', $POSSES_DRIVER_LICENS);
+		}
+		
+		if ( isset($_POST['DRIVER_STATE']) ) {
+			$DRIVER_STATE 			= $_POST['DRIVER_STATE'];
+			set_cimyFieldValue($user_id, 'DRIVER_STATE', $DRIVER_STATE);
+		}
+		
+		if ( isset($_POST['RELIABLE_TRANSPORT']) ) {
+			$RELIABLE_TRANSPORT 	= $_POST['RELIABLE_TRANSPORT'];
+			set_cimyFieldValue($user_id, 'RELIABLE_TRANSPORT', $RELIABLE_TRANSPORT);
+		}
+		
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4346' ) {
+		
+		if ( isset($_POST['FIELD_LICENSE_STATUS']) ) {
+			$FIELD_LICENSE_STATUS 	= $_POST['FIELD_LICENSE_STATUS'];
+			set_cimyFieldValue($user_id, 'FIELD_LICENSE_STATUS', $FIELD_LICENSE_STATUS);
+		}
+
+		if ( isset($_POST['FIELD_LICENSE_STATE']) ) {
+			$FIELD_LICENSE_STATE    = $_POST['FIELD_LICENSE_STATE'];
+			set_cimyFieldValue($user_id, 'FIELD_LICENSE_STATE', implode(',', $FIELD_LICENSE_STATE));
+		}
+		die();
+	}
+
+
+
+	if ( $form_id == 'profilebuder4348' ) {
+		
+		if ( isset($_POST['CUR_WORK_SITUATION']) ) {
+			$CUR_WORK_SITUATION 	= $_POST['CUR_WORK_SITUATION'];
+			set_cimyFieldValue($user_id, 'CUR_WORK_SITUATION', implode(',', $CUR_WORK_SITUATION) );
+		}
+
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4349' ) {
+		
+		if ( isset($_POST['US_ARMED_FORCES']) ) {
+			$US_ARMED_FORCES 		= $_POST['US_ARMED_FORCES'];
+			set_cimyFieldValue($user_id, 'US_ARMED_FORCES', $US_ARMED_FORCES);
+		}
+		if ( isset($_POST['US_ARMED_FORCES_OPTION']) ) {
+			$US_ARMED_FORCES_OPTION 		= $_POST['US_ARMED_FORCES_OPTION'];
+			set_cimyFieldValue($user_id, 'US_ARMED_FORCES_OPTI', $US_ARMED_FORCES_OPTION);
+		}
+
+		if ( isset($_POST['LOCAL_LAW_FORCE_YN']) ) {
+			$LOCAL_LAW_FORCE_YN 	= $_POST['LOCAL_LAW_FORCE_YN'];
+			set_cimyFieldValue($user_id, 'LOCAL_LAW_FORCE_YN', $LOCAL_LAW_FORCE_YN);
+		}
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4351' ) {
+		
+		if ( isset($_POST['FEDERAL_NVESTIGATIV']) ) {
+			$FEDERAL_NVESTIGATIV 	= $_POST['FEDERAL_NVESTIGATIV'];
+			set_cimyFieldValue($user_id, 'FEDERAL_NVESTIGATIV', $FEDERAL_NVESTIGATIV);
+		}
+		
+		if ( isset($_POST['US_LAW_ENFORCE_STATU']) ) {
+			$US_LAW_ENFORCE_STATU 	= $_POST['US_LAW_ENFORCE_STATU'];
+			set_cimyFieldValue($user_id, 'US_LAW_ENFORCE_STATU', $US_LAW_ENFORCE_STATU);
+		}
+		if ( isset( $_POST['US_LAW_ENFORCE_OTHER'] ) ) {
+			$US_LAW_ENFORCE_OTHER = $_POST['US_LAW_ENFORCE_OTHER'];
+			set_cimyFieldValue($user_id, 'US_LAW_ENFORCE_OTHER', $US_LAW_ENFORCE_OTHER);
+		}
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4352' ) {
+
+		if ( isset($_POST['MAJOR_METROPOLITAN']) ) {
+			$MAJOR_METROPOLITAN 	= $_POST['MAJOR_METROPOLITAN'];
+			set_cimyFieldValue($user_id, 'MAJOR_METROPOLITAN', $MAJOR_METROPOLITAN);
+		}
+		die();
+	}
+
+	if ( $form_id == 'profilebuder4356' ) {
+
+		if ( isset($_POST['rfname']) ) {
+			$rfname 				= $_POST['rfname'];
+			update_user_meta($user_id, 'rfname', $rfname);
+		}
+
+		if ( isset($_POST['rfemail']) ) {
+			$rfemail 				= $_POST['rfemail'];
+			update_user_meta($user_id, 'rfemail', $rfemail);
+		}
+		die();
+	}
+
+
+	if ( $form_id == 'profilebuder4357' ) {
+		
+
+		$userdata = get_userdata($user_id);
+
+		$name = $userdata->display_name;
+		$email = $userdata->user_email;
+		
+		$AGREE_TO_RESPOND 			= get_cimyFieldValue($user_id, 'AGREE_TO_RESPOND');
+		$AGREE_TO_RESPOND 			= ( !empty( $AGREE_TO_RESPOND ) ) ? $AGREE_TO_RESPOND : 'none';
+
+		$SYSTEM_AND_PROCE 			= get_cimyFieldValue($user_id, 'SYSTEM_AND_PROCE');
+		$SYSTEM_AND_PROCE 			= ( !empty( $SYSTEM_AND_PROCE ) ) ? $SYSTEM_AND_PROCE : 'none';
+
+		$BEST_INDUSTRY 				= get_cimyFieldValue($user_id, 'BEST_INDUSTRY');
+		$BEST_INDUSTRY 				= ( !empty( $BEST_INDUSTRY ) ) ? $BEST_INDUSTRY : 'none';
+
+
+		$HIGHEST_EDUCATION 			= get_cimyFieldValue($user_id, 'HIGHEST_EDUCATION');
+		if( !empty( $HIGHEST_EDUCATION ) ) {
+			$other_option = array('Associates Degree', 'Bachelors Degree', 'Masters Degree', 'Doctorate Degree / PhD.');
+			if ( in_array($HIGHEST_EDUCATION, $other_option) ) {
+				
+				$AREA_OF_STUDY 				= get_cimyFieldValue($user_id, 'AREA_OF_STUDY');
+				$AREA_OF_STUDY 				= ( !empty( $AREA_OF_STUDY ) ) ? $AREA_OF_STUDY : 'none';
+
+				$SCHOOL_NAME 				= get_cimyFieldValue($user_id, 'SCHOOL_NAME');
+				$SCHOOL_NAME 				= ( !empty( $SCHOOL_NAME ) ) ? $SCHOOL_NAME : 'none';
+
+				$STUDY_YEAR 			    = get_cimyFieldValue($user_id, 'STUDY_YEAR');
+				$STUDY_YEAR 				= ( !empty( $STUDY_YEAR ) ) ? $STUDY_YEAR : 'none';
+
+				$STUDY_MAJOR 			    = get_cimyFieldValue($user_id, 'STUDY_MAJOR');
+				$STUDY_MAJOR 				= ( !empty( $STUDY_MAJOR ) ) ? $STUDY_MAJOR : 'none';
+
+				$HIGHEST_EDUCATION = $HIGHEST_EDUCATION.'<br>Area of study : '.$AREA_OF_STUDY.'<br>School Name : '.$SCHOOL_NAME.'<br>Year : '.$STUDY_YEAR.'<br>Major : '.$STUDY_MAJOR;
+				
+			}
+			else{
+				$HIGHEST_EDUCATION = $HIGHEST_EDUCATION;
+			}
+		}
+		else{
+			$HIGHEST_EDUCATION = 'none';
+		}
+
+
+
+		
+		$TYPE_OF_OPPORTUNITY 		= get_cimyFieldValue($user_id, 'TYPE_OF_OPPORTUNITY');
+		$TYPE_OF_OPPORTUNITY 		= ( !empty( $TYPE_OF_OPPORTUNITY ) ) ? $TYPE_OF_OPPORTUNITY : 'none';
+
+		$JOB_SEARCH_RADIUS 			= get_cimyFieldValue($user_id, 'JOB_SEARCH_RADIUS');
+		$JOB_SEARCH_RADIUS 			= ( !empty( $JOB_SEARCH_RADIUS ) ) ? $JOB_SEARCH_RADIUS : 'none';
+
+		$US_ELIGIBLE 			    = get_cimyFieldValue($user_id, 'US_ELIGIBLE');
+		$US_ELIGIBLE 				= ( !empty( $US_ELIGIBLE ) ) ? $US_ELIGIBLE : 'none';
+
+		$SECURITY_CLEAR_YN 			= get_cimyFieldValue($user_id, 'SECURITY_CLEAR_YN');
+		$SECURITY_CLEAR_YN 			= ( !empty( $SECURITY_CLEAR_YN ) ) ? $SECURITY_CLEAR_YN : 'none';
+
+		$OVER_18_YN 			    = get_cimyFieldValue($user_id, 'OVER_18_YN');
+		$OVER_18_YN 				= ( !empty( $OVER_18_YN ) ) ? $OVER_18_YN : 'none';
+
+		$POSSES_DRIVER_LICENS 		= get_cimyFieldValue($user_id, 'POSSES_DRIVER_LICENS');
+		$POSSES_DRIVER_LICENS 		= ( !empty( $POSSES_DRIVER_LICENS ) ) ? $POSSES_DRIVER_LICENS : 'none';
+
+		$DRIVER_STATE 			    = get_cimyFieldValue($user_id, 'DRIVER_STATE');
+		$DRIVER_STATE 				= ( !empty( $DRIVER_STATE ) ) ? $DRIVER_STATE : 'none';
+
+		$RELIABLE_TRANSPORT 		= get_cimyFieldValue($user_id, 'RELIABLE_TRANSPORT');
+		$RELIABLE_TRANSPORT 		= ( !empty( $RELIABLE_TRANSPORT ) ) ? $RELIABLE_TRANSPORT : 'none';
+
+		$FIELD_LICENSE_STATUS 		= get_cimyFieldValue($user_id, 'FIELD_LICENSE_STATUS');
+		$FIELD_LICENSE_STATUS 		= ( !empty( $FIELD_LICENSE_STATUS ) ) ? $FIELD_LICENSE_STATUS : 'none';
+
+		$FIELD_LICENSE_STATE 		= get_cimyFieldValue($user_id, 'FIELD_LICENSE_STATE');
+		$FIELD_LICENSE_STATE 		= ( !empty( $FIELD_LICENSE_STATE ) ) ? $FIELD_LICENSE_STATE : 'none';
+
+	
+		/*.........Languages..........*/
+
+		$language_array = array('mandarin','vietnamese','english','javanese','spanish','tamil','hindi','Korean','russian','turkish','arabic','telugu','portuguese','marathi','bengali','italian','french','thai','malay','burmese','german','cantonese','japanese','kannada','farsi','gujarati','urdu','polish','punjabi','wu','other');
+
+		foreach ($language_array as $lang) {
+			
+			$list_language = get_user_meta( $user_id, 'list_languages_'.$lang, true );
+			$rating = get_user_meta( $user_id, $lang.'_rating', true );
+
+			if ( !empty( $list_language ) ) {
+
+				if ( !empty( $rating ) ) {
+					
+					if ( $list_language == 'OTHER' ) {
+						$list_languages_text = get_user_meta( $user_id, 'list_languages_text', true );
+						$list_languages[] = $list_language.' : '. $list_languages_text .' ( '.$rating.' ) ';
+					}
+					else{
+						$list_languages[] = $list_language.' ( '.$rating.' ) ';
+					}
+				}
+				else{
+					if ( $list_language == 'OTHER' ) {
+						$list_languages_text = get_user_meta( $user_id, 'list_languages_text', true );
+						$list_languages[] = $list_language.' : '. $list_languages_text;
+					}
+					else{
+						$list_languages[] = $list_language;
+					}
+				}
+			}
+		}
+
+		if ( !empty($list_languages) ) {
+			
+			$LANGUAGES_SPOKEN = implode('<br>', $list_languages);
+		}
+		else{
+			$LANGUAGES_SPOKEN = 'none';
+		}
+
+
+		$CUR_WORK_SITUATION 		= get_cimyFieldValue($user_id, 'CUR_WORK_SITUATION');
+		$CUR_WORK_SITUATION 		= ( !empty( $CUR_WORK_SITUATION ) ) ? $CUR_WORK_SITUATION : 'none';
+
+		$US_ARMED_FORCES 			= get_cimyFieldValue($user_id, 'US_ARMED_FORCES');
+		if ( !empty( $US_ARMED_FORCES ) ) {
+			if ( $US_ARMED_FORCES == 'Yes' ) {
+				
+				$US_ARMED_FORCES_OPTION 			= get_cimyFieldValue($user_id, 'US_ARMED_FORCES_OPTI');
+				if ( !empty( $US_ARMED_FORCES_OPTION ) ) {
+
+					$US_ARMED_FORCES 		= $US_ARMED_FORCES.' ( '.$US_ARMED_FORCES_OPTION.' ) ';
+				}
+				else{
+					$US_ARMED_FORCES 		= $US_ARMED_FORCES;
+				}
+			}
+			else{
+				$US_ARMED_FORCES 		= $US_ARMED_FORCES;
+			}
+		}
+		else{
+
+			$US_ARMED_FORCES 		= 'none';
+		}
+
+		$LOCAL_LAW_FORCE_YN 		= get_cimyFieldValue($user_id, 'LOCAL_LAW_FORCE_YN');
+		$LOCAL_LAW_FORCE_YN 		= ( !empty( $LOCAL_LAW_FORCE_YN ) ) ? $LOCAL_LAW_FORCE_YN : 'none';
+
+		$FEDERAL_NVESTIGATIV 		= get_cimyFieldValue($user_id, 'FEDERAL_NVESTIGATIV');
+
+		if ( !empty( $FEDERAL_NVESTIGATIV ) ) {
+			
+			if ( $FEDERAL_NVESTIGATIV == 'Yes' ) {
+			
+				$US_LAW_ENFORCE_STATU 		= get_cimyFieldValue($user_id, 'US_LAW_ENFORCE_STATU');
+
+				if ( !empty( $US_LAW_ENFORCE_STATU ) ) {
+
+					if ( $US_LAW_ENFORCE_STATU == 'OTHER' ) {
+						$US_LAW_ENFORCE_OTHER 		= get_cimyFieldValue($user_id, 'US_LAW_ENFORCE_OTHER');
+						if ( !empty( $US_LAW_ENFORCE_OTHER ) ) {
+							$US_LAW_ENFORCE_STATU = $US_LAW_ENFORCE_STATU.' ( '.$US_LAW_ENFORCE_OTHER. ' ) ';
+						}
+						else{
+
+							$US_LAW_ENFORCE_STATU = $US_LAW_ENFORCE_STATU;
+						}
+
+					}
+				}
+				else{
+					$US_LAW_ENFORCE_STATU = 'none';
+				}
+
+				$FEDERAL_NVESTIGATIV = $US_LAW_ENFORCE_STATU;
+			}
+			else{
+				$FEDERAL_NVESTIGATIV = $FEDERAL_NVESTIGATIV;
+			}
+		}
+		else{
+			 $FEDERAL_NVESTIGATIV = 'none';
+		}
+
+		$MAJOR_METROPOLITAN 		= get_cimyFieldValue($user_id, 'MAJOR_METROPOLITAN');
+		$MAJOR_METROPOLITAN 		= ( !empty( $MAJOR_METROPOLITAN ) ) ? $MAJOR_METROPOLITAN : 'none';
+
+		$CURRENT_RESUME 		= get_cimyFieldValue($user_id, 'CURRENT_RESUME');
+		$CURRENT_RESUME 		= ( !empty( $CURRENT_RESUME ) ) ? '<a href="'.$CURRENT_RESUME.'">Resume</a>' : 'none';
+
+		
+		$rfname = get_user_meta($user_id, 'rfname');
+		$rfemail =  get_user_meta($user_id, 'rfemail');
+		
+		if( !empty( $rfname ) && isset( $rfname[0] ) ) {
+
+			$rfname_arr = $rfname[0];
+			$rfemail_arr = $rfemail[0];
+
+			$emp_rfname = array_filter($rfname_arr );
+			$emp_rfemail = array_filter($rfemail_arr );
+			
+			if ( !empty($emp_rfname) || !empty($emp_rfemail) ) {
+
+
+				$count_rf = count($rfname_arr);
+
+				for ($i=0; $i < $count_rf; $i++) { 
+					
+					if ( !empty($rfname_arr[$i]) && !empty($rfemail_arr[$i]) ) {
+						$rfc_arr[] = $rfname_arr[$i].' ( '. $rfemail_arr[$i] .' )';
+					}
+				}
+
+				$rfc = implode( '<br>', $rfc_arr);
+
+			}
+			else{
+				$rfc = 'none';
+			}
+		}
+		else{
+			$rfc = 'none';
+		}
+
+		$view_profile =  site_url('/wp-admin/admin.php?page=eyerecruit_user_profile&user='.$user_id);
+
+		$approve = site_url('/wp-admin/users.php?page=new-user-approve-admin&user='.$user_id.'&status=approve&_wpnonce=5a32097b5a');
+
+		$reject = site_url('/wp-admin/users.php?page=new-user-approve-admin&user='.$user_id.'&status=deny&_wpnonce=5a32097b5a');
+		
+		$pro_message = 
+
+		'<table style="border-top: 1px solid #cccccc; border-left: 1px solid #cccccc;" border="0" width="100%" cellspacing="0" cellpadding="10" align="center" data-mce-style="border-top: 1px solid #cccccc; border-left: 1px solid #cccccc;" class="mce-item-table" data-mce-selected="1">
+			<tbody>
+				
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Name
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$name.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Email
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						<a href="mailto:'.$email.'">'.$email.'</a>
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Agree to respond to the questions
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$AGREE_TO_RESPOND.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Currently actively or passively looking for a job or career change
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$SYSTEM_AND_PROCE.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Industry that best reflects your work experience
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$BEST_INDUSTRY.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Highest level of education
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$HIGHEST_EDUCATION.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Type of opportunity
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$TYPE_OF_OPPORTUNITY.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Desired Working Radius
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$JOB_SEARCH_RADIUS.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Eligible and legally authorized to work in the United States
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$US_ELIGIBLE.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Security Clearance
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$SECURITY_CLEAR_YN.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						18 Years of age or older
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$OVER_18_YN.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Possess a valid State issued Drivers License
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$POSSES_DRIVER_LICENS.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						State issued
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$DRIVER_STATE.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Reliable transportation for local travel
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$RELIABLE_TRANSPORT.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Currently licensed in the field of Investigation or Security
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$FIELD_LICENSE_STATUS.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						From which State(s)
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$FIELD_LICENSE_STATE.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Languages and proficiency level
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$LANGUAGES_SPOKEN.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Current employment situation
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$CUR_WORK_SITUATION.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Active or Retired United States Armed Forces
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$US_ARMED_FORCES.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Active State of Local Law Enforcement
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$LOCAL_LAW_FORCE_YN.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Employed by a Federal Investigative or Law Enforcement Agency
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$FEDERAL_NVESTIGATIV.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Closest major metropolitan city 
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$MAJOR_METROPOLITAN.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Resume
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$CURRENT_RESUME.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Recommend Friends & Colleagues
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						'.$rfc.'
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						View Profile
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						<a href="'.$view_profile.'">View Profile</a>
+					</td>
+				</tr>
+
+				<tr>
+					<th style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#eeeeee" width="150" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						Action
+					</th>
+					<td style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;" align="left" bgcolor="#ffffff" data-mce-style="border-bottom: 1px solid #cccccc; border-right: 1px solid #cccccc; font-size: 14px; font-family: Arial, sans-serif; color: #343434; line-height: 20px;">
+						<a href="'.$approve.'">Accept</a> OR <a href="'.$reject.'">Reject</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>';
+
+		$get_option_arr 			= get_option('jobseeker_profile_builder');
+		$subject 					= $get_option_arr['jobseekerprofilebuilder_subject'];
+		$setting_options 			= get_option('xtreem_options_smtp');
+		$to 				= $setting_options['tomail'];
+
+		$shordcode_to_rep 	= array('[site-url]','[jobseeker_first_name]','[jobseeker_last_name]','[jobseeker]');
+		$replace_with 		= array(site_url(),$userdata->first_name,$userdata->last_name,$pro_message );
+		$message 			= str_replace($shordcode_to_rep, $replace_with, $get_option_arr['jobseekerprofilebuilder_mail_template']);
+				
+
+
+		$headers = "MIME-Version: 1.0" . "\r\n";
+    	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+		wp_mail($to, $subject, $message, $headers);
+		//wp_mail('balram.bochliya@xtreemsolution.com', $subject, $message, $headers);
+
+
+		echo "mail send";
+
+	}
+
+	die();
+}
+
+
+
+
+
+add_action('wp_ajax_cvf_upload_files', 'cvf_upload_files');
+add_action('wp_ajax_nopriv_cvf_upload_files', 'cvf_upload_files'); // Allow front-end submission
+
+function cvf_upload_files(){
+
+	if ( isset($_POST['user_id']) && !empty($_POST['user_id']) ) {
+		
+		$user_id = multi_base64_decode($_POST['user_id']);
+	}
+	else{
+		die();
+	}
+
+    $parent_post_id = isset( $_POST['post_id'] ) ? $_POST['post_id'] : 0;  // The parent ID of our attachments
+    $valid_formats = array("doc", "pdf", "docx"); // Supported file types
+    $max_file_size = 1024 * 50000; // in kb
+    $wp_upload_dir = wp_upload_dir();
+    $path = $wp_upload_dir['path'] . '/';
+    $count = 0;
+
+    $attachments = get_posts( array(
+        'post_type'         => 'attachment',
+        'posts_per_page'    => -1,
+        'post_parent'       => $parent_post_id,
+        'exclude'           => get_post_thumbnail_id() // Exclude post thumbnail to the attachment count
+    ) );
+
+    // Image upload handler
+    if( $_SERVER['REQUEST_METHOD'] == "POST" ){
+           
+        foreach ( $_FILES['files']['name'] as $f => $name ) {
+
+            $extension = pathinfo( $name, PATHINFO_EXTENSION );
+            // Generate a randon code for each file name
+            $new_filename = cvf_td_generate_random_code( 20 )  . '.' . $extension;
+           
+            if ( $_FILES['files']['error'][$f] == 4 ) {
+                continue;
+            }
+           
+            if ( $_FILES['files']['error'][$f] == 0 ) {
+                // Check if image size is larger than the allowed file size
+                if ( $_FILES['files']['size'][$f] > $max_file_size ) {
+                    $upload_message[] = "File size is too large!";
+                    continue;
+               
+                // Check if the file being uploaded is in the allowed file types
+                } elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
+                    $upload_message[] = "Allow only pdf and doc file format.";
+                    continue;
+               
+                } else{
+                    // If no errors, upload the file...
+                    if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$new_filename ) ) {
+                       
+                        $count++;
+
+                        $filename = $path.$new_filename;
+                        $filetype = wp_check_filetype( basename( $filename ), null );
+                        $wp_upload_dir = wp_upload_dir();
+                        $attachment = array(
+                            'guid'           => $wp_upload_dir['url'] . '/' . basename( $filename ),
+                            'post_mime_type' => $filetype['type'],
+                            'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $filename ) ),
+                            'post_content'   => '',
+                            'post_status'    => 'inherit'
+                        );
+                        // Insert attachment to the database
+                        $attach_id = wp_insert_attachment( $attachment, $filename, $parent_post_id );
+
+                        require_once( ABSPATH . 'wp-admin/includes/image.php' );
+                       
+                        // Generate meta data
+                        $attach_data = wp_generate_attachment_metadata( $attach_id, $filename );
+                        wp_update_attachment_metadata( $attach_id, $attach_data );
+
+                        $CURRENT_RESUME = wp_get_attachment_url($attach_id);
+                        
+                        set_cimyFieldValue($user_id, 'CURRENT_RESUME', $CURRENT_RESUME);
+                    }
+                }
+            }
+        }
+        
+    }
+    // Loop through each error then output it to the screen
+    if ( isset( $upload_message ) ) :
+        foreach ( $upload_message as $msg ){       
+            printf( __('%s', 'wp-trade'), $msg );
+        }
+    endif;
+   
+    exit();
+}
+
+// Random code generator used for file names.
+function cvf_td_generate_random_code($length=10) {
+ 
+   $string = '';
+   $characters = "23456789ABCDEFHJKLMNPRTVWXYZabcdefghijklmnopqrstuvwxyz";
+ 
+   for ($p = 0; $p < $length; $p++) {
+       $string .= $characters[mt_rand(0, strlen($characters)-1)];
+   }
+ 
+   return $string;
+ 
+}
+
+
+/*..........send_mail_to_fr-Ajax Action.................*/
+
+add_action('wp_ajax_send_mail_to_fr', 'send_mail_to_fr');
+add_action('wp_ajax_nopriv_send_mail_to_fr', 'send_mail_to_fr');
+
+function send_mail_to_fr(){
+	if ( isset($_POST['femail']) && !empty($_POST['femail']) ) {
+		
+		$fname_Arr = $_POST['fname'];
+		$femail_Arr = $_POST['femail'];
+
+		$count = count($femail_Arr);
+
+		$recommend_friends_mail = get_option('recommend_friends_mail');
+
+
+		if ( isset( $recommend_friends_mail['recommend_friends_mail_template'] ) && !empty( $recommend_friends_mail['recommend_friends_mail_template'] ) ){
+		 	$message =  $recommend_friends_mail['recommend_friends_mail_template']; 
+		}
+		else{
+		 	$message ='Test';
+		}
+
+
+		if ( isset( $recommend_friends_mail['recommend_friends_subject'] ) && !empty( $recommend_friends_mail['recommend_friends_subject'] ) ){
+		 	$subject =  $recommend_friends_mail['recommend_friends_subject'];
+		}
+		else{
+		 	$subject ='Eye Recruit';
+		} 
+
+		$headers = "MIME-Version: 1.0" . "\r\n";
+    	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+		
+
+		for ($i=0; $i <= $count; $i++) { 
+
+			$fname = $fname_Arr[$i];
+			$femail = $femail_Arr[$i];
+
+			$message = str_replace('[name]', $fname, $message); 
+
+
+			if ( ( !empty( $femail ) ) && ( !filter_var($femail, FILTER_VALIDATE_EMAIL) === false ) ) {
+				wp_mail( $femail, $subject, $message, $headers);
+			}
+		}
+
+		die();
+	}
+	die();
+}
+
+
+function multi_base64_encode($value){
+	return base64_encode( base64_encode( base64_encode($value) ) );
+}
+
+function multi_base64_decode($value){
+	return base64_decode( base64_decode( base64_decode($value) ) );
+}
