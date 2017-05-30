@@ -886,18 +886,18 @@ function invite_any_colleague(){
 		$colleague_email = $_POST['rfemail'];
 		$data = get_userdata($current_user_id);
 		$sender_name = $data->first_name.' '.$data->last_name;
-		$get_option_arr 	= get_option('reach_out_recommendation');
+		$get_option_arr 	= get_option('recommend_friends_mail');
 		$headers = "MIME-Version: 1.0" . "\r\n";
     	$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 		
 		$currtime = time();
     	foreach ($colleague_email as $key => $femail) {
 
-			$subject 			= $get_option_arr['reach_out_recommendation_subject'];
 			$to 				= $femail;
 			$shordcode_to_rep 	= array('[site-url]','[reach_out_recommendation_first_name]','[reach_out_recommendation_last_name]','[reach_out_recommendation]','[sender_name]');
 			$replace_with 		= array(site_url(),$colleague_name[$key],'',$user_msg, $sender_name);
-			$message 			= str_replace($shordcode_to_rep, $replace_with, $get_option_arr['reach_out_recommendation_template']);
+			$subject 			= str_replace($shordcode_to_rep, $replace_with,$get_option_arr['recommend_friends_subject']);
+			$message 			= str_replace($shordcode_to_rep, $replace_with, $get_option_arr['recommend_friends_template']);
 			wp_mail($to, $subject, $message, $headers);
 			$colleague_date[] = $currtime;
 		}
@@ -974,33 +974,45 @@ function reach_out_and_ask_for_referral(){
 		$sender_name = $_POST['sender_name'];
 		$Relationship = $_POST['Relationship'];
 		$Years = $_POST['Years'];
+		$tablename = $wpdb->prefix.'reach_out_and_ask_for_referral';
+		
 		$nameArr = array();
 		foreach ($user_email as $key => $value) {
-			$get_option_arr 	= get_option('reach_out_recommendation');
-			$subject 			= $get_option_arr['reach_out_recommendation_subject'];
-			$setting_options 	= get_option('xtreem_options_smtp');
-			$to 				= $value;//$setting_options['tomail'];
-			$shordcode_to_rep 	= array('[site-url]','[reach_out_recommendation_first_name]','[reach_out_recommendation_last_name]','[reach_out_recommendation]','[sender_name]');
-			$replace_with 		= array(site_url(),$fname[$key],$lname[$key],$user_msg, $sender_name);
-			$message 			= str_replace($shordcode_to_rep, $replace_with, $get_option_arr['reach_out_recommendation_template']);
-			$headers            = "MIME-Version: 1.0" . "\r\n";
-			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-
-			if(wp_mail($to, $subject, $message, $headers)){
-				$wpdb->insert(
-				   $wpdb->prefix."reach_out_and_ask_for_referral", 
+			//insert the record
+			$wpdb->insert(
+				   $tablename, 
 				   array(
 					   "user_id" => $current_user_id,
 					   "first_name" => $fname[$key],
 					   "last_name" => $lname[$key],
+					   "request_time" => time(),
 					   "user_email" => $value,
-					   "user_message" => $user_msg,
 					   "use_relationship" => $Relationship[$key],
 					   "how_year"  => $Years[$key]
 					),
-				    array( '%d', '%s', '%s', '%s', '%s' , '%s', '%s')
+				    array( '%d', '%s', '%s', '%s', '%s', '%s' , '%s')
 				);
+			//get the mail options
+			if($wpdb->insert_id){
+				$selectPending = $wpdb->get_row("SELECT * FROM $tablename WHERE user_email = '".$user_email."' AND user_message IS NULL  ");
+			$sender_recommendation_link = get_site_url().'/add-recommendation/?rID='.$wpdb->insert_id;
+			$get_option_arr 	= get_option('reach_out_recommendation');
+			$setting_options 	= get_option('xtreem_options_smtp');
+			$to 				= $value;//$setting_options['tomail'];
+			$shordcode_to_rep 	= array('[site-url]','[reach_out_recommendation_first_name]','[reach_out_recommendation_last_name]','[reach_out_recommendation]','[sender_name]','[sender_recommendation_link]');
+			$replace_with 		= array(site_url(),$fname[$key],$lname[$key],$user_msg, $sender_name,$sender_recommendation_link);
+			$subject 			= str_replace($shordcode_to_rep, $replace_with, $get_option_arr['reach_out_recommendation_subject']);
+			$message 			= str_replace($shordcode_to_rep, $replace_with, $get_option_arr['reach_out_recommendation_template']);
+			$headers            = "MIME-Version: 1.0" . "\r\n";
+			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+			$awesome=false;
+			if(wp_mail($to, $subject, $message, $headers)){
+				$awesome=true;
+				
+			}	
 			}
+			
 
 			$nameArr[] = $fname[$key].' '.$lname[$key];
 		}
@@ -1391,8 +1403,6 @@ function paginate_preferences_recent_activity() {
 	}
 	die();
 }
-
-
 
 
 function auto_login_new_user( $user_id ) {
