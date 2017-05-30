@@ -413,48 +413,7 @@ function random_str($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzAB
 							<div class="section_title">
 								<h3>Support Services (Old to be deleted) </h3>
 							</div>
-							<div class="row">
-								
-								
-								<div class="col-sm-3 col-xs-6 devicehalf">
-									<a href="<?php echo  get_term_link( 470, 'product_cat' ); ?>">
-										<img src="<?php echo site_url();  ?>/assets/uploads/2015/02/icons-salary.png" class="img-responsive">
-										<h6>Compensation <br>Negotiation</h6>
-									</a>
-								</div>
-								<div class="col-sm-3 col-xs-6 devicehalf">
-									<a href="<?php echo site_url(); ?>/job-seekers/contract-opportunities/">
-										<img src="<?php echo site_url();  ?>/assets/uploads/2015/01/icon-negotiation.png" class="img-responsive">
-										<h6>Contract <br>Opportunities</h6>
-									</a>
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-sm-3 col-xs-6 devicehalf">
-									<a href="<?php echo site_url(); ?>/job-seekers/onboarding-orientation/">
-										<img src="<?php echo site_url();  ?>/assets/uploads/2015/01/icon-training.png" class="img-responsive">
-										<h6>Onboarding <br>Orientation</h6>
-									</a>
-								</div>
-								<div class="col-sm-3 col-xs-6 devicehalf">
-									<a href="<?php echo site_url(); ?>/job-seekers/transition-support/">
-										<img src="<?php echo site_url();  ?>/assets/uploads/2015/02/icon-direction.png" class="img-responsive">
-										<h6>Transition <br>Support</h6>
-									</a>
-								</div>
-								<div class="col-sm-3 col-xs-6 devicehalf">
-									<a href="<?php echo site_url(); ?>/job-seekers/relocation-services/">
-										<img src="<?php echo site_url();  ?>/assets/uploads/2015/01/icon-truck.png" class="img-responsive">
-										<h6>Relocation<br>Services</h6>
-									</a>
-								</div>
-								<div class="col-sm-3 col-xs-6 devicehalf">
-									<a href="<?php echo site_url(); ?>/job-seekers/performance-consulting/">
-										<img src="<?php echo site_url();  ?>/assets/uploads/2015/02/icons-performance.png" class="img-responsive">
-										<h6>Performance <br>Consulting</h6>
-									</a>
-								</div>
-							</div>
+						
 						</div>
 					</div>
 
