@@ -396,7 +396,7 @@ function random_str($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzAB
 
 						<div class="support_serv">
 							<div class="section_title">
-								<h3>Support Services (New WooCommerce)</h3>
+								<h3>Support Services</h3>
 							</div>
 							<?php
 						///SHOW JOB SEEKER SUPPORT SERVICES NAV MENU
@@ -410,10 +410,6 @@ function random_str($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzAB
 							wp_nav_menu( $args );
 							?>
 							
-							<div class="section_title">
-								<h3>Support Services (Old to be deleted) </h3>
-							</div>
-						
 						</div>
 					</div>
 
