@@ -1613,3 +1613,9 @@ $htmlStr .= '</ul>';
 // return $htmlStr;
 return implode(',', $arr2);
 }
+
+///
+function er_asset_icon($filename){
+	$filename = get_stylesheet_directory_uri().'/img/icons/'.$filename;
+	echo '<img src="'.$filename.'" alt="icon">';
+}
