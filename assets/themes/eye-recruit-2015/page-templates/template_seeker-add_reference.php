@@ -90,17 +90,19 @@ if($referenceID == 0){
             <div id="thanksMsg" class="container paddedTop">
               <div class="row">
                 <div class="col-md-3 text-center">
-                  <?php er_asset_icon('personal-recommendations.png');?>
+                  <?php er_asset_icon('phone.png');?>
                 </div>
                 <div class="col-md-9">
 
-                  <h3>Thanks <?php echo ucfirst($_POST['ref_fname']);?>,</h3>
+                  <h3>Thank you for being a reference</h3>
 
-                  <p>Being selected from a distinguished short list to speak candidly and attest to someone’s experience, work ethic and credentials is an honor.  What a potential Employer can gauge from a quality reference is substantial and it may be the deciding factor in an applicant advancing to the next stage. </p>
+                  <p>Most people who are successful in their career have had help along the way.  Being asked to be a Reference during someone’s Career is more important that many people believe.  What a potential Employer can gauge from Reference is significant and is often the deciding factor in an applicant advancing to the next stage. </p>
 
-                  <p>It is significant to receive praise one's former supervisors, managers &amp; colleagues. This is why EyeRecruit believes in providing an open, transparent and cooperative way to seek and display references. </p>
+<p>We are all looking to find and maximize meaning and engagement at work and within in our Careers. Sometimes to accomplish that, we require assistance from others in the form of hearing positive reinforcement, access to on-going communications to stay acquainted with people we respect and admire and other times it requires a leap of faith in ourselves to make a career shift into a position or an industry that fuels our passions. </p>
 
-                  <p>We believe that the process we provide for Job Seekers will assist them in managing their own career.  It displays trust and demonstrates positive and high ethical standards - all of which are very appealing qualities in the eyes of employers, especially high caliber employers. </p>
+<p>As a Reference you may receive a call. Before you do, take the time to speak to the person you are providing the Reference for and make it clear what you’re comfortable saying.  You are not required to provide details you are not comfortable with. Some References provide Employment Verification and nothing else, and other take the passive (but Positive) approach. Your decision is your decision.   </p>
+
+<p>Whether you chose to speak freely or choose your words more carefully, its more important to be factual. The #1 Rule is to be honest.</p>
 
                 </div>
               </div>

@@ -176,7 +176,7 @@ function reach_out_and_ask_for_reference(){
 			//get the mail options
 			if($wpdb->insert_id){
 				$selectPending = $wpdb->get_row("SELECT * FROM $tablename WHERE user_email = '".$user_email."' AND user_message IS NULL  ");
-			$sender_recommendation_link = get_site_url().'/add-recommendation/?rID='.$wpdb->insert_id;
+			$sender_recommendation_link = get_site_url().'/add-reference/?rID='.$wpdb->insert_id;
 			$get_option_arr 	= get_option('reach_out_reference');
 			$setting_options 	= get_option('xtreem_options_smtp');
 			$to 				= $value;//$setting_options['tomail'];
