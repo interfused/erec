@@ -153,7 +153,7 @@ switch ( strtolower( get_the_title() ) ){
 	$docSidebar = 'sidebars/doc-sidebar-bkg-mgt.php';
 	$uploadModalDocType .= 'Background Doc';
 	$cvfAction = 'cvf_upload_backgroundfiles';
-	$wellNoDocFooter = '';
+	$wellNoDocFooter = 'sidebars/well-no-doc-bkg_mgt.php';
 	break;
 
 	case "cover letters":
@@ -242,12 +242,17 @@ if ( (count($select) == 0) && (in_array( 'candidate', $current_user->roles)) ) {
 		$showinst = 'style="display:none;"';
 	}
 	else{
-		?>
-		<script type="text/javascript">
+		 if($getDocTypeToQuery != "background_doc" ){
+		 	?>
+		 	<script type="text/javascript">
 		jQuery(document).ready( function() {
 			jQuery('#UploadRes').modal('show');
 		});
-		</script> <?php 
+		</script>
+		 	<?php 
+		 }
+		?>
+		 <?php 
 		$showinst = 'style="display:none;"';
 	}
 }
