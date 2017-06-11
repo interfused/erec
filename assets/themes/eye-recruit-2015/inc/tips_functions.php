@@ -145,72 +145,73 @@ add_action('wp_ajax_reach_out_and_ask_for_reference','reach_out_and_ask_for_refe
 add_action('wp_ajax_nopriv_reach_out_and_ask_for_reference','reach_out_and_ask_for_reference');
 
 function reach_out_and_ask_for_reference(){
-	$current_user_id = get_current_user_id();
-	$userdata = get_userdata($current_user_id);
-	$user_fname = $userdata->first_name;
-	$user_lname = $userdata->last_name;
 	global $wpdb;
-	if( isset($_POST) && !empty($_POST['Email']) ){
+	$current_user_id = get_current_user_id();
+	if( isset($_POST)){
 		$fname = $_POST['fname'];
 		$lname = $_POST['lname'];
-		$Email = $_POST['Email'];
-		$Company = $_POST['Company'];
-		$Position = $_POST['Position'];
-		$Telephone = $_POST['Telephone'];
+		$user_email = $_POST['user_email'];
+		$user_msg = $_POST['user_msg'];
+		$sender_name = $_POST['sender_name'];
 		$Relationship = $_POST['Relationship'];
 		$Years = $_POST['Years'];
-		//$notation = $_POST['notation'];
-		$sender_name = $user_fname.' '. $user_lname;	
+		$tablename = $wpdb->prefix.'er_references';
+		
 		$nameArr = array();
-		foreach ($Email as $key => $value) {
-			$newArr = array(
-				'fname' => $fname[$key], 
-				'lname' => $lname[$key],
-				'Email' => $Email[$key],
-				'Company' => $Company[$key],
-				'Position' => $Position[$key],
-				'Telephone' => $Telephone[$key],
-				'Relationship' => $Relationship[$key],
-				'Years' => $Years[$key],
-				//'notation' => $notation[$key],
-
-			);
+		foreach ($user_email as $key => $value) {
+			//insert the record
+			$wpdb->insert(
+				   $tablename, 
+				   array(
+					   "user_id" => $current_user_id,
+					   "first_name" => $fname[$key],
+					   "last_name" => $lname[$key],
+					   "request_time" => time(),
+					   "user_email" => $value,
+					   "use_relationship" => $Relationship[$key],
+					   "how_year"  => $Years[$key]
+					),
+				    array( '%d', '%s', '%s', '%s', '%s', '%s' , '%s')
+				);
+			//get the mail options
+			if($wpdb->insert_id){
+				$selectPending = $wpdb->get_row("SELECT * FROM $tablename WHERE user_email = '".$user_email."' AND user_message IS NULL  ");
+			$sender_recommendation_link = get_site_url().'/add-reference/?rID='.$wpdb->insert_id;
 			$get_option_arr 	= get_option('reach_out_reference');
-			$subject 			= $get_option_arr['reach_out_reference_subject'];
 			$setting_options 	= get_option('xtreem_options_smtp');
-			$to 				= $Email[$key];//$setting_options['tomail'];
-			$shordcode_to_rep 	= array('[site-url]','[reference_first_name]','[reference_last_name]','[sender_name]');
-			$replace_with 		= array(site_url(),$fname[$key],$lname[$key],$sender_name);
+			$to 				= $value;//$setting_options['tomail'];
+			$shordcode_to_rep 	= array('[site-url]','[reference_first_name]','[reach_out_recommendation_last_name]','[reach_out_recommendation]','[sender_name]','[sender_reference_link]');
+			$replace_with 		= array(site_url(),$fname[$key],$lname[$key],$user_msg, $sender_name,$sender_recommendation_link);
+			$subject 			= str_replace($shordcode_to_rep, $replace_with, $get_option_arr['reach_out_reference_subject']);
 			$message 			= str_replace($shordcode_to_rep, $replace_with, $get_option_arr['reach_out_reference_template']);
 			$headers            = "MIME-Version: 1.0" . "\r\n";
 			$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+
+			$awesome=false;
+			if(wp_mail($to, $subject, $message, $headers)){
+				$awesome=true;
+				
+			}	
+			}
 			
-			wp_mail($to, $subject, $message, $headers);
-			$wpdb->insert(
-				$wpdb->prefix."reference_now", 
-				array(
-					"ref_detail"=> serialize($newArr),
-					"user_id" => $current_user_id,
-				),
-				array('%s', '%d')
-			);
+
 			$nameArr[] = $fname[$key].' '.$lname[$key];
 		}
+
 		$nameList = implode(', 	', $nameArr);
         $wpdb->insert(
           $wpdb->prefix.'user_activity_log',
           array(
             'user_id'  => $current_user_id,
-            'action'   => 'AddRefre',
+            'action'   => 'reachReference',
             'datetime' => time(),
-            'meta'     => 'Add new reference '.$nameList
+            'meta'     => 'Add new referral '.$nameList
           ),
           array( '%d', '%s', '%s', '%s' )
         );	
 	}
 	die();
 }
-
 
 /*..............delete reference......*/
 add_action('wp_ajax_delete_reach_reference','delete_reach_reference');
@@ -222,7 +223,7 @@ function delete_reach_reference(){
 	 	global $wpdb;
 	 	$user_id = get_current_user_id();
 	 	$refcid = $_POST['refcid'];
-	 	$tablename = $wpdb->prefix.'reference_now';
+	 	$tablename = $wpdb->prefix.'er_references';
 		$select = $wpdb->get_row("SELECT * FROM $tablename WHERE id = '".$refcid."' AND user_id = '".$user_id."' ");
 		$ref_detail = unserialize($select->ref_detail);
 

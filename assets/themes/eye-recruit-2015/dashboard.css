@@ -3223,3 +3223,6 @@ color: #ffffff;
 li.icon.military{ background-image: url(http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/military_service_icon.png);}
 li.icon.law_enforcement{ background-image: url(http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/enforcement_icon.jpg);}
 li.icon.federal{ background-image: url(http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/federal_shield.jpg);}
+
+.avatar{border-radius: 1000px;}
+.page-template-template_navigation_Referrals .avatar{margin-right:10px; margin-top:10px;}

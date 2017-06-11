@@ -759,8 +759,21 @@ li#menu-item-2668 ul, div.multiCol2 {
     column-gap:15px;
     columns:2;
 }
-div.multiCol2 ul{padding:0; margin:0; padding-left:18px;}
-div.multiCol2 p{column-break-inside: avoid; }
+div.multiCol3 {
+  -webkit-column-count:3;   
+    -moz-column-count:3;
+    -ms-column-count:3;
+    -o-column-count:3;
+    column-count:3;
+    -webkit-column-gap:15px;   
+    -moz-column-gap:15px;
+    -ms-column-gap:15px;
+    -o-column-gap:15px;
+    column-gap:15px;
+    columns:3;
+}
+div.multiCol2 ul,div.multiCol3 ul{padding:0; margin:0; padding-left:18px;}
+div.multiCol2 p,div.multiCol3 p{column-break-inside: avoid; }
 /* JOB LISTING : FIND A JOB */
   li.type-job_listing{text-align:left;}
   
