@@ -1,6 +1,6 @@
 <?php
 /**
- * The default template for displaying content. Used for profile bilder layout and popups.
+ * The default template for displaying content. Used for profile builder layout and popups.
  *
  * @package Jobify
  * @since Jobify 1.0
@@ -125,6 +125,7 @@ function showCurrentStep() {
 			var OVER_18_YN = jQuery("input[name='OVER_18_YN']:checked"). val();
 
 			/*.......Step7........*/
+			var CURR_CAREER_LVL = jQuery("select[name='CURR_CAREER_LVL']").val();
 			var INDUSTRY_YEARS = jQuery("select[name='INDUSTRY_YEARS']").val();
 			var COMPENSATION_CURRENT = jQuery("select[name='COMPENSATION_CURRENT']").val();
 			var COMPENSATION_DESIRED = jQuery("select[name='COMPENSATION_DESIRED']").val();
@@ -485,6 +486,7 @@ function showCurrentStep() {
 						'US_ELIGIBLE': US_ELIGIBLE,
 						'SECURITY_CLEAR_YN': SECURITY_CLEAR_YN,
 						'OVER_18_YN': OVER_18_YN,
+						'CURR_CAREER_LVL':CURR_CAREER_LVL,
 						'INDUSTRY_YEARS':INDUSTRY_YEARS,
 						'COMPENSATION_CURRENT':COMPENSATION_CURRENT,
 						'COMPENSATION_DESIRED':COMPENSATION_DESIRED,
