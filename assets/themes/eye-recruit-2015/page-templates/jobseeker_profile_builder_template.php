@@ -26,6 +26,14 @@
 
 get_header('loginpage'); ?>
 <?php //while ( have_posts() ) : the_post(); ?>
+
+<?php  
+/*
+TO EDIT:
+add/modify appropriate question in wordpress dashboard under "Seeker Steps"
+edit content-profilebuilder.php to allow for question to be populated accordingly
+*/
+?>
 <div class="container">
 	          	<?php 
 	          	
@@ -90,7 +98,7 @@ get_header('loginpage'); ?>
 	<?php //do_action( 'jobify_loop_after' ); ?>
 </div><!-- #primary -->
 <?php //endwhile; ?>
-<?php get_template_part( 'content', 'profilebilder' ); ?>
+<?php get_template_part( 'content', 'profilebuilder' ); ?>
 
 
 
