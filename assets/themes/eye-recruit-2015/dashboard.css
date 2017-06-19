@@ -715,6 +715,7 @@ transform:rotate(45deg);
   .ata_glance {padding:18px 20px}
   .ata_glance ul {padding-left:0}
   .ata_glance ul li{padding-right:0}
+  .ata_glance ul li.icon{padding-right:32px;}
   .ata_glance ul li span{color: #000;}
   .ata_glance ul li ins{background: transparent; font-style: normal;}
 

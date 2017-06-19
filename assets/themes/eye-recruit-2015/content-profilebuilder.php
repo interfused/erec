@@ -1611,4 +1611,11 @@ function showCurrentStep() {
     </div>
   </div>
 </div>
+<script>
+jQuery(document).ready(function(){
+	jQuery(".profilestep").each(function(index, el) {
+			jQuery(this).find(".disclaimer").appendTo(jQuery(this).find('.profilestep_inner'));
+	});
 
+});
+</script>
