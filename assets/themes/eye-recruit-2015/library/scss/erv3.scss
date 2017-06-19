@@ -1,0 +1,14 @@
+/* UPDATED STYLESHEET 2017 TO BE USED FOR ALL FUTURE CSS 
+FRONT END */
+@import('variables');
+
+/* STRUCTURE */
+.footer-social{
+  a{
+    color: $gray1;
+
+    &:hover{
+      color: $white !important;
+    }
+  }
+}

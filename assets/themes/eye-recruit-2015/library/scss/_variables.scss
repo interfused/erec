@@ -1,0 +1,34 @@
+/* COLORS */
+$white: #ffffff;
+$red1: #a12641;
+$green1: #68a025;
+$green2: #ebdc00;
+$black1: #24262b;
+
+/* light */
+$gray1: #adadad;
+
+/* medium */
+$gray2: #787878;
+
+/* dark */
+$gray3: #333333;
+
+/* TYPOPGRAHY */
+.typography-header{
+  font-family: "Rokkitt",serif;
+  text-transform: uppercase;
+}
+
+/* SWATCHES */
+.swatch1{
+  background-color: $white;
+  color: $gray2;
+  
+  p{
+    color: $gray2;
+  }
+  h1,h2,h3,h4,h5,h6{
+    color: $red1;
+  }
+}
