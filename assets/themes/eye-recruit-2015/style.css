@@ -46,6 +46,21 @@ h1, h2,h3,h4,h5,h6,.footer-widget-title, .footer-widget #wp-calendar caption{fon
     color:#a12641;
 }
 .fineprint{font-size:.8rem;}
+
+.disclaimer{
+  font-size: .9rem;
+  padding: 1em;
+  color: #888;
+  border-top: 1px solid #c8c8c8;
+  margin-top: 2em;
+}
+.disclaimer:before{
+  display: block;
+  content: "Disclaimer:";
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
 .footer-widget-title, .footer-widget #wp-calendar caption{font-size:24px;}
 
 /* FORM STYLE */

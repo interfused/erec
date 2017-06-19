@@ -1619,3 +1619,23 @@ function er_asset_icon($filename){
 	$filename = get_stylesheet_directory_uri().'/img/icons/'.$filename;
 	echo '<img src="'.$filename.'" alt="icon">';
 }
+/* 
+DISCLAIMERS
+usage: [er_disclaimer disclaimer_type="armed_forces"]
+*/
+function er_disclaimer($atts){
+	switch($atts['disclaimer_type']){
+		case "armed_forces":
+		return "EyeRecruit, Inc. and the site EyeRecruit.com, is a Proud supporter of Veterans, Veteran Families and the men and women of the Armed Forces. This site is providing only the information that you as a member are willing to provide to us. We do not confirm or validate this information to be factual. EyeRecruit, Inc is not responsible for incorrect information supplied by users. Providing Military Service information IS NOT MANDATORY and by continuing to use this service you continue to agree to be bound by our Terms & Conditions. Learn More about Military Service Records - DD Form 214 - and consider obtaining any and all supporting documentation and providing it for interest parties on this platform. Again, thank you for your service.";
+		break;
+
+		case "federal":
+		return "EyeRecruit, Inc. and the site EyeRecruit.com, is a Proud supporter of the Federal Govenrment and the men and women who provide service to our country. This site is providing only the information that you as a member are willing to provide to us. We do not confirm or validate this information to be factual. EyeRecruit, Inc is not responsible for incorrect information supplied by users. Providing Federal Law Enforcement or Federal Investigative Agency information IS NOT MANDATORY and by continuing to use this service you continue to agree to be bound by our Terms & Conditions. Consider obtaining any and all supporting documentation regarding your Federal Investigative & Security history and providing it for interest parties on this platform. Again, thank you for your service and God Bless America.";
+		break;
+
+		default:
+		return "Default disclaimer";
+		break;
+	}
+}
+add_shortcode( 'er_disclaimer', 'er_disclaimer' );
