@@ -382,7 +382,7 @@ function cvf_upload_resumefiles(){
 	$user_id = get_current_user_id();
 	global $wpdb;
     $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 2000000;
+    $max_file_size = 3000000;
     $wp_upload_dir = wp_upload_dir();
     $path = $wp_upload_dir['basedir'].'/resume/';
     if (!file_exists( $path.date('Y/m/d') ) ) {
@@ -686,7 +686,7 @@ function cvf_upload_educationfiles(){
 	$user_id = get_current_user_id();
 	global $wpdb;
     $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 2000000;
+    $max_file_size = 3000000;
     $wp_upload_dir = wp_upload_dir();
     $path = $wp_upload_dir['basedir'].'/resume/';
     if (!file_exists( $path.date('Y/m/d') ) ) {
@@ -773,7 +773,7 @@ function cvf_upload_certificatesfiles(){
 	$user_id = get_current_user_id();
 	global $wpdb;
     $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 2000000;
+    $max_file_size = 3000000;
     $wp_upload_dir = wp_upload_dir();
     $path = $wp_upload_dir['basedir'].'/resume/';
     if (!file_exists( $path.date('Y/m/d') ) ) {
@@ -859,7 +859,7 @@ function cvf_upload_licensesfiles(){
 	$user_id = get_current_user_id();
 	global $wpdb;
     $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 2000000;
+    $max_file_size = 3000000;
     $wp_upload_dir = wp_upload_dir();
     $path = $wp_upload_dir['basedir'].'/resume/';
     if (!file_exists( $path.date('Y/m/d') ) ) {
@@ -946,7 +946,7 @@ function cvf_upload_honorsfiles(){
 	$user_id = get_current_user_id();
 	global $wpdb;
     $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 2000000;
+    $max_file_size = 3000000;
     $wp_upload_dir = wp_upload_dir();
     $path = $wp_upload_dir['basedir'].'/resume/';
     if (!file_exists( $path.date('Y/m/d') ) ) {
@@ -1032,7 +1032,7 @@ function cvf_upload_coverlettersfiles(){
 	$user_id = get_current_user_id();
 	global $wpdb;
     $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 2000000;
+    $max_file_size = 3000000;
     $wp_upload_dir = wp_upload_dir();
     $path = $wp_upload_dir['basedir'].'/resume/';
     if (!file_exists( $path.date('Y/m/d') ) ) {
@@ -1118,7 +1118,7 @@ function cvf_upload_backgroundfiles(){
 	$user_id = get_current_user_id();
 	global $wpdb;
     $valid_formats = array("pdf", "jpg", "jpeg", "png","doc","docx");
-    $max_file_size = 2000000;
+    $max_file_size = 3000000;
     $wp_upload_dir = wp_upload_dir();
     $path = $wp_upload_dir['basedir'].'/resume/';
     // $path = $wp_upload_dir['basedir'].'/docs-background/';
@@ -1810,14 +1810,25 @@ function seekerPricingPlanType(){
 		foreach ($getPmproLevels as $level) {
 			
 			$payment_level =  $level->initial_payment;
-		   $current_plan_payment =   $current_user->membership_level->initial_payment;
+		  $current_plan_payment =   $current_user->membership_level->initial_payment;
+		  
+		  /*
+		  	Monthly pricing: Note: this is done to display yearly as a monthly payment which makes numbers look lower
+		  */
+		  if($level->cycle_period=='Year'){
+		  	$displayMonthlyPricing = $level->initial_payment/12;
+
+		  }else{
+		  	$displayMonthlyPricing = $level->initial_payment;
+		  }
+		  $displayMonthlyPricing = number_format((float)$displayMonthlyPricing, 2, '.', '');
 
 			$levelmeta = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'selectusertype' AND meta_value = 'candidate' " );
 			$levelOtherDesc = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'other_desc'" );
 			$plan_image = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'plan_image'" );
 			$other_text_after_price = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'other_text_after_price'" );
-			if ( ((!empty($levelmeta->meta_value)) && ($level->expiration_period == $payType)) || ($level->initial_payment == '0.00')  ) { 
-				$leveprice = (($level->initial_payment == '0.00')) ? '<h4><big>Free</big></h4>' : '<h4>'.$pmpro_currency_symbol.'<big> '.$level->initial_payment.'</big><small>/ Month</small></h4>'; 
+			if ( ((!empty($levelmeta->meta_value)) && ($level->cycle_period == $payType)) || ($level->initial_payment == '0.00')  ) { 
+				$leveprice = (($level->initial_payment == '0.00')) ? '<h4><big>Free</big></h4>' : '<h4>'.$pmpro_currency_symbol.'<big> '.$displayMonthlyPricing.'</big><small>/ Month</small></h4>'; 
 				//$level->expiration_period
 				?>
 				<div class="col-md-3 col-sm-6 col-xs-6 devicefull">
@@ -1826,9 +1837,9 @@ function seekerPricingPlanType(){
 						<h3><?php echo $level->name; ?></h3>
 						<div class="spricecol_box">
 							<?php if ( !empty($plan_image->meta_value) ) { ?>
-								<img src="<?php echo $plan_image->meta_value; ?>" class="img-respoinsive">
+								<img src="<?php echo $plan_image->meta_value; ?>" >
 							<?php } else { ?>
-								<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/seeker_basicicon.jpg" class="img-respoinsive">
+								<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/seeker_basicicon.jpg" >
 							<?php } ?>
 							<?php 
 							echo $leveprice; 

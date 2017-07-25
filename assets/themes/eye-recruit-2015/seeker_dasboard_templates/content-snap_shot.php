@@ -69,7 +69,7 @@ if( !empty($value4) ){
 $value6 = get_cimyFieldValue($user_id,'HIGHEST_EDUCATION');
 $eduDetailArr = array('Associates Degree','Bachelors Degree','Masters Degree','Doctorate Degree / PhD.'); 
 
-$Clearance = get_cimyFieldValue($user_id,'CLEARANCE_LEVEL');
+$Clearance = get_cimyFieldValue($user_id,'CLEARANCE_LEVEL') ? get_cimyFieldValue($user_id,'CLEARANCE_LEVEL') : 'Not Defined';
 $LAW_ENFORCE = get_cimyFieldValue($user_id,'FEDERAL_NVESTIGATIV');
 $yesvalue = get_cimyFieldValue($user_id,'US_LAW_ENFORCE_STATU');
 if($LAW_ENFORCE == 'Yes'){

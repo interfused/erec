@@ -624,6 +624,12 @@ if(is_page(3836) ){
 				jQuery(this).addClass('modal-open').clearQueue();
 			});
 		});
+    //remove "empty" paragraphs
+    jQuery('p').each(function() {
+      var tmpThis = jQuery(this);
+      if(tmpThis.html().replace(/\s|&nbsp;/g, '').length == 0)
+      tmpThis.remove();
+    });
 
 	});
 </script>

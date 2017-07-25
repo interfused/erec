@@ -77,7 +77,7 @@ get_header(); ?>
 											<div class="radio"><label><input <?php if($ClearanceLe == 'Confidential'){ echo "checked"; } ?> id="confidential" name="CLEARANCE_LEVEL" type="radio" value="Confidential"><span>Confidential</span></label></div>
 											<div class="radio"><label><input <?php if($ClearanceLe == 'Secret'){ echo "checked"; } ?> id="secret" name="CLEARANCE_LEVEL" type="radio" value="Secret"><span>Secret</span></label></div>
 											<div class="radio"><label><input <?php if($ClearanceLe == 'Top Secret'){ echo "checked"; } ?> id="top_secret" name="CLEARANCE_LEVEL" type="radio" value="Top Secret"><span>Top Secret</span></label></div>
-											<div class="radio"><label><input <?php if($ClearanceLe == 'Top Secret/SCI'){ echo "checked"; } ?> id="top_secretsci" name="CLEARANCE_LEVEL" type="radio" value="Top Secret/SCI"><span>Top Secret/SCI</span></label></div>
+											<!-- <div class="radio"><label><input <?php if($ClearanceLe == 'Top Secret/SCI'){ echo "checked"; } ?> id="top_secretsci" name="CLEARANCE_LEVEL" type="radio" value="Top Secret/SCI"><span>Top Secret/SCI</span></label></div> -->
 											<div class="radio"><label><input <?php if($ClearanceLe == 'Intel Agency(NSA /CIA/FBI/etc)'){ echo "checked"; } ?> id="intel_agency" name="CLEARANCE_LEVEL" type="radio" value="Intel Agency(NSA /CIA/FBI/etc)"><span>Intel Agency (NSA, CIA, FBI etc)</span></label></div>
 											<div class="radio"><label><input <?php if($ClearanceLe == 'Information available on request only'){ echo "checked"; } ?> id="info_only_req" name="CLEARANCE_LEVEL" type="radio" value="Information available on request only"><span>Information available on request only</span></label></div>
 										</div>

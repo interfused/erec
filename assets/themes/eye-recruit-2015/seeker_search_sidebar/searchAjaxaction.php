@@ -247,8 +247,8 @@ function employee_seeker_filter_ajax(){
 					<span class="back_check"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/backcheck.jpg"></span>
 					<div class="thumbnail">
 						<?php
-							if ( (has_wp_user_avatar($author_info->ID)) && ($allwoPhoto != 'No') ) {
-								echo get_wp_user_avatar($author_info->ID); 
+							if (  ($allwoPhoto != 'No') ) {
+								echo do_shortcode('[ica_avatar uid="'.$author_info->ID.'"]');
 							}else{
 								?>
 								<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/employer_default.jpg" class="img-responsive">
@@ -358,13 +358,9 @@ function ey_seeker_profile_comment(){
 				$userId=$ucomments->user_id; 		
 				$currentId=get_current_user_id();
 				$id=$ucomments->id;	
-				if ( (has_wp_user_avatar($userId))) {
-					$image= get_wp_user_avatar($userId, ' img-responsive'); 
-				}else{
-					$image="<img src='".get_stylesheet_directory_uri()."/img/EyeRecruit_Avitar.jpg' height='225px' width='190px' class='img-responsive'>";
-				} ?>
+				 ?>
 				<article class="<?php echo (($userId == $currentId))? 'current_user' : ''; ?>" >
-				  	<div class='img-circle'><?php echo $image; ?></div>
+				  	<div class='img-circle'><?php echo do_shortcode('[ica_avatar uid="'.$userId.'"]'); ?></div>
 					<div class='comment_cont row'>
 						<div class='col-md-9' id='c<?php echo $id; ?>'>
 							<p><?php echo $ucomments->comment; ?></p>
@@ -416,13 +412,9 @@ function seeker_comment_page(){
 				$userId=$ucomments->user_id; 		
 				$currentId=get_current_user_id();
 				$id=$ucomments->id;					    	
-				if ( (has_wp_user_avatar($userId)) ) {
-					$image= get_wp_user_avatar($userId, ' img-responsive'); 
-				}else{
-					$image="<img src='".get_stylesheet_directory_uri()."/img/EyeRecruit_Avitar.jpg' height='225px' width='190px' class='img-responsive'>";
-				} ?>
+				 ?>
 				<article class="<?php echo (($userId == $currentId))? 'current_user' : ''; ?>">
-					<div class='img-circle'><?php echo $image; ?></div>
+					<div class='img-circle'><?php echo do_shortcode('[ica_avatar uid="'.$userId.'"]'); ?></div>
 					<div class='comment_cont row'>
 						<div class='col-md-9' id='c<?php echo $id; ?>'>
 							<p><?php echo $ucomments->comment; ?></p>

@@ -33,23 +33,28 @@ seeker_resume .navs_listitem .nav_list_middle .thumbnail {
 /* generic */
 /* background */
 .page-id-4604 .navs_listitem .nav_list_middle .thumbnail{
-	background-image:url(//demo.eyerecruit.com/assets/themes/eye-recruit-2015/boxicon/3--Candidate-Resume---purchased-[Converted].jpg);
+	background-image:url(/assets/themes/eye-recruit-2015/boxicon/3--Candidate-Resume---purchased-[Converted].jpg);
 }
 /* background */
 .page-id-4596 .navs_listitem .nav_list_middle .thumbnail{
-	background-image:url(//demo.eyerecruit.com/assets/themes/eye-recruit-2015/boxicon/1---Background-Verification---Purchased-[Converted].jpg);
+	background-image:url(/assets/themes/eye-recruit-2015/boxicon/1---Background-Verification---Purchased-[Converted].jpg);
 }
 /* cover letters */
 .page-id-4606 .navs_listitem .nav_list_middle .thumbnail{
-	background-image:url(//demo.eyerecruit.com/assets/themes/eye-recruit-2015/boxicon/4---Introduction-Coverletter---purchased-[Converted].jpg);
+	background-image:url(/assets/themes/eye-recruit-2015/boxicon/4---Introduction-Coverletter---purchased-[Converted].jpg);
 }
 /* education */
 .page-id-4616 .navs_listitem .nav_list_middle .thumbnail{
-	background-image:url(//demo.eyerecruit.com/assets/themes/eye-recruit-2015/boxicon/7---Educational-Documents---purchased-[Converted].jpg);
+	background-image:url(/assets/themes/eye-recruit-2015/boxicon/7---Educational-Documents---purchased-[Converted].jpg);
 }
 /* certification */
 .page-id-4614 .navs_listitem .nav_list_middle .thumbnail{
-	background-image:url(//demo.eyerecruit.com/assets/themes/eye-recruit-2015/boxicon/8---Accomplishments-and-Certifications---purchased-[Converted].jpg);
+	background-image:url(/assets/themes/eye-recruit-2015/boxicon/8---Accomplishments-and-Certifications---purchased-[Converted].jpg);
+}
+
+/* licenses */
+.page-id-4621 .navs_listitem .nav_list_middle .thumbnail{
+	background-image:url(/assets/themes/eye-recruit-2015/boxicon/10---Professional-Licensing---Purchased---Choice-A-[Converted].jpg);
 }
 </style>
 
@@ -489,7 +494,6 @@ $roles1 = array_shift( $roless );
 					</div>
 
 					<div class="col-md-3">
-						docSidebar is: <?php echo $docSidebar;?>
 						<?php include $docSidebar; ?>
 					</div>
 				</div>

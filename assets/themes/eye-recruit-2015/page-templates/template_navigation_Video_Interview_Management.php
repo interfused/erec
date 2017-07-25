@@ -121,13 +121,9 @@ get_header(); ?>
 																<?php  } ?>
 															</div>
 		      												<!-- <img src="<?php //echo get_stylesheet_directory_uri(); ?>/img/video_user.jpg" class="img-responsive" alt="Resume"> -->
-		      												<?php if ( has_wp_user_avatar($userID) ) {
-																echo get_wp_user_avatar($userID, ''); 
-															}else{
-																?>
-																<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/video_user.jpg" class="img-responsive" alt="Resume">
-																<?php
-															}  ?>
+		      												<?php 
+		      													echo do_shortcode('[ica_avatar uid="'.$userID.'"]');
+															  ?>
 														</div>
 														<?php if($allowView == 'allow'){ ?>
 															<div class="text-center">

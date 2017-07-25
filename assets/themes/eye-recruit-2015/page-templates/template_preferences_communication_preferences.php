@@ -124,7 +124,7 @@ get_header(); ?>
 										</td>
 									</tr>
 									<tr>
-										<td>Whit a weekly report that showing you which Employers have viewed your profile.</td>
+										<td>With a weekly report that showing you which Employers have viewed your profile.</td>
 										<td class="tableicons">
 											<div class="checkbox-slider--b">
 												<label>

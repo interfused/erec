@@ -72,13 +72,7 @@ get_header(); ?>
 										<div class="col-md-2 col-sm-4">
 											<div href="javascript:void(0);" class="thumbnail"> 
 												<?php
-													if ( has_wp_user_avatar($user_id) ) {
-														echo get_wp_user_avatar($user_id, 'thumbnail'); 
-													}else{
-														?>
-														<img src="<?php echo site_url(); ?>/assets/uploads/2016/08/EyeRecruit_Avitar.png" height="225px" width="190px" class="thumbnail">
-														<?php
-													}
+												echo do_shortcode('[ica_avatar uid="'.$user_id.'"]');
 												?>
 												<!-- <img src="<?php //echo get_stylesheet_directory_uri(); ?>/img/sprofile_user.jpg" class="img-responsive">  -->
 											</div>

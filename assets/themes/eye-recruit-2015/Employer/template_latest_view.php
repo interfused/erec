@@ -68,8 +68,8 @@ get_header(); ?>
 													<span class="back_check"><img src="<?php echo get_stylesheet_directory_uri(); ?>/img/backcheck.jpg"></span>
 													<div class="thumbnail">
 														<?php
-															if ( (has_wp_user_avatar($can_id)) && ($allwoPhoto != 'No') ) {
-																echo get_wp_user_avatar($can_id);
+															if (  ($allwoPhoto != 'No') ) {
+																echo do_shortcode('[ica_avatar uid="'.$can_id.'"]');
 															}else{
 																?>
 																<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/employer_default.jpg" class="img-responsive">

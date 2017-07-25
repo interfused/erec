@@ -55,13 +55,7 @@ get_header(); ?>
 							<div class="thumbnail">
 								<a href="javascript:void(0);" id="editPoPic"><i class="fa fa-pencil"></i></a>
 								<?php
-								if ( has_wp_user_avatar($user_id) ) {
-									echo get_wp_user_avatar($user_id); 
-								}else{
-									?>
-									<img src="<?php echo site_url(); ?>/assets/uploads/2016/08/EyeRecruit_Avitar.png" height="150px" width="150px" class="img-reponsive">
-									<?php
-								}
+								echo do_shortcode('[ica_avatar uid="'.$user_id.'"]');
 								?>
 							</div>
 							<div class="profile_cont">
@@ -172,7 +166,7 @@ get_header(); ?>
 						
 						<div class="name_info">
 							<div class="sidebar_title cont_title">
-								<h4>Your Locations & Zip Codes</h4>
+								<h4>Your Zip Code</h4>
 								<!-- <div class="title_edit"><a href="javascript:void(0);"><i class="fa fa-pencil"></i> Edit</a></div> -->
 							</div>
 							<div class="indent">
@@ -181,26 +175,21 @@ get_header(); ?>
 
 									<div class="row">
 										<div class="col-sm-7">
-											<span class="help-block">Fort Lauderdale, FL. 33327 (default)</span>
+											<span class="help-block"><?php echo get_cimyFieldValue($user_id, 'SEEKER_ZIP_CODE'); ?></span>
 										</div>
 										<div class="col-sm-5">
 											<i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Tell us which emails you wish to receive & which you don’t Simple." data-placement="left"></i>
 										</div>
 									</div>
-									<div class="row">
-										<div class="col-sm-7">
-											<span class="help-block">Cape Coral, FL. 33914</span>
-										</div>
-										<div class="col-sm-5">
-											<i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Tell us which emails you wish to receive & which you don’t Simple." data-placement="left"></i> 
-										</div>
-									</div>
+									
 								</div>
 								<div class="form-group alert_row">
 									<div class="row">
 										<div class="col-sm-7">
-											<label class="sr-only" for="inputHelpBlock">Closest Major City</label>
-											<p class="help-block" id="get_cell_phone"><?php echo get_user_meta( $user_id, 'cell_phone',true); ?></p>
+											<label class="sr-only" for="inputHelpBlock">Closest Major City You are Seeking</label>
+											
+											<!-- <p class="help-block" id="get_cell_phone"><?php echo get_user_meta( $user_id, 'cell_phone',true); ?></p> -->
+											<?php echo get_cimyFieldValue($user_id, 'MAJOR_METROPOLITAN'); ?>
 											<!-- <input type="text" aria-invalid="false" aria-required="true" class="form-control" size="40" value="<?php //echo get_user_meta( $user_id, 'cell_phone',true); ?>"  placeholder="Cellular Phone *" name="cellular_phone"> -->
 										</div>
 										<div class="col-sm-5">

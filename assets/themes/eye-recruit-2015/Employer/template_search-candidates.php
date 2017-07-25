@@ -135,8 +135,8 @@ get_header();
 												<span class="back_check"><img src="<?php echo $themeurl; ?>/img/backcheck.jpg"></span>
 												<div class="thumbnail">
 													<?php
-														if ( (has_wp_user_avatar($author_info->ID)) && ($allwoPhoto != 'No') ) {
-															echo get_wp_user_avatar($author_info->ID); 
+														if (  ($allwoPhoto != 'No') ) {
+															echo do_shortcode('[ica_avatar uid="'.$author_info->ID.'"]');
 														}else{
 															?>
 															<img src="<?php echo $themeurl; ?>/img/employer_default.jpg" class="img-responsive">
