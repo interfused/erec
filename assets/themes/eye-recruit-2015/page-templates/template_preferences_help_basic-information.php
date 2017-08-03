@@ -608,15 +608,8 @@ get_header(); ?>
 														$cWsArr = get_cimy_options_arr_from_field( 'CUR_WORK_SITUATION' );
 																	
 														$cWsVal = explode(',', get_cimyFieldValue($UserID, 'CUR_WORK_SITUATION') );
-														echo '<h2>cWsArr:</h2><pre>';
-														var_dump($cWsArr);
-														echo '</pre><h2>cWsVal:</h2><pre>';
-														var_dump($cWsVal);
-														echo '</pre>';
-														
 														foreach ($cWsArr as $value) { ?>
 															<li>
-
 															 <div class="checkbox"><label><input name="CUR_WORK_SITUATION[]" <?php if( in_array($value, $cWsVal) ){ echo "checked"; } ?> type="checkbox" value="<?php echo $value; ?>"><span><?php echo $value; ?></span></label></div> </li>
 														<?php } ?>
 													</ul>
