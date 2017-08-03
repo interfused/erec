@@ -1567,6 +1567,32 @@ function get_cimy_field_options($atts){
 }
 add_shortcode('getcimyfieldoptions','get_cimy_field_options');
 
+/*
+returns an array of options 
+use for dropdowns
+*/
+function get_cimy_options_arr_from_field($fieldname){
+
+	$allCimyFields = get_cimyFields();
+	if (count($allCimyFields) > 0) {
+		foreach ($allCimyFields as $field) {
+
+			if(cimy_uef_sanitize_content($field['NAME']) == $fieldname){
+				$str =  cimy_uef_sanitize_content($field['LABEL']) ;
+				break;
+			}
+		}
+	}
+
+	//find the first slash
+	if (($tmp = strstr($str, '/')) !== false) {
+		$str = substr($tmp, 1);
+	}
+	//explode everything after based on comma
+	//return array
+	return explode(',',$str);
+}
+
 ///////
 //AWARD BADGES
 ///////
