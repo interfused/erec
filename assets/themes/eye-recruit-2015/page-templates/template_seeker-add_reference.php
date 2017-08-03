@@ -18,6 +18,11 @@ if(isset( $_POST['post_nonce_field'] ) && wp_verify_nonce( $_POST['post_nonce_fi
 
   $sql = 'SELECT * FROM '.$tableName.' WHERE id = "'.$_POST['id'].'"';
   $wpdb->get_row($sql);
+  if ( $_POST['phone_cell']){
+    $cell = $_POST['phone_cell'];
+  } else{
+    $cell = 'N/A';
+  }
 
   $wpdb->update(
     $tableName,
@@ -37,6 +42,7 @@ if(isset( $_POST['post_nonce_field'] ) && wp_verify_nonce( $_POST['post_nonce_fi
     array('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s'),
     array('%d')
     );
+ 
   $postSuccess = true;
 }
 
@@ -145,7 +151,7 @@ if($referenceID == 0){
 
                             <div class="form-group">
                               <label for="user_aff">How are/were you affiliated with <?php echo $user_info->first_name;?>?  </label>
-                              <input type="text" id="user_aff" name="user_aff" required placeholder="Company/club/group/etc.">
+                              <input type="text" id="user_aff" name="user_aff" required placeholder="Company/club/group/etc." maxlength="50">
                             </div>
 
                             <div class="form-group">
@@ -163,12 +169,12 @@ if($referenceID == 0){
                             <p class="paddedBottom"><?php echo $user_fullname;?> has requested your recommendation.  If would, please let us know a little bit more about you.</p>
                             <div class="form-group">
                               <label for="current_company">Your Current Employer?</label>
-                              <input type="text" id="current_company" name="current_company" required >
+                              <input type="text" id="current_company" name="current_company" required maxlength="20" >
                             </div>
 
                             <div class="form-group">
                               <label for="current_position">Current Position</label>
-                              <input type="text" id="current_position" name="current_position" required >
+                              <input type="text" id="current_position" name="current_position" required maxlength="20" >
                             </div>
 
                             
@@ -219,6 +225,7 @@ if($referenceID == 0){
                         </div>
                         <div class="col-sm-12 form-group text-center paddedTopBottom-2x">
                           <?php  wp_nonce_field( 'post_nonce', 'post_nonce_field' ); ?>
+
                           <button type="submit" class="btn btn-primary">Submit Reference</button>
                         </div>
                       </form>

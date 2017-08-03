@@ -244,7 +244,7 @@
 				  <option value="Confidential">Confidential</option>
 				  <option value="Secret">Secret</option>
 				  <option value="Top Secret">Top Secret</option>
-				  <option value="Top Secret/SCI">Top Secret/SCI</option>
+				  <!-- <option value="Top Secret/SCI">Top Secret/SCI</option> -->
 				  <option value="Intel Agency(NSA /CIA/FBI/etc)">Intel Agency(NSA /CIA/FBI/etc)</option>
 				  <option value="Information available on request only">Information available on request only</option>
 				</select>

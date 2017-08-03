@@ -102,8 +102,8 @@ li.icon{
                       <div class="thumbnail"> 
                         <?php
                         $allwoPhoto = get_cimyFieldValue($user_id, 'PNA_PHOTOGRAPH');
-                        if ( (has_wp_user_avatar($user_id)) && ($allwoPhoto != 'No') ) {
-                          echo get_wp_user_avatar($user_id, 'thumbnail'); 
+                        if (  ($allwoPhoto != 'No') ) {
+                          echo do_shortcode('[ica_avatar uid="'.$user_id.'"]'); 
                         }else{
                           ?>
                           <img src="<?php echo get_stylesheet_directory_uri(); ?>/img/EyeRecruit_Avitar.jpg" height="225px" width="190px" class="thumbnail">
@@ -383,13 +383,7 @@ li.icon{
                           <article>
                             <div class="img-circle">
                               <?php
-                              if ( (has_wp_user_avatar($user_id))) {
-                                echo get_wp_user_avatar($user_id, ' img-responsive'); 
-                              }else{
-                                ?>
-                                <img src="<?php echo get_stylesheet_directory_uri(); ?>/img/EyeRecruit_Avitar.jpg" height="225px" width="190px" class="img-responsive">
-                                <?php
-                              }
+                              echo do_shortcode('[ica_avatar uid="'.$user_id.'"]');
                               ?>
                             </div>
 

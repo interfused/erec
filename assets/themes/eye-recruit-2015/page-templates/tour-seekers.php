@@ -93,15 +93,6 @@ get_header();
 					<div class="profile_box">
 						<div class="thumbnail">
 							<a id="tourAvatar" href="javascript:void(0);"><i class="fa fa-pencil"></i></a>
-							<?php
-						/*	if ( has_wp_user_avatar($user_id) ) {
-								echo get_wp_user_avatar($user_id, ''); 
-							}else{
-								?>
-								<img src="<?php echo site_url();  ?>/assets/uploads/2016/08/EyeRecruit_Avitar.png" height="225px" width="190px">
-								<?php
-							}*/
-							?>
 							<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/EyeRecruit_Avitar.jpg" height="225px" width="190px">
 						</div>
 

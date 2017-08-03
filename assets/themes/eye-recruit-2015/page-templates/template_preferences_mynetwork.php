@@ -125,14 +125,7 @@ get_header(); ?>
 																	echo '<span class="badge">This <br>Just In</span>';
 																}
 															}
-
-															if ( has_wp_user_avatar($userID) ) {
-																echo get_wp_user_avatar($userID, ' img-responsive'); 
-															}else{
-																?>
-																<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/EyeRecruit_Avitar.jpg" class="img-responsive">
-																<?php
-															}
+															echo do_shortcode('[ica_avatar uid="'.$userID.'"]');
 															echo "<span class='join_rec_id' countkey='".$ref_name_key."' fid='".$userID."'>Recruit ID: ".$userID."</span>";
 														}
 														else{ 

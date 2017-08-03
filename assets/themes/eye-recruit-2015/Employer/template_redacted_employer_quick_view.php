@@ -109,8 +109,8 @@ function get_star_assessment($user_id,$field_name){
 											<div class="thumbnail"> 
 												<?php
 													$allwoPhoto = get_cimyFieldValue($user_id, 'PNA_PHOTOGRAPH');
-													if ( (has_wp_user_avatar($user_id)) && ($allwoPhoto != 'No') ) {
-														echo get_wp_user_avatar($user_id, 'thumbnail'); 
+													if (  ($allwoPhoto != 'No') ) {
+														echo do_shortcode('[ica_avatar uid="'.$user_id.'"]');
 													}else{
 														?>
 														<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/EyeRecruit_Avitar.jpg" height="225px" width="190px" class="thumbnail">
@@ -405,13 +405,7 @@ function get_star_assessment($user_id,$field_name){
 												    	  	?>
 													    		<article class="<?php echo (($userId == $currentId))? 'current_user' : ''; ?>">
 													    			<div class="img-circle"><?php 
-														    			if ( (has_wp_user_avatar($userId))) {
-																			echo get_wp_user_avatar($userId, ' img-responsive'); 
-																		}else{
-																			?>
-																				<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/EyeRecruit_Avitar.jpg" height="225px" width="190px" class="img-responsive">
-																			<?php
-																		}
+													    			echo do_shortcode('[ica_avatar uid="'.$userId.'"]');
 																		?>
 													    			</div>
 													    			<div class="comment_cont row">
@@ -441,13 +435,7 @@ function get_star_assessment($user_id,$field_name){
 										    		<article>
 										    			<div class="img-circle">
 										    			<?php
-										    				if ( (has_wp_user_avatar($employer_id))) {
-															echo get_wp_user_avatar($employer_id, ' img-responsive'); 
-															}else{
-														?>
-															<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/EyeRecruit_Avitar.jpg" height="225px" width="190px" class="img-responsive">
-														<?php
-															}
+										    			echo do_shortcode('[ica_avatar uid="'.$employer_id.'"]');
 														?>
 										    			</div>
 										    			<div class="comment_cont">

@@ -1278,13 +1278,7 @@ function delete_name_email(){
 												}
 											}
 
-											if ( has_wp_user_avatar($userID) ) {
-												echo get_wp_user_avatar($userID, ' img-responsive'); 
-											}else{
-												?>
-												<img src="<?php echo get_stylesheet_directory_uri(); ?>/img/EyeRecruit_Avitar.jpg" class="img-responsive">
-												<?php
-											}
+											echo do_shortcode('[ica_avatar uid="'.$userID.'"]');
 											echo "<span class='join_rec_id'>Recruit ID: ".$userID."</span>";
 										}
 										else{ 

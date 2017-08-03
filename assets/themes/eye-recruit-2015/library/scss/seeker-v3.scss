@@ -4,3 +4,166 @@
 .seeker-v3{
     @extend .swatch1;
 }
+
+.membership--need-upgrade{
+  @extend .swatch2;
+  background-color: $black-alpha;
+  text-align: center;
+  min-height: 200px;
+
+  .content{
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+}
+
+/* DASHBOARD */
+#importantDocs{
+  overflow: hidden;
+}
+
+#assesSection{
+  position: relative;
+
+  .membership--need-upgrade{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+  }
+}
+
+.dashboard_sec{
+  
+  .nav_items{
+    .locked--upgrade{
+      @extend .swatch2;
+      background-color: $black-alpha;
+      text-align: center;
+
+      i{
+        background-image: none;
+        color: $gray1;
+      }
+
+      &:after{
+        position: absolute;
+        top: 140px;
+        left: 0;
+        width: 100%;
+        content: "Upgrade Now to Unlock";
+        font-size: .8em;
+      }
+
+      &:hover{
+        background-color: $black1;
+        i{
+          color: $white;
+        }
+      }
+    }
+  }  
+
+}
+
+/* MEMBERSHIP */
+a.btn.btn-success.current-plan{
+  cursor: text;
+}
+
+form.pmpro_form {
+  div[class^='col-sm'],div[class^='col-md'],div[class^='col-lg']{
+    clear: none;
+  }
+
+  #pmpro_level_cost, #other_discount_code_p{
+    display: none;
+  }
+
+  th{
+    position: relative;
+    border-bottom: 1px solid $white;
+    @extend .typography-header;
+    text-transform: none;
+    font-size: 20px;
+    padding-left: 0;
+    padding-right: 0;
+
+    &:before{
+      display: block;
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      height: 1px;
+      width: 50px;
+      background-color: $red1;
+    }
+  }
+
+  .pmpro_thead{
+    float: left;
+    width: 55%;
+  }
+  
+  .pmpro_thead-msg{
+    font-family: "Open Sans",sans-serif;
+    font-size: 12px;
+    float: right;
+    width: 40%;
+    font-weight: normal;
+    text-align: right;
+    font-style: italic;
+  }
+
+  abbr[title]{
+    border-bottom: none;
+  }
+
+  .form-group.cloak{
+    position: absolute;
+    top:0;
+    left: 0;
+    overflow: hidden;
+    height:.1px;
+    width: .1px; 
+  }
+
+  label[for="baddress1"]{
+    padding-top: 2em;
+  }
+
+  .pmpro_payment-expiration{
+
+    label{
+      display: block;
+    }
+    #ExpirationMonth{
+      display: inline-block;
+      width: 30%;
+      margin-right: 5px; 
+    }
+    #ExpirationYear{
+      display: inline-block;
+      width: 60%;
+      margin-left: 5px; 
+    }
+
+    @media (min-width: 768px){
+      width: 50%;
+    }
+
+  }
+
+  .pmpro_payment-cvv{
+    @media(min-width: 768px){
+      width: 50%;
+    }
+  }
+  
+}
+

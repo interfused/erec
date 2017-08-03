@@ -20,12 +20,12 @@ get_header('loginpage'); ?>
 	$levelArray = array();
 	foreach ($getPmproLevels as $level) {
 		$levelmeta = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'selectusertype' AND meta_value = 'candidate' " );
-		if ( ((!empty($levelmeta->meta_value)) && ($level->expiration_period == 'Month')) || ($level->initial_payment == '0.00')  ) {
+		if ( in_array($level->name, array('BASIC','PLUS','PREMIUM','ULTIMATE')) ) {
 			$levelArray[] = $level->id;
 		}
 	}
 	?>
-
+	
 	<div id="primary" class="content-area">
 		<div id="content" role="main">
 			<section class="pricing_page">
@@ -75,16 +75,15 @@ get_header('loginpage'); ?>
 						<div class="row" id="seekerPricingList">
 							<?php
 							$countno = 1;
+
 							foreach ($getPmproLevels as $level) {
 								$levelmeta = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'selectusertype' AND meta_value = 'candidate' " );
 								$levelOtherDesc = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'other_desc'" );
 								$plan_image = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'plan_image'" );
 								$other_text_after_price = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'other_text_after_price'" );
-								if ( ((!empty($levelmeta->meta_value)) && ($level->expiration_period == 'Month')) || ($level->initial_payment == '0.00')  ) { 
+								if ( in_array($level->name, array('BASIC','PLUS','PREMIUM','ULTIMATE'))  ) { 
 									
 									$leveprice = (($level->initial_payment == '0.00')) ? '<h4><big>Free</big></h4>' : '<h4>'.$pmpro_currency_symbol.' <big>'.$level->initial_payment.'</big><small>/ Month</small></h4>'; 
-
-									/*.$level->expiration_period.*/
 									?>
 
 									
@@ -127,7 +126,7 @@ get_header('loginpage'); ?>
 							} ?>
 						</div>
 						<h2 class="text-center">Find The Plan That Works For You.</h2>
-						<p class="text-right">* Calculated using the shown monthly and annual costs using a 31 day month.</p>
+						<div id="billing_period" class="fineprint text-center">* Billed Monthly</div>
 					</div>
 				</div>
 			</section>
@@ -139,16 +138,17 @@ get_header('loginpage'); ?>
 
 <script type="text/javascript">
 	function seekerPricing(){
-		//alert(jQuery('input[name="pricingcheck"]:checked').val());
 		if ( jQuery('input[name="pricingcheck"]:checked').val() == 2 ) {
 			var plan = 'annual';
 			jQuery("#secound").addClass('radio_active');
 			jQuery("#first").removeClass('radio_active');
+			jQuery("#billing_period").text("* Billed Annually");
 		}
 		else{
 			var plan = 'monthly';
 			jQuery("#first").addClass('radio_active');
 			jQuery("#secound").removeClass('radio_active');
+			jQuery("#billing_period").text("* Billed Monthly");
 		}
 		jQuery('#loaders').show();
 		jQuery.ajax({
@@ -191,3 +191,4 @@ get_header('loginpage'); ?>
     </div>
   </div>
 </div>
+

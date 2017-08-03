@@ -4,6 +4,7 @@ $red1: #a12641;
 $green1: #68a025;
 $green2: #ebdc00;
 $black1: #24262b;
+$black-alpha: rgba(0,0,0,.8);
 
 /* light */
 $gray1: #adadad;
@@ -30,5 +31,17 @@ $gray3: #333333;
   }
   h1,h2,h3,h4,h5,h6{
     color: $red1;
+  }
+}
+
+.swatch2{
+  background-color: $black1;
+  color: $white;
+  
+  p{
+    color: $white;
+  }
+  h1,h2,h3,h4,h5,h6{
+    color: $white;
   }
 }

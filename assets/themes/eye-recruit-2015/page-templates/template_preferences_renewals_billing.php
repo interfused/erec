@@ -123,7 +123,7 @@ $user_id = get_current_user_id();
 									   <p class="help-block">
 									   		<?php
 										  	$paymetdate = date('Y-m-d', strtotime($getlastpaymentdate->startdate) );
-										  	if( !empty($paymetdate) && ( $getlastpaymentdate->enddate != '0000-00-00 00:00:00') ) {
+										  	if( !empty($paymetdate)  ) {
 										  		$memberplan = pmpro_getMembershipLevelForUser($user_id);
 												$cy_number = $memberplan->cycle_number;
 												$cycle_period = $memberplan->cycle_period;

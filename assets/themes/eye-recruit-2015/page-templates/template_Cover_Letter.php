@@ -45,13 +45,7 @@ $cell_phone = get_user_meta($userID, 'cell_phone', true);
 							
 							<div class="thumbnail">
 								<?php
-									if ( (has_wp_user_avatar($userID)) ) {
-										echo get_wp_user_avatar($userID, ' img-responsive'); 
-									}else{
-										?>
-										<img src="<?php echo site_url(); ?>/assets/uploads/2016/08/EyeRecruit_Avitar.png" class="img-responsive" alt="seeker profile">
-										<?php
-									}
+									echo do_shortcode('[ica_avatar uid="'.$userID.'"]');
 								?>
 								<!-- <img src="<?php //echo get_stylesheet_directory_uri(); ?>/img/coverletter_name.png" class="img-responsive" alt="seeker profile"> -->
 							</div>

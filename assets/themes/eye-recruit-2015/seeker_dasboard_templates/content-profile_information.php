@@ -69,7 +69,7 @@ if($value3){
 <ul class="view_points row">
 	<li class="col-xs-6 devicefull"><strong>Industry Sector : </strong><?php  echo get_cimyFieldValue($user_id,'BEST_INDUSTRY'); ?></li>
 	<li class="col-xs-6 devicefull"><strong>Years of Service : </strong><?php  echo get_cimyFieldValue($user_id,'INDUSTRY_YEARS'); ?></li>
-	<li class="col-xs-6 devicefull"><strong>Employment Status : </strong><?php  echo 'Actively Looking'; ?></li>
+	<li class="col-xs-6 devicefull"><strong>Employment Status : </strong><?php  echo $emStatus; ?></li>
 	<li class="col-xs-6 devicefull"><strong>Desired Opportunity : </strong><?php  echo $tofOp; ?></li>
 	<li class="col-xs-6 devicefull"><strong>Career Level : </strong><?php  echo get_cimyFieldValue($user_id,'CURR_CAREER_LVL'); ?></li>
 	<li class="col-xs-6 devicefull"><strong>Closest Metropolitan Area : </strong><?php  echo get_cimyFieldValue($user_id,'MAJOR_METROPOLITAN'); ?></li>

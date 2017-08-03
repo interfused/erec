@@ -5,7 +5,7 @@ add_action('wp_ajax_nopriv_ica_handle_initial_upload', 'ica_handle_initial_uploa
 function ica_handle_initial_upload(){
 	global $wpdb;
     $valid_formats = array("jpg", "png");
-    $max_file_size = 2000000;
+    $max_file_size = 4000000;
     $wp_upload_dir = wp_upload_dir();
     $path = $wp_upload_dir['basedir'].'/ifused_avatar_temp/';
     if (!file_exists( $path.date('Y/m/d') ) ) {
