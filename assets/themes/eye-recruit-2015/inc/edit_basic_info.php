@@ -208,7 +208,7 @@ function edit_basic_info() {
 		set_cimyFieldValue($user_id, 'LANGUAGES_WRITTEN', implode(', ', $_POST['LANGUAGES_WRITTEN'] ) );
 		set_cimyFieldValue($user_id, 'LANGUAGES_WRITTEN_OT', $_POST['LANGUAGES_WRITTEN_OT'] );
 
-		set_cimyFieldValue($user_id, 'CUR_WORK_SITUATION', implode(', ', $_POST['CUR_WORK_SITUATION'] ) );
+		set_cimyFieldValue($user_id, 'CUR_WORK_SITUATION', implode(',', $_POST['CUR_WORK_SITUATION'] ) );
 
 		set_cimyFieldValue($user_id, 'US_ARMED_FORCES', $_POST['US_ARMED_FORCES'] );
 		set_cimyFieldValue($user_id, 'US_ARMED_FORCES_OPTI', $_POST['US_ARMED_FORCES_OPTION'] );

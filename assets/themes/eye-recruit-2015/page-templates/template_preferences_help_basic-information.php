@@ -604,10 +604,13 @@ get_header(); ?>
 												<div class="indent-2x">
 													<ul class="radio-group radio-group-1-2">
 														<?php 
-														$cWsArr = array('I needed a career change','Needed a full-time position','I am looking for more career growth','New challenge','There were changes at company','Not compatible with company goals','Decided to take a different career path','Not enough hours','Company cut backs','Not enough work or challenge','Company downsized','Personal problems','Company restructured','Personal reasons','Company went out of business','Position eliminated','Family circumstances','Position ended','Family illness','Relocating','Family reasons','Reorganization or merger','Looking for more flexible schedule','Retiring','Went / going back to school','Schedule conflict','Personal health reasons','Seasonal position',"Job wasn't a good fit",'Seeking a challenge','Job was outsourced','Seeking more responsibility','Laid off','Limited growth at company','Limited growth at company','Summer job','Long commute','Temporary job','Looking for a new challenge','Travel');
+														
+														$cWsArr = get_cimy_options_arr_from_field( 'CUR_WORK_SITUATION' );
+																	
 														$cWsVal = explode(',', get_cimyFieldValue($UserID, 'CUR_WORK_SITUATION') );
 														foreach ($cWsArr as $value) { ?>
-															<li> <div class="checkbox"><label><input name="CUR_WORK_SITUATION[]" <?php if( in_array($value, $cWsVal) ){ echo "checked"; } ?> type="checkbox" value="<?php echo $value; ?>"><span><?php echo $value; ?></span></label></div> </li>
+															<li>
+															 <div class="checkbox"><label><input name="CUR_WORK_SITUATION[]" <?php if( in_array($value, $cWsVal) ){ echo "checked"; } ?> type="checkbox" value="<?php echo $value; ?>"><span><?php echo $value; ?></span></label></div> </li>
 														<?php } ?>
 													</ul>
 												</div>

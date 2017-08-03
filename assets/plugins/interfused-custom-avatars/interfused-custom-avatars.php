@@ -93,9 +93,6 @@ function getBase64Image(img) {
     return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 }
 
-jQuery(".cropit-image-input").click(function(){
-	console.log("crop it test");
-	});
 
 </script>
         <?php
