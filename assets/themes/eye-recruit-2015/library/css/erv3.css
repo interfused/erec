@@ -1,0 +1,39 @@
+/* UPDATED STYLESHEET 2017 TO BE USED FOR ALL FUTURE CSS 
+ FRONT END */
+/* COLORS */
+/* light */
+/* medium */
+/* dark */
+/* TYPOPGRAHY */
+.typography-header {
+  font-family: "Rokkitt", serif;
+  text-transform: uppercase;
+}
+/* SWATCHES */
+.swatch1 {
+  background-color: #fff;
+  color: #787878;
+}
+.swatch1 p {
+  color: #787878;
+}
+.swatch1 h1, .swatch1 h2, .swatch1 h3, .swatch1 h4, .swatch1 h5, .swatch1 h6 {
+  color: #a12641;
+}
+.swatch2 {
+  background-color: #24262b;
+  color: #fff;
+}
+.swatch2 p {
+  color: #fff;
+}
+.swatch2 h1, .swatch2 h2, .swatch2 h3, .swatch2 h4, .swatch2 h5, .swatch2 h6 {
+  color: #fff;
+}
+/* STRUCTURE */
+.footer-social a {
+  color: #adadad;
+}
+.footer-social a:hover {
+  color: #fff !important;
+}

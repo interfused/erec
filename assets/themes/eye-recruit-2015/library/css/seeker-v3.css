@@ -1,0 +1,156 @@
+/* SEEKER VERTICAL RELATED CSS */
+/* COLORS */
+/* light */
+/* medium */
+/* dark */
+/* TYPOPGRAHY */
+.typography-header, form.pmpro_form th {
+  font-family: "Rokkitt", serif;
+  text-transform: uppercase;
+}
+/* SWATCHES */
+.swatch1, .seeker-v3 {
+  background-color: #fff;
+  color: #787878;
+}
+.swatch1 p, .seeker-v3 p {
+  color: #787878;
+}
+.swatch1 h1, .seeker-v3 h1, .swatch1 h2, .seeker-v3 h2, .swatch1 h3, .seeker-v3 h3, .swatch1 h4, .seeker-v3 h4, .swatch1 h5, .seeker-v3 h5, .swatch1 h6, .seeker-v3 h6 {
+  color: #a12641;
+}
+.swatch2, .membership--need-upgrade, .dashboard_sec .nav_items .locked--upgrade {
+  background-color: #24262b;
+  color: #fff;
+}
+.swatch2 p, .membership--need-upgrade p, .dashboard_sec .nav_items .locked--upgrade p {
+  color: #fff;
+}
+.swatch2 h1, .membership--need-upgrade h1, .dashboard_sec .nav_items .locked--upgrade h1, .swatch2 h2, .membership--need-upgrade h2, .dashboard_sec .nav_items .locked--upgrade h2, .swatch2 h3, .membership--need-upgrade h3, .dashboard_sec .nav_items .locked--upgrade h3, .swatch2 h4, .membership--need-upgrade h4, .dashboard_sec .nav_items .locked--upgrade h4, .swatch2 h5, .membership--need-upgrade h5, .dashboard_sec .nav_items .locked--upgrade h5, .swatch2 h6, .membership--need-upgrade h6, .dashboard_sec .nav_items .locked--upgrade h6 {
+  color: #fff;
+}
+.membership--need-upgrade {
+  background-color: rgba(0, 0, 0, .8);
+  text-align: center;
+  min-height: 200px;
+}
+.membership--need-upgrade .content {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+/* DASHBOARD */
+#importantDocs {
+  overflow: hidden;
+}
+#assesSection {
+  position: relative;
+}
+#assesSection .membership--need-upgrade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+.dashboard_sec .nav_items .locked--upgrade {
+  background-color: rgba(0, 0, 0, .8);
+  text-align: center;
+}
+.dashboard_sec .nav_items .locked--upgrade i {
+  background-image: none;
+  color: #adadad;
+}
+.dashboard_sec .nav_items .locked--upgrade:after {
+  position: absolute;
+  top: 140px;
+  left: 0;
+  width: 100%;
+  content: "Upgrade Now to Unlock";
+  font-size: 0.8em;
+}
+.dashboard_sec .nav_items .locked--upgrade:hover {
+  background-color: #24262b;
+}
+.dashboard_sec .nav_items .locked--upgrade:hover i {
+  color: #fff;
+}
+/* MEMBERSHIP */
+a.btn.btn-success.current-plan {
+  cursor: text;
+}
+form.pmpro_form div[class^='col-sm'], form.pmpro_form div[class^='col-md'], form.pmpro_form div[class^='col-lg'] {
+  clear: none;
+}
+form.pmpro_form #pmpro_level_cost, form.pmpro_form #other_discount_code_p {
+  display: none;
+}
+form.pmpro_form th {
+  position: relative;
+  border-bottom: 1px solid #fff;
+  text-transform: none;
+  font-size: 20px;
+  padding-left: 0;
+  padding-right: 0;
+}
+form.pmpro_form th:before {
+  display: block;
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  height: 1px;
+  width: 50px;
+  background-color: #a12641;
+}
+form.pmpro_form .pmpro_thead {
+  float: left;
+  width: 55%;
+}
+form.pmpro_form .pmpro_thead-msg {
+  font-family: "Open Sans", sans-serif;
+  font-size: 12px;
+  float: right;
+  width: 40%;
+  font-weight: normal;
+  text-align: right;
+  font-style: italic;
+}
+form.pmpro_form abbr[title] {
+  border-bottom: none;
+}
+form.pmpro_form .form-group.cloak {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  height: 0.1px;
+  width: 0.1px;
+}
+form.pmpro_form label[for="baddress1"] {
+  padding-top: 2em;
+}
+form.pmpro_form .pmpro_payment-expiration label {
+  display: block;
+}
+form.pmpro_form .pmpro_payment-expiration #ExpirationMonth {
+  display: inline-block;
+  width: 30%;
+  margin-right: 5px;
+}
+form.pmpro_form .pmpro_payment-expiration #ExpirationYear {
+  display: inline-block;
+  width: 60%;
+  margin-left: 5px;
+}
+@media (min-width: 768px) {
+  form.pmpro_form .pmpro_payment-expiration {
+    width: 50%;
+  }
+}
+@media (min-width: 768px) {
+  form.pmpro_form .pmpro_payment-cvv {
+    width: 50%;
+  }
+}

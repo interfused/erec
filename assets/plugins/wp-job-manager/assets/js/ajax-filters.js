@@ -14,6 +14,8 @@ jQuery( document ).ready( function ( $ ) {
 		var order        = target.data( 'order' );
 		var featured     = target.data( 'featured' );
 		var filled       = target.data( 'filled' );
+		var job_types    = target.data( 'job_types' );
+		var post_status  = target.data( 'post_status' );
 		var index        = $( 'div.job_listings' ).index(this);
 		var categories, keywords, location;
 
@@ -70,6 +72,7 @@ jQuery( document ).ready( function ( $ ) {
 				search_location: location,
 				search_categories: categories,
 				filter_job_type: filter_job_type,
+				filter_post_status: post_status,
 				per_page: per_page,
 				orderby: orderby,
 				order: order,
@@ -95,6 +98,8 @@ jQuery( document ).ready( function ( $ ) {
 				search_categories: categories,
 				search_keywords: keywords,
 				search_location: location,
+				filter_post_status: post_status,
+				filter_job_type: job_types,
 				per_page: per_page,
 				orderby: orderby,
 				order: order,
@@ -105,7 +110,7 @@ jQuery( document ).ready( function ( $ ) {
 			};
 
 		}
-		jQuery('#loaders').show();
+
 		xhr[index] = $.ajax( {
 			type: 'POST',
 			url: job_manager_ajax_filters.ajax_url.toString().replace( '%%endpoint%%', 'get_listings' ),
@@ -151,25 +156,6 @@ jQuery( document ).ready( function ( $ ) {
 							$( 'li.job_listing', results ).css( 'visibility', 'visible' );
 						}
 
-						/*.........Xtreem changes...............*/
-						jQuery('html, body').animate({
-					        scrollTop: jQuery('#searchSec').offset().top - 200
-					    }, 500);
-						jQuery('#jobpaginationDiv').html('');
-						if ( result.max_num_pages > 1 ) {
-							jQuery('.job_listings .job_listing').attr('noofpage', page);
-							jQuery('.job_listings .job_listing').addClass('noofpage'+page);
-							for (var i = 1; i <= result.max_num_pages; i++) {
-								if(i == page){
-									var act = 'active';
-								}
-								else{
-									var act = 'load_more_jobs1';
-								}
-								jQuery('<a class="'+act+'" data-page="'+i+'" href="javascript:void(0);">'+i+'</a>').appendTo('#jobpaginationDiv');
-							}
-						}
-
 						$( results ).removeClass( 'loading' );
 
 						target.triggerHandler( 'updated_results', result );
@@ -180,7 +166,6 @@ jQuery( document ).ready( function ( $ ) {
 						}
 					}
 				}
-				jQuery('#loaders').hide();
 			},
 			error: function ( jqXHR, textStatus, error ) {
 				if ( window.console && 'abort' !== textStatus ) {
