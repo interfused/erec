@@ -9,12 +9,7 @@
  */
 
 get_header(); ?>
-<?php
-/* DEV NOTES
-look into 
-$accessEmp and $accessRec as they seem unneccssary and were previously coded by xtreem.  Each file should have it's own permission as currently evident. 
-*/
-?>
+
 <style>
 .resumeno{padding-bottom: 2em;}
 .navs_listitem .nav_list_header {
