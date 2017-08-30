@@ -23,7 +23,7 @@ function jobseeker_basic_info_member_tips($value){ ?>
 	<aside class="widget widget_wpb_widget special_box special_logo navi_thumbnail">
 		<?php
 		$args = array(
-			"post_type"=>'tips',
+			"post_type"=>'site-tip',
 			"post_status"=>'publish',
 			//'orderby' => 'rand',
 			'order' => 'DESC',
@@ -60,15 +60,15 @@ function jobseeker_basic_info_member_tips($value){ ?>
 
 function member_dashboard_sidebar_tips_function($value){
 	$args = array(
-		"post_type"=>'tips',
+		"post_type"=>'site-tip',
 		"post_status"=>'publish',
 		'orderby' => 'rand',
 		'order' => 'DESC',
 		 'tax_query' => array(
         array( 
-            'taxonomy' => 'tip_category',
+            'taxonomy' => 'site-tip-category',
             'field' => 'id',
-            'terms' => 456
+            'terms' => 480
         )
     ),
 	"posts_per_page"=> 1
@@ -85,7 +85,7 @@ function member_dashboard_sidebar_tips_function($value){
 		while($the_queries->have_posts()){ $the_queries->the_post(); ?>
 			<div class="sidebar_title">
 				<span class="title_icon tips_icon"></span>
-				<h4><a href="<?php  the_permalink(); ?>"><?php echo get_the_title(); ?></h4></a>
+				<h4>Tip #<?php echo get_the_id(); ?></a>
 			</div>
 			<p><?php  $link = get_the_permalink(); 
 				$content = get_the_content();
@@ -108,7 +108,7 @@ function member_navigation_sidebar_tips_function($value){ ?>
 		<div class="thumbnail"><img src="<?php  echo get_stylesheet_directory_uri(); ?>/img/navi_logo-icon.png" class="img-responsive"></div>
 		<?php 
 		$args = array(
-			"post_type"=>'tips',
+			"post_type"=>'site-tip',
 			"post_status"=>'publish',
 			//'orderby' => 'rand',
 			'order' => 'DESC',
