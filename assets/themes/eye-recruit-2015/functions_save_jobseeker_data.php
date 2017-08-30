@@ -95,11 +95,26 @@ function save_user_login_history($login){
         'created_ate' => $cdate
       ), 
       array( '%d','%s' ,'%s','%s','%s','%s','%s'));
-
 }
 
-
 add_action('wp_login','save_user_login_history');
+
+/*
+DELETE USER HISTORY ON USER DELETION
+*/
+function er_delete_user_login_history( $user_id ) {
+    global $wpdb;
+    $user_obj = get_userdata( $user_id );
+
+    $id_user = $user_obj->ID;
+    $idsss = $user_obj->user_id;
+
+
+    /*Delete Data from friend table*/  
+    $delete_record = $wpdb->query("DELETE FROM `eyecuwp_user_login_history` where `user_id` = ".$user_obj->ID."");
+
+}
+add_action( 'delete_user', 'er_delete_user_login_history' );
 
 /*ASSESSMENT*/
 $sectionQuestions_work_act = 44;

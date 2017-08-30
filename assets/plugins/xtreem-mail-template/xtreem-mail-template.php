@@ -1,7 +1,7 @@
 <?php
 /*
-Plugin Name: Xtreem  Mail Templates 
-Author:      Xtreem Solution
+Plugin Name: EyeRecruit Mail Templates 
+Author:      EyeRcruit
 Description: This plugin is customized to create mail templates for eyerecruit.
 */
  // error_reporting(E_ALL);
