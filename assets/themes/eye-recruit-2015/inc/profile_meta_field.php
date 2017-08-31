@@ -843,7 +843,7 @@ function jobseeker_profile_data_lang() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4347' ) {
+	if ( $form_id == 'profilebuder7062' ) {
 		
 
 		update_usermeta( $user_id, 'list_languages_mandarin', $_POST['list_languages_mandarin'] );
@@ -956,7 +956,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4338' ) {
+	if ( $form_id == 'profilebuder7055' ) {
 		
 		if ( isset($_POST['AGREE_TO_RESPOND']) ) {
 
@@ -967,7 +967,7 @@ function jobseeker_profile_data() {
 	}
 
 
-	if ( $form_id == 'profilebuder4390' ) {
+	if ( $form_id == 'profilebuder7056' ) {
 
 		if ( isset($_POST['SYSTEM_AND_PROCE']) ) {
 			$SYSTEM_AND_PROCE 		= $_POST['SYSTEM_AND_PROCE'];
@@ -976,7 +976,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4340' ) {
+	if ( $form_id == 'profilebuder7057' ) {
 		
 		if ( isset($_POST['BEST_INDUSTRY']) ) {
 			$BEST_INDUSTRY 			= $_POST['BEST_INDUSTRY'];
@@ -985,7 +985,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4342' ) {
+	if ( $form_id == 'profilebuder7058' ) {
 		
 		if ( isset($_POST['HIGHEST_EDUCATION']) ) {
 			$HIGHEST_EDUCATION 		= $_POST['HIGHEST_EDUCATION'];
@@ -1014,7 +1014,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4343' ) {
+	if ( $form_id == 'profilebuder7059' ) {
 		
 		if ( isset($_POST['TYPE_OF_OPPORTUNITY']) ) {
 			$TYPE_OF_OPPORTUNITY 	= $_POST['TYPE_OF_OPPORTUNITY'];
@@ -1029,7 +1029,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4344' ) {
+	if ( $form_id == 'profilebuder7060' ) {
 
 		if ( isset($_POST['US_ELIGIBLE']) ) {
 			$US_ELIGIBLE 			= $_POST['US_ELIGIBLE'];
@@ -1049,7 +1049,7 @@ function jobseeker_profile_data() {
 	}
 
 
-	if ( $form_id == 'profilebuder4345' ) {
+	if ( $form_id == 'profilebuder7057' ) {
 		
 		if ( isset($_POST['INDUSTRY_YEARS']) ) {
 			$INDUSTRY_YEARS 	= $_POST['INDUSTRY_YEARS'];
@@ -1081,7 +1081,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4346' ) {
+	if ( $form_id == 'profilebuder7061' ) {
 		
 		if ( isset($_POST['FIELD_LICENSE_STATUS']) ) {
 			$FIELD_LICENSE_STATUS 	= $_POST['FIELD_LICENSE_STATUS'];
@@ -1097,7 +1097,7 @@ function jobseeker_profile_data() {
 
 
 
-	if ( $form_id == 'profilebuder4348' ) {
+	if ( $form_id == 'profilebuder7063' ) {
 		
 		if ( isset($_POST['CUR_WORK_SITUATION']) ) {
 			$CUR_WORK_SITUATION 	= $_POST['CUR_WORK_SITUATION'];
@@ -1107,7 +1107,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4349' ) {
+	if ( $form_id == 'profilebuder7064' ) {
 		
 		if ( isset($_POST['US_ARMED_FORCES']) ) {
 			$US_ARMED_FORCES 		= $_POST['US_ARMED_FORCES'];
@@ -1125,7 +1125,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4351' ) {
+	if ( $form_id == 'profilebuder7066' ) {
 		
 		if ( isset($_POST['FEDERAL_NVESTIGATIV']) ) {
 			$FEDERAL_NVESTIGATIV 	= $_POST['FEDERAL_NVESTIGATIV'];
@@ -1143,7 +1143,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4352' ) {
+	if ( $form_id == 'profilebuder7067' ) {
 
 		if ( isset($_POST['MAJOR_METROPOLITAN']) ) {
 			$MAJOR_METROPOLITAN 	= $_POST['MAJOR_METROPOLITAN'];
@@ -1158,7 +1158,7 @@ function jobseeker_profile_data() {
 		die();
 	}
 
-	if ( $form_id == 'profilebuder4356' ) {
+	if ( $form_id == 'profilebuder7070' ) {
 
 		if ( isset($_POST['rfname']) && !empty($_POST['rfname'])) {
 			$rfname 				= $_POST['rfname'];
@@ -1182,7 +1182,7 @@ function jobseeker_profile_data() {
 	}
 
 
-	if ( $form_id == 'profilebuder4357' ) {
+	if ( $form_id == 'profilebuder7071' ) {
 		
 
 		$userdata = get_userdata($user_id);

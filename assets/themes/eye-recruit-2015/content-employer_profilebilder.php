@@ -40,8 +40,8 @@ if ( is_user_logged_in() ) {
 		}
 	}
 	jQuery(document).ready(function(){
-		jQuery("#profilebuder4665").addClass("active");
-		currentid = '4665';
+		jQuery("#profilebuder7077").addClass("active");
+		currentid = '7077';
 		window.location.hash = btoa(currentid);
 		showCurrentStep();
 		jQuery('body').addClass('profile-builder-page');
@@ -57,7 +57,7 @@ if ( is_user_logged_in() ) {
 			if ( jQuery('input[name="EMP_CMPNY_LIS_FILE"]').val() != '') {
 				var fd = new FormData();
 				var files_data = jQuery('.EMP_CMPNY_LIS_FILE');
-				jQuery('#profilebuder4677 .continue_step').html('File uploading. Please wait...').attr('disabled');
+				jQuery('#profilebuder7082 .continue_step').html('File uploading. Please wait...').attr('disabled');
 
 				jQuery.each(jQuery(files_data), function(i, obj) {
 		            jQuery.each(obj.files,function(j,file){
@@ -75,7 +75,7 @@ if ( is_user_logged_in() ) {
 		            processData: false,
 		            success: function(response){
 
-		            	jQuery('#profilebuder4677 .continue_step').removeAttr('disabled').html('<i class="fa fa-angle-double-left"></i>  Continue  <i class="fa fa-angle-double-right"></i>');
+		            	jQuery('#profilebuder7082 .continue_step').removeAttr('disabled').html('<i class="fa fa-angle-double-left"></i>  Continue  <i class="fa fa-angle-double-right"></i>');
 		            	
 		            	if ( response == 'Allow only pdf and doc file format.'  || response == 'File size is too large!' ) {
 		            		jQuery('<span class="text-primary cust_error_invalid">'+response+'</span>').insertAfter('input[name="EMP_CMPNY_LIS_FILE"]');
@@ -264,7 +264,7 @@ if ( is_user_logged_in() ) {
 				}
 			});
 			
-			if(jQuery(this).attr('data-current')==4693){
+			if(jQuery(this).attr('data-current')==7098){
 				var _this = jQuery(this);
 				_this.text('Please Wait...')
 				_this.attr('disabled', 'disabled');
