@@ -228,7 +228,7 @@ get_header(); ?>
 								
 								<div class="special_box special_logo navi_thumbnail">
 									<div class="thumbnail">
-										<img src="http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
+										<img src="<?php echo site_url(); ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
 									</div>
 									<h5>EMPLOYERS USE OF BACKGROUND REPORTS:</h5>
 									<p>"The employer must tell you that they might use the (background report) information to make a decision related to your employment and must ask for your written permission, but if you're applying for a job and don't give your permission, the employer may reject your application."<br></br>
@@ -240,14 +240,14 @@ get_header(); ?>
 								</div>
 								<div class="special_box special_logo navi_thumbnail margin-top-70-logo">
 									<div class="thumbnail">
-										<img src="http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
+										<img src="<?php echo site_url(); ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
 									</div>
 									<h5>OUR DISCLAIMER</h5>
 									<p>EyeRecruit, Inc. is not a Law Firm and should not be seen or interpreted as providing legal advice.</p><p>What you provide to a potential employer is up to you.  It is always a good idea to check with someone who knows the specific laws in the jurisdiction where you live.</p>
 								</div>
 								<div class="special_box special_logo navi_thumbnail margin-top-70-logo">
 									<div class="thumbnail">
-										<img src="http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
+										<img src="<?php echo site_url(); ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
 									</div>
 									<h5>PROFESSIONAL TIP</h5>
 									<p>Use a professional licensed provider to conduct your background verification.  Great screening companies will do a far better job of locating the concrete information you need, not only for your knowledge, but to assist a potential Employer.  Providing your own background will prevent Employers from viewing data that might be a violation of State of Federal Law.  </p>
