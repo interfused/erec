@@ -13,13 +13,7 @@
 //http://wordpress.stackexchange.com/questions/9775/how-to-edit-a-user-profile-on-the-front-end
 /* Get user info. */
 
-/*
-CHANGELOG
 
-2016 04 12
-Integrated replacement labels for previous labels
-
-*/
 global $current_user, $wp_roles;
 get_currentuserinfo();
 
@@ -32,12 +26,13 @@ $userMeta=get_user_meta($user->ID);
 require_once( ABSPATH . WPINC . '/registration.php' );
 $error = array();   
 
-$sectionQuestions_work_act=44;
-$sectionQuestions_tech=48;
-$sectionQuestions_tasks=32; 
-$sectionQuestions_know=14; 
-$sectionQuestions_skills=17; 
-$sectionQuestions_ability=18; 
+//retrieve question count by category id
+$sectionQuestions_work_act = get_assessment_questions_count(488);
+$sectionQuestions_tech = get_assessment_questions_count(484);
+$sectionQuestions_tasks = get_assessment_questions_count(483); 
+$sectionQuestions_know = get_assessment_questions_count(486); 
+$sectionQuestions_skills = get_assessment_questions_count(487); 
+$sectionQuestions_ability = get_assessment_questions_count(485); 
 
 /* If profile was saved, update profile. */
 if ( 'POST' == $_SERVER['REQUEST_METHOD'] && !empty( $_POST['action'] ) && $_POST['action'] == 'update-user' ) {
@@ -727,7 +722,7 @@ jQuery(document).ready(function(){
 	setupTmpTbl("Skills Assessment",'skills');
 	setupTmpTbl("Abilities Assessment",'abilities');
 	setupTmpTbl("Work Activities Assessment",'activities');
-	///OTHER TASKS YN FIELDS : 35 questions
+	///OTHER TASKS YN FIELDS : 
 	for(i=1; i<= <?php echo $sectionQuestions_tasks; ?>; i++){
 		if(!jQuery('select[name="cimy_uef_TASKS_Q'+ (i) +'"]' ).length ){
 		break;
@@ -737,7 +732,7 @@ jQuery(document).ready(function(){
 	jQuery('table#tasks').remove();
 	
 	
-	///OTHER TECH YN FIELDS : 35 questions
+	///OTHER TECH YN FIELDS : 
 	for(i=1;i<= <?php echo $sectionQuestions_tech; ?> ;i++){
 		if(!jQuery('select[name="cimy_uef_TECH_Q'+ (i) +'"]' ).length ){
 		break;
@@ -748,7 +743,7 @@ jQuery(document).ready(function(){
 	
 	
 	
-	///OTHER KNOW YN FIELDS : 35 questions
+	///OTHER KNOW YN FIELDS : 
 	for(i=1;i<=<?php echo $sectionQuestions_know;?>;i++){
 		if(!jQuery('select[name="cimy_uef_KNOW_Q'+ i +'"]' ).length ){
 		break;
@@ -756,7 +751,7 @@ jQuery(document).ready(function(){
 	cloneAndCheck2( 'KNOW_Q'+i ,'#knowledge' );
 	}
 	jQuery('table#knowledge').remove();
-	///OTHER SKILLS YN FIELDS : 35 questions
+	///OTHER SKILLS YN FIELDS : 
 	for(i=1;i<=<?php echo $sectionQuestions_skills; ?>;i++){
 		if(!jQuery('select[name="cimy_uef_SKILLS_Q'+ i +'"]' ).length ){
 		break;
@@ -766,7 +761,7 @@ jQuery(document).ready(function(){
 	 
 	jQuery('table#skills').remove();
 	
-	///OTHER ABILITY YN FIELDS : 35 questions
+	///OTHER ABILITY YN FIELDS : 
 	for(i=1;i<=<?php echo $sectionQuestions_ability; ?>;i++){
 		if(!jQuery('select[name="cimy_uef_ABILITY_Q'+ i +'"]' ).length ){
 		break;
@@ -775,7 +770,7 @@ jQuery(document).ready(function(){
 	}
 	jQuery('table#abilities').remove();
 	
-	///OTHER WORK ACTIVITIES YN FIELDS : 35 questions
+	///OTHER WORK ACTIVITIES YN FIELDS : 
 	for(i=1;i<= <?php echo $sectionQuestions_work_act; ?> ;i++){
 		if(!jQuery('select[name="cimy_uef_WORK_ACT_Q'+ i +'"]' ).length ){
 		break;
@@ -909,14 +904,6 @@ function setupPaginationBackup(sectionType){
 		maxPages= Math.floor(<?php echo $sectionQuestions_tech; ?>/maxQ);
 	}
 	
-	
-	/*
-KNOW
-SKILLS
-ABILITY
-WORK_ACT
-*/
-
 //	alert('maxPages: '+ maxPages );
 	
 	var html='<div class="paginationDiv text-center">';

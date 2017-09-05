@@ -364,51 +364,7 @@ get_header();
 							</div>
 						</div>
 					</div>
-					<!-- <div class="assessments">
-						<div class="section_title">
-							<h3>Self Assessments</h3>
-						</div>
-						<div class="row">
-							<div class="col-sm-4 col-xs-6 devicehalf">
-								<a href="javascript:void(0);" class="asses_box">
-									<i class="fa fa-check-square-o"></i>
-									<h5>Abilities</h5>
-								</a>
-							</div>
-							<div class="col-sm-4 col-xs-6 devicehalf">
-								<a href="javascript:void(0);" class="asses_box">
-									<i class="fa fa-book"></i>
-									<h5>Kwonledge</h5>
-								</a>
-							</div>
-							<div class="col-sm-4 col-xs-6 devicehalf">
-								<a href="javascript:void(0);" class="asses_box">
-									<i class="fa fa-mobile"></i>
-									<h5>Tech & Trends</h5>
-								</a>
-							</div>
-							<div class="col-sm-4 col-xs-6 devicehalf">
-								<a href="javascript:void(0);" class="asses_box">
-									<i class="fa fa-pencil"></i>
-									<h5>Skills</h5>
-								</a>
-							</div>
-							<div class="col-sm-4 col-xs-6 devicehalf">
-								<a href="javascript:void(0);" class="asses_box asses_import">
-									<i class="fa fa-briefcase"></i>
-									<h5>Work</h5>
-									<span class="torch"></span>
-								</a>
-							</div>
-							<div class="col-sm-4 col-xs-6 devicehalf">
-								<a href="javascript:void(0);" class="asses_box asses_import">
-									<i class="fa fa-tasks"></i>
-									<h5>Tasks</h5>
-									<span class="torch"></span>
-								</a>
-							</div>
-						</div>
-					</div> -->
+
 				</div>
 
 				<div class="col-lg-3 col-md-6 col-lg-pull-6 col-md-pull-0">
@@ -418,10 +374,10 @@ get_header();
 								<h4>Operating Statistics</h4>
 							</div>
 							<ul class="view_points">
-								<li><strong>127 </strong>- Times profile has been viewed.</li>
-								<li><strong>12 </strong>- Times profile added to favorites.</li>
-								<li><strong>16 </strong>- Times profile was forwarded.</li>
-								<li><strong>6 </strong>- Currently following your career.</li>
+								<li><strong>{#} </strong>- Times profile has been viewed.</li>
+								<li><strong>{#} </strong>- Times profile added to favorites.</li>
+								<li><strong>{#} </strong>- Times profile was forwarded.</li>
+								<li><strong>{#} </strong>- Currently following your career.</li>
 							</ul>
 							<div class="profile_pogress">
 								<div class="progress" aria-describedby="profile_process">

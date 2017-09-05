@@ -378,10 +378,10 @@ function random_str($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzAB
                         <i class="fa fa-book"></i>
                         <h5>Knowledge</h5>
                         <?php 
-                        $kwonledge = get_user_meta($user_id, 'knowledge-assessment', true);
-                        $kwonledgedatediff = $now - $kwonledge;
-                        $kwonledgedayes = floor( $kwonledgedatediff / (60 * 60 * 24) );
-                        if ( (!empty($kwonledge)) && ($kwonledgedayes <= 90) ) {
+                        $knowledge = get_user_meta($user_id, 'knowledge-assessment', true);
+                        $knowledgedatediff = $now - $knowledge;
+                        $knowledgedayes = floor( $knowledgedatediff / (60 * 60 * 24) );
+                        if ( (!empty($knowledge)) && ($knowledgedayes <= 90) ) {
                           echo '<span class="torch"></span>';
                         }
                         ?>
