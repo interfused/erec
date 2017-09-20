@@ -10,7 +10,6 @@
 
 
 get_header(); ?>
-<h1>DEV: need to debug / find out what qtype</h1>
 	<script type="text/javascript" src="<?php  echo get_stylesheet_directory_uri(); ?>/rating/jquery-rating.js"></script>
 	<!-- <link rel="stylesheet" type="text/css" href="<?php //echo get_stylesheet_directory_uri(); ?>/css/sweetalert.css"> 
 	<script type="text/javascript" src="<?php //echo get_stylesheet_directory_uri(); ?>/js/sweetalert.js"></script> -->
@@ -112,12 +111,11 @@ get_header(); ?>
 					</div>
 					<?php 
 					$id 	= get_the_ID();
-					$qtype 	= get_post_meta($id,'question_type',true);
+					$assessmentTaxId 	= get_post_meta($id,'wpcf-assessment-type',true);
 					$pageSlug = get_post_field( 'post_name', get_post() );
-					getQuestions($qtype);
+					getQuestions($assessmentTaxId);
 					?>
 					
-					<h2>q type is: <?php echo $qtype;?></h2>
 					<?php the_content(); ?>
 
 					<?php  if ( is_user_logged_in() && isset($_REQUEST['recruitID']) ) {

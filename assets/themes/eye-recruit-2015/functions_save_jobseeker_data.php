@@ -125,7 +125,7 @@ function get_assessment_questions_count($terms_id){
     return $count;
 }
 
-function getQuestions($qType){
+function getQuestions($tag_id){
    
     $current_user = wp_get_current_user();
     if(isset($_REQUEST['recruitID'])){
@@ -150,41 +150,35 @@ function getQuestions($qType){
       $removeallow = "";
     }
 
-    switch ($qType) {
-      case "TASKS":
+    switch ($tag_id) {
+      case 483:
       $slugStart='tasks_q';
       $selfAssPagename = 'Tasks';
-      $tag_id = 483;
       break;
 
-      case "TECH":
+      case 484:
       $slugStart='tech_q';
       $selfAssPagename = 'Tech Trends';
-      $tag_id = 484;
       break;
 
-      case "KNOW":
+      case 486:
       $slugStart='know_q';
       $selfAssPagename = 'Kwonledge';
-      $tag_id = 486;
       break;
 
-      case "SKILLS":
+      case 487:
       $slugStart='skills_q';
       $selfAssPagename = 'Skills';
-      $tag_id = 487;
-
       break;
 
-      case "ABILITY":
+      case 485:
       $slugStart='ability_q';
       $selfAssPagename = 'Abilities';
-      $tag_id = 485;
       break;
-      case "WORK_ACT":
+
+      case 488:
       $slugStart='work_act_q';
       $selfAssPagename = 'Work';
-      $tag_id = 488;
       break;
     }
 
