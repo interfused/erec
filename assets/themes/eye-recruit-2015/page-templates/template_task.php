@@ -111,10 +111,11 @@ get_header(); ?>
 					</div>
 					<?php 
 					$id 	= get_the_ID();
-					$qtype 	= get_post_meta($id,'question_type',true);
+					$assessmentTaxId 	= get_post_meta($id,'wpcf-assessment-type',true);
 					$pageSlug = get_post_field( 'post_name', get_post() );
-					getQuestions($qtype);
+					getQuestions($assessmentTaxId);
 					?>
+					
 					<?php the_content(); ?>
 
 					<?php  if ( is_user_logged_in() && isset($_REQUEST['recruitID']) ) {

@@ -286,8 +286,8 @@ get_header(); ?>
               <div class="col-md-3">
 						<?php 
 						$pageID = get_the_ID(); 
-						$roafar = get_post_meta($pageID, 'reach_out_ask_for_a_referral_now_content', true); 
-						$hiw = get_post_meta($pageID, 'how_it_works', true); 
+						$roafar = get_post_meta($pageID, 'wpcf-referral-now-content', true); 
+						$hiw = get_post_meta($pageID, 'wpcf-how-it-works', true); 
 						$mt = get_post_meta($pageID, 'member_tip', true); 
 						?>
 						

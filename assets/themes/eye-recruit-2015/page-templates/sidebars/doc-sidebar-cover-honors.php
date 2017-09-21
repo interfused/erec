@@ -1,6 +1,7 @@
 <?php 
 $pageID = get_the_ID(); 
-$uar = get_post_meta($pageID, 'upload_file_content', true); 
+$uar = get_post_meta($pageID, 'wpcf-upload-file-content', true); 
+$uors = get_post_meta($pageID, 'wpcf-use-our-services-content', true);
 $mt = get_post_meta($pageID, 'member_tips', true); 
 ?>
 <?php  if ( (is_user_logged_in()) &&  ($roles1 == 'employer') ) {  ?>
@@ -17,7 +18,7 @@ $mt = get_post_meta($pageID, 'member_tips', true);
 		<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
 	</div>
 	<h5>CONSIDER THE SOURCE</h5>
-	<p>Military, Law Enforcement and Governmental Sector awards are traditionally ribbons, badges, and medals, and are a big part of the culture. While they show leadership, excellence and hard work, they also show sacrifice.  Awards from these institutions tell a story of heroism, valor and courage.  They will help determine capabilities and talents with respect to future performance.</p>
+	<?php echo $uors; ?>
 </div>
 
 <?php } elseif ((is_user_logged_in()) &&  ($roles1 == 'candidate')){ ?>
@@ -37,7 +38,7 @@ $mt = get_post_meta($pageID, 'member_tips', true);
 		<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
 	</div>
 	<h5>CONSIDER THE SOURCE</h5>
-	<p>Military, Law Enforcement and Governmental Sector awards are traditionally ribbons, badges, and medals, and are a big part of the culture. While they show leadership, excellence and hard work, they also show sacrifice.  Awards from these institutions tell a story of heroism, valor and courage.  They will help determine capabilities and talents with respect to future performance.</p>
+	<?php echo $uors; ?>
 </div>
 <?php  }else{  ?>
 

@@ -110,7 +110,7 @@ if ( isset($_REQUEST['recruitID']) ) {
 	if ( in_array( 'candidate', $current_user->roles) ){
 		$breadcrumbUrl = '/job-seekers/seeker-profile-view/';
 		//if candidate viewing his/her profile as an employee
-		if($_SERVER['HTTP_REFERER'] == 'http://demo.eyerecruit.com/job-seekers/seeker-profile-view/'){
+		if($_SERVER['HTTP_REFERER'] == site_url().'/job-seekers/seeker-profile-view/'){
 
 			$seekerPreviewAsEmployer = true;
 			$view = 'allow';

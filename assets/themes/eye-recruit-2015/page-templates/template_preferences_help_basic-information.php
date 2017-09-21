@@ -1715,7 +1715,7 @@ $sY = get_cimyFieldValue($UserID, 'STUDY_YEAR');
 <style>
 input[name="COMPENSATION_ACC"][value="Do Not Show Employer"]:checked+span,
 input[name="COMP_DESIRED_ACC"][value="Do Not Show Employer"]:checked+span
-{background:url(http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/lock_sm.png) no-repeat top right; background-size: contain; padding-right:32px;}
+{background:url(/assets/themes/eye-recruit-2015/img/lock_sm.png) no-repeat top right; background-size: contain; padding-right:32px;}
 </style>
 <?php 
 ///CHECK TRIGGER for page nav

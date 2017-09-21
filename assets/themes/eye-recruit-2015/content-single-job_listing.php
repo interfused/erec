@@ -153,7 +153,7 @@ if(is_interfused()){ ?>
 									<?php } 
 								}else{
 									?>
-					                <img src="http://demo.eyerecruit.com/assets/uploads/2017/03/Members-Only-Purchased.jpg" class="img-responsive">
+					                <img src="<?php echo site_url(); ?>/assets/uploads/2017/03/Members-Only-Purchased.jpg" class="img-responsive">
 					                <?php
 								}
 								?>

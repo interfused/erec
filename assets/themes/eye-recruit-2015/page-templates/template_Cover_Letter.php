@@ -38,8 +38,8 @@ $cell_phone = get_user_meta($userID, 'cell_phone', true);
 		<div id="content" role="main">
 			<section class="cover_letter">
 				<div class="container">
-					<h1>Cover Letter Priview</h1>
-					<a href="javascript:void();" class="modify_save">Modify & Save</a>
+					<h1>Cover Letter Preview</h1>
+					<a href="javascript:void();" class="modify_save">Modify &amp; Save</a>
 					<div class="cover_letter_box" id="printme">
 						<div class="letter_header">
 							

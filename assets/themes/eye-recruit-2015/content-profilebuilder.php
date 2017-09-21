@@ -40,8 +40,7 @@ function showCurrentStep() {
 		}
 	}
 	jQuery(document).ready(function(){
-		jQuery("#profilesteps4331").addClass("active");
-		//jQuery("#profilesteps4331").addClass("inactive");
+		jQuery("#profilesteps7051").addClass("active");
 		showCurrentStep();
 
 		jQuery('body').addClass('profile-builder-page');
@@ -89,7 +88,7 @@ function showCurrentStep() {
 			var hi_edu_arr = ['Associates Degree', 'Bachelors Degree', 'Masters Degree', 'Doctorate Degree / PhD.']; 
 			if  ( jQuery.inArray( HIGHEST_EDUCATION, hi_edu_arr ) != -1 ) {
 
-				if ( jQuery('#profilebuder4342').hasClass('thisValid') ) {
+				if ( jQuery('#profilebuder7058').hasClass('thisValid') ) {
 					var AREA_OF_STUDY = jQuery("input[name='AREA_OF_STUDY']").val();
 					var SCHOOL_NAME = jQuery("input[name='SCHOOL_NAME']").val();
 					var STUDY_YEAR = jQuery("input[name='STUDY_YEAR']").val();
@@ -137,7 +136,7 @@ function showCurrentStep() {
 			/*.......Step8........*/
 			var FIELD_LICENSE_STATUS = jQuery("input[name='FIELD_LICENSE_STATUS']:checked").val();
 
-			if ( jQuery('#profilebuder4346').hasClass('thisValid') ) { 
+			if ( jQuery('#profilebuder7061').hasClass('thisValid') ) { 
 
 				var li_state = [];
 				jQuery("input[name='FIELD_LICENSE_STATE[]']:checked").each(function() {
@@ -248,7 +247,7 @@ function showCurrentStep() {
 			/*.......Step12........*/
 			var FEDERAL_NVESTIGATIV = jQuery("input[name='FEDERAL_NVESTIGATIV']:checked").val();
 
-			if ( jQuery('#profilebuder4351').hasClass('thisValid') ) {
+			if ( jQuery('#profilebuder7066').hasClass('thisValid') ) {
 				var us_law_force = jQuery("input[name='US_LAW_ENFORCE_STATU']:checked").val();
 				if ( us_law_force == 'OTHER' ) {
 					var US_LAW_ENFORCE_STATU = us_law_force;
@@ -282,14 +281,14 @@ function showCurrentStep() {
 		    });
 		    var rfemail = rfe;
 
-		    if ( form_id == 'profilebuder4353') {
+		    if ( form_id == 'profilebuder7068') {
 
 		        var fd = new FormData();
 		        var files_data = jQuery('#resume');
 
 		        if ( jQuery('input[name="CURRENT_RESUME"]').val() != '') {
 
-			        jQuery('#profilebuder4353 .continue_step').html('File uploading. Please wait...').attr('disabled');
+			        jQuery('#profilebuder7068 .continue_step').html('File uploading. Please wait...').attr('disabled');
 
 		        	
 			        jQuery.each(jQuery(files_data), function(i, obj) {
@@ -310,7 +309,7 @@ function showCurrentStep() {
 			            processData: false,
 			            success: function(response){
 
-			            	jQuery('#profilebuder4353 .continue_step').removeAttr('disabled').html('<i class="fa fa-angle-double-left"></i>  Continue  <i class="fa fa-angle-double-right"></i>');
+			            	jQuery('#profilebuder7068 .continue_step').removeAttr('disabled').html('<i class="fa fa-angle-double-left"></i>  Continue  <i class="fa fa-angle-double-right"></i>');
 			            	
 			            	if ( response == 'Allow only pdf and doc file format.'  || response == 'File size is too large!' ) {
 			            		jQuery('<span class="text-primary cust_error_invalid">'+response+'</span>').insertAfter('input[name="CURRENT_RESUME"]');
@@ -332,12 +331,12 @@ function showCurrentStep() {
 					return false;
 			    }
 		    }
-		    else if(form_id == 'profilebuder4347'){
+		    else if(form_id == 'profilebuder7062'){
 
 		    	if ( jQuery("input[name='list_languages_other']").is(':checked') ) {
 		    		jQuery('#list_languages_text-error').remove();
 		    		if ( list_languages_text == '' ) {
-						jQuery('<label id="list_languages_text-error" class="error lang_error" for="list_languages_text">Please enter an other language.</label>').insertAfter('#profilebuder4347 ul');
+						jQuery('<label id="list_languages_text-error" class="error lang_error" for="list_languages_text">Please enter an other language.</label>').insertAfter('#profilebuder7062 ul');
 		    			return false;
 		    		}
 		    		else{
@@ -428,11 +427,11 @@ function showCurrentStep() {
 
 		    else{
 
-		    	if ( form_id == 'profilebuder4349' ) {
+		    	if ( form_id == 'profilebuder7064' ) {
 
 		    		jQuery('.usfor_error').remove();
 		    		if ( ( US_ARMED_FORCES == 'Yes') && ( !jQuery('input[name="US_ARMED_FORCES_OPTION"]').is(':checked') ) ) {
-						jQuery('#fours .indent').append('<label id="US_ARMED_FORCES_OPTION-error" class="error usfor_error" for="US_ARMED_FORCES_OPTION">Please select at least one.</label>');; //.insertAfter('#fours');
+						jQuery('#fours .indent').append('<label id="US_ARMED_FORCES_OPTION-error" class="error usfor_error" for="US_ARMED_FORCES_OPTION">Please select at least one.</label>'); //.insertAfter('#fours');
 		    			return false;
 		    		}
 		    		else{
@@ -440,11 +439,11 @@ function showCurrentStep() {
 		    		}
 		    	}
 
-		    	if ( form_id == 'profilebuder4352' ) {
+		    	if ( form_id == 'profilebuder7067' ) {
 
 		    		jQuery('.other_metro_error').remove();
 		    		if ( ( MAJOR_METROPOLITAN == 'Other') && ( MAJOR_METROPOLITAN_O == '' ) ) {
-						jQuery('#othe_metropo_city .indent').append('<label id="MAJOR_METROPOLITAN_O-error" class="error other_metro_error" for="MAJOR_METROPOLITAN_O">Please enter an other metropolitan city name.</label>');; //.insertAfter('#fours');
+						jQuery('#othe_metropo_city .indent').append('<label id="MAJOR_METROPOLITAN_O-error" class="error other_metro_error" for="MAJOR_METROPOLITAN_O">Please enter an other metropolitan city name.</label>'); //.insertAfter('#fours');
 		    			return false;
 		    		}
 		    		else{
@@ -461,7 +460,7 @@ function showCurrentStep() {
 				window.location.hash = btoa(nextid);
 			    }
 
-				if (form_id == 'profilebuder4357') {
+				if (form_id == 'profilebuder7071') {
 					_this.text('Please Wait...').attr('disabled', 'disabled');
 				}
 
@@ -526,28 +525,29 @@ function showCurrentStep() {
 
 	            jQuery('#accociatesdegreeModal label[for="AREA_OF_STUDY"]').text(jQuery(this).val());
 	            
-	            if( jQuery('#profilebuder4342').attr('chd') != 'associates_degree' ) { 
+	            if( jQuery('#profilebuder7058').attr('chd') != 'associates_degree' ) { 
 	            	jQuery('.accociatesdegree form')[0].reset();
 		            jQuery('input[name="STUDY_MAJOR"]:checked').each(function(){
 					      jQuery(this).attr('checked', false);  
 					});
 		        }
-	            jQuery('#profilebuder4342').attr('chd', 'associates_degree');
+	            jQuery('#profilebuder7058').attr('chd', 'associates_degree');
 	      	}
 		});
 
 		jQuery('#bachelors_degree').click(function(){
+			console.log('bachelor');
 			jQuery('.accociatesdegree .study_error').remove();	
 			if (jQuery(this).attr("checked") == "checked") {
 	            jQuery('#accociatesdegreeModal').modal('show');
 	            jQuery('#accociatesdegreeModal label[for="AREA_OF_STUDY"]').text(jQuery(this).val());
-	            if( jQuery('#profilebuder4342').attr('chd') != 'bachelors_degree' ) { 
+	            if( jQuery('#profilebuder7058').attr('chd') != 'bachelors_degree' ) { 
 	            	jQuery('.accociatesdegree form')[0].reset();
 		            jQuery('input[name="STUDY_MAJOR"]:checked').each(function(){
 					      jQuery(this).attr('checked', false);  
 					});
 		        }
-	            jQuery('#profilebuder4342').attr('chd', 'bachelors_degree');
+	            jQuery('#profilebuder7058').attr('chd', 'bachelors_degree');
 	      	}
 		});
 
@@ -556,13 +556,13 @@ function showCurrentStep() {
 			if (jQuery(this).attr("checked") == "checked") {
 	            jQuery('#accociatesdegreeModal').modal('show');
 	            jQuery('#accociatesdegreeModal label[for="AREA_OF_STUDY"]').text(jQuery(this).val());
-	            if( jQuery('#profilebuder4342').attr('chd') != 'masters_degree' ) { 
+	            if( jQuery('#profilebuder7058').attr('chd') != 'masters_degree' ) { 
 	            	jQuery('.accociatesdegree form')[0].reset();
 		            jQuery('input[name="STUDY_MAJOR"]:checked').each(function(){
 					      jQuery(this).attr('checked', false);  
 					});
 		        }
-	            jQuery('#profilebuder4342').attr('chd', 'masters_degree');
+	            jQuery('#profilebuder7058').attr('chd', 'masters_degree');
 	      	}
 		});
 
@@ -571,13 +571,13 @@ function showCurrentStep() {
 			if (jQuery(this).attr("checked") == "checked") {
 	            jQuery('#accociatesdegreeModal').modal('show');
 	            jQuery('#accociatesdegreeModal label[for="AREA_OF_STUDY"]').text(jQuery(this).val());
-	            if( jQuery('#profilebuder4342').attr('chd') != 'doctorate' ) { 
+	            if( jQuery('#profilebuder7058').attr('chd') != 'doctorate' ) { 
 	            	jQuery('.accociatesdegree form')[0].reset();
 		            jQuery('input[name="STUDY_MAJOR"]:checked').each(function(){
 					      jQuery(this).attr('checked', false);  
 					});
 		        }
-	            jQuery('#profilebuder4342').attr('chd', 'doctorate');
+	            jQuery('#profilebuder7058').attr('chd', 'doctorate');
 	      	}
 		});
 
@@ -592,6 +592,7 @@ function showCurrentStep() {
 		});
 
 		jQuery('#yes_retired').click(function(){	
+			console.log('yes retired');
 			if (jQuery(this).attr("checked") == "checked") {
 	            jQuery('#fours').show();
 	      	}
@@ -661,7 +662,7 @@ function showCurrentStep() {
 		}
 
 
-		jQuery( "#profilebuder4356" ).on('keyup', 'input[name="fname[]"]', function() {
+		jQuery( "#profilebuder7070" ).on('keyup', 'input[name="fname[]"]', function() {
 			var name_val = jQuery(this).val();
 			var name_id = jQuery(this).attr('id');
 			jQuery('#'+name_id+'-error').remove();
@@ -675,7 +676,7 @@ function showCurrentStep() {
 
 		});
 
-		jQuery( "#profilebuder4356" ).on('keyup', 'input[name="user_email[]"]', function() {
+		jQuery( "#profilebuder7070" ).on('keyup', 'input[name="user_email[]"]', function() {
 			var email_val = jQuery(this).val();
 			var email_id = jQuery(this).attr('id');
 			jQuery('#'+email_id+'-error').remove();
@@ -727,7 +728,7 @@ function showCurrentStep() {
 			else{
 
 				// <i class="fa fa-angle-double-left"></i> Next <i class="fa fa-angle-double-right"></i>
-				jQuery('#profilebuder4356 .continue_step').attr('disabled', 'disabled').html('Mail Sending. Please wait...');
+				jQuery('#profilebuder7070 .continue_step').attr('disabled', 'disabled').html('Mail Sending. Please wait...');
 
 				var fname = [];
 				jQuery('input[name="fname[]"]').each( function() {
@@ -749,7 +750,7 @@ function showCurrentStep() {
 					},
 					success: function(res){
 						//alert(res);
-						jQuery('#profilebuder4356 .continue_step').removeAttr('disabled').html('<i class="fa fa-angle-double-left"></i> Next <i class="fa fa-angle-double-right"></i>');
+						jQuery('#profilebuder7070 .continue_step').removeAttr('disabled').html('<i class="fa fa-angle-double-left"></i> Next <i class="fa fa-angle-double-right"></i>');
 
 					}
 				});
@@ -770,7 +771,7 @@ function showCurrentStep() {
 			jQuery('#AREA_OF_STUDY-error').remove();
 			var area_val = jQuery('input[name="AREA_OF_STUDY"]').val();
 			if ( area_val == '' ) {
-				jQuery('#profilebuder4342').removeClass('thisValid');
+				jQuery('#profilebuder7058').removeClass('thisValid');
 				jQuery('<label id="AREA_OF_STUDY-error" class="error study_error" for="AREA_OF_STUDY">Please enter an area of study.</label>').insertAfter('input[name="AREA_OF_STUDY"]');
 			}
 			else{
@@ -783,7 +784,7 @@ function showCurrentStep() {
 			jQuery('#SCHOOL_NAME-error').remove();
 			var sch_val = jQuery('input[name="SCHOOL_NAME"]').val();
 			if ( sch_val == '' ) {
-				jQuery('#profilebuder4342').removeClass('thisValid');
+				jQuery('#profilebuder7058').removeClass('thisValid');
 				jQuery('<label id="SCHOOL_NAME-error" class="error study_error" for="SCHOOL_NAME">Please enter a school name.</label>').insertAfter('input[name="SCHOOL_NAME"]');
 			}
 			else{
@@ -795,11 +796,11 @@ function showCurrentStep() {
 			jQuery('#STUDY_YEAR-error').remove();
 			var year = jQuery('input[name="STUDY_YEAR"]').val();
 			if ( year == '' ) {
-				jQuery('#profilebuder4342').removeClass('thisValid');
+				jQuery('#profilebuder7058').removeClass('thisValid');
 				jQuery('<label id="STUDY_YEAR-error" class="error study_error" for="STUDY_YEAR">Please enter your year of graduation.</label>').insertAfter('input[name="STUDY_YEAR"]');
 			}
 			else if ( numericOnly( jQuery('input[name="STUDY_YEAR"]').val() ) ) {
-				jQuery('#profilebuder4342').removeClass('thisValid');
+				jQuery('#profilebuder7058').removeClass('thisValid');
 				jQuery('<label id="STUDY_YEAR-error" class="error study_error" for="STUDY_YEAR">Please enter only numeric values (0-9).</label>').insertAfter('input[name="STUDY_YEAR"]');
 			}
 			else{
@@ -840,11 +841,11 @@ function showCurrentStep() {
 			}
 
 			if ( jQuery('.error').hasClass('study_error') ) {
-				jQuery('#profilebuder4342').removeClass('thisValid');
+				jQuery('#profilebuder7058').removeClass('thisValid');
 				return false;
 			}
 			else{
-				jQuery('#profilebuder4342').addClass('thisValid');
+				jQuery('#profilebuder7058').addClass('thisValid');
 			}
 		});
 
@@ -862,7 +863,7 @@ function showCurrentStep() {
 			jQuery('#US_LAW_ENFORCE_STATU_OTHER-error').remove();
 			var sch_val = jQuery('input[name="US_LAW_ENFORCE_STATU_OTHER"]').val();
 			if ( sch_val == '' ) {
-				jQuery('#profilebuder4351').removeClass('thisValid');
+				jQuery('#profilebuder7066').removeClass('thisValid');
 				jQuery('<label id="US_LAW_ENFORCE_STATU_OTHER-error" class="error study_error" for="US_LAW_ENFORCE_STATU_OTHER">Please enter an other agency name.</label>').insertAfter('input[name="US_LAW_ENFORCE_STATU_OTHER"]');
 			}
 			else{
@@ -901,11 +902,11 @@ function showCurrentStep() {
 			}
 
 			if ( jQuery('.error').hasClass('law_error') ) {
-				jQuery('#profilebuder4351').removeClass('thisValid');
+				jQuery('#profilebuder7066').removeClass('thisValid');
 				return false;
 			}
 			else{
-				jQuery('#profilebuder4351').addClass('thisValid');
+				jQuery('#profilebuder7066').addClass('thisValid');
 			}
 		});
 
@@ -914,7 +915,7 @@ function showCurrentStep() {
 		    jQuery('input[name="US_LAW_ENFORCE_STATU"]').attr('checked', false);  
 		    jQuery('input[name="US_LAW_ENFORCE_STATU_OTHER"]').hide();
 			jQuery('input[name="US_LAW_ENFORCE_STATU_OTHER"]').val('');
-			jQuery('#profilebuder4351').addClass('thisValid')
+			jQuery('#profilebuder7066').addClass('thisValid')
 		});
 
 		jQuery('#Investigative').on('hidden.bs.modal', function (e) {
@@ -922,25 +923,25 @@ function showCurrentStep() {
 			jQuery('#US_LAW_ENFORCE_STATU_OTHER-error').remove();
 
 			if( !jQuery('input[name="US_LAW_ENFORCE_STATU"]').is(':checked') ){
-				jQuery('#profilebuder4351').removeClass('thisValid');
+				jQuery('#profilebuder7066').removeClass('thisValid');
 			}
 		});
 
 
 
 
-		jQuery('#profilebuder4345 .clearfix').hide();
-		jQuery('#profilebuder4345 .state').hide();
+		jQuery('#profilebuder7075 .clearfix').hide();
+		jQuery('#profilebuder7075 .state').hide();
 
 		jQuery('input[name="POSSES_DRIVER_LICENS"]').on('click', function() {
 			var dr_li = jQuery('input[name="POSSES_DRIVER_LICENS"]:checked').val();
 			if ( dr_li == 'Yes' ) {
-				jQuery('#profilebuder4345 .clearfix').show();
-				jQuery('#profilebuder4345 .state').show();
+				jQuery('#profilebuder7075 .clearfix').show();
+				jQuery('#profilebuder7075 .state').show();
 			}
 			else{
-				jQuery('#profilebuder4345 .clearfix').hide();
-				jQuery('#profilebuder4345 .state').hide();
+				jQuery('#profilebuder7075 .clearfix').hide();
+				jQuery('#profilebuder7075 .state').hide();
 			}
 		});
 
@@ -973,11 +974,11 @@ function showCurrentStep() {
 			}
 
 			if ( jQuery('.error').hasClass('state_error') ) {
-				jQuery('#profilebuder4346').removeClass('thisValid');
+				jQuery('#profilebuder7061').removeClass('thisValid');
 				return false;
 			}
 			else{
-				jQuery('#profilebuder4346').addClass('thisValid');
+				jQuery('#profilebuder7061').addClass('thisValid');
 			}
 		});
 
@@ -986,7 +987,7 @@ function showCurrentStep() {
 			jQuery('#FIELD_LICENSE_STATE-error').remove();
 
 			if( !jQuery('input[name="FIELD_LICENSE_STATE[]"]').is(':checked') ){
-				jQuery('#profilebuder4346').removeClass('thisValid');
+				jQuery('#profilebuder7061').removeClass('thisValid');
 			}
 		});
 

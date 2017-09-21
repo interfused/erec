@@ -81,7 +81,7 @@ modify checkout form (after)
 function er_postCheckoutFormSetup(){
 	$htmlStr = '</div>';
 	//sidebar
-	$htmlStr .= '<div class="col-md-4"><div class="special_box"><img src="http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/security_pro_img.jpg" alt="securityImages" ></div></div>';
+	$htmlStr .= '<div class="col-md-4"><div class="special_box"><img src="/assets/themes/eye-recruit-2015/img/security_pro_img.jpg" alt="securityImages" ></div></div>';
 	echo $htmlStr;
 }
 add_action( 'woocommerce_after_checkout_form', 'er_postCheckoutFormSetup', 1 );

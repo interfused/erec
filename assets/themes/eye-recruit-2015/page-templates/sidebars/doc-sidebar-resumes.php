@@ -1,7 +1,7 @@
 <?php 
 $pageID = get_the_ID(); 
-$uar = get_post_meta($pageID, 'upload_file_content', true); 
-$uors = get_post_meta($pageID, 'use_our_services_content', true); 
+$uar 		= get_post_meta($pageID, 'wpcf-upload-file-content', true); 
+$uors = get_post_meta($pageID, 'wpcf-use-our-services-content', true);
 $mt = get_post_meta($pageID, 'member_tips', true); 
 ?>
 

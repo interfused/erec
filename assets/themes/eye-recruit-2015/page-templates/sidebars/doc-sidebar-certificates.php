@@ -1,6 +1,6 @@
 <?php 
 $pageID = get_the_ID(); 
-$uar = get_post_meta($pageID, 'upload_file_content', true); 
+$uar = get_post_meta($pageID, 'wpcf-upload-file-content', true); 
 $mt = get_post_meta($pageID, 'member_tips', true); 
 ?>
 <?php  if ( (is_user_logged_in()) &&  ($roles1 == 'employer') ) {  ?>

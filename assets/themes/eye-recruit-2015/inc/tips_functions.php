@@ -17,13 +17,50 @@ function count_char_length($x, $length = 27) {
     return $y;
   }
 }
+/*
+PULL ONLY THE CONTENT OF A RANDOM GENERATED MEMBER TIP
+*/
+function er_random_member_tip_content($atts){
+	$atts = shortcode_atts( array(
+    			'tax_id' => 1
+    			), $atts, 'er_random_member_tip_content' );
 
+	$args = array(
+		"post_type"=>'site-tip',
+		"post_status"=>'publish',
+		'orderby' => 'rand',
+		'order' => 'DESC',
+		 'tax_query' => array(
+        array( 
+            'taxonomy' => 'site-tip-category',
+            'field' => 'id',
+            'terms' => $atts['tax_id']
+        )
+    ),
+	"posts_per_page"=> 1
+	
+	);
+	$the_queries = new Wp_query($args);
+	if($the_queries->have_posts()){
+		while($the_queries->have_posts()){ $the_queries->the_post(); 
+				$content = get_the_content();
+				return '<p>'.$content.'</p>';  
+		}
+	}
+	else{ 
+		return '<h4>Tips not found</h4>';
+	} 
+	wp_reset_postdata();
+}
+add_shortcode('er_random_member_tip_content','er_random_member_tip_content');
 
 function jobseeker_basic_info_member_tips($value){ ?>
 	<aside class="widget widget_wpb_widget special_box special_logo navi_thumbnail">
+		<strong>DEV TO REPROGRAM jobseeker_basic_info_member_tips for <?php echo $value;?> to use category taxonomy instead of select_page_to_show meta (line #70-76)</strong>
 		<?php
+		/*
 		$args = array(
-			"post_type"=>'tips',
+			"post_type"=>'site-tip',
 			"post_status"=>'publish',
 			//'orderby' => 'rand',
 			'order' => 'DESC',
@@ -53,6 +90,7 @@ function jobseeker_basic_info_member_tips($value){ ?>
 		else{ ?>
 			<h3>Tips not found</h3>
 		<?php } 
+		*/
 	echo "</aside>";
 }
 
@@ -60,32 +98,26 @@ function jobseeker_basic_info_member_tips($value){ ?>
 
 function member_dashboard_sidebar_tips_function($value){
 	$args = array(
-		"post_type"=>'tips',
+		"post_type"=>'site-tip',
 		"post_status"=>'publish',
 		'orderby' => 'rand',
 		'order' => 'DESC',
 		 'tax_query' => array(
         array( 
-            'taxonomy' => 'tip_category',
+            'taxonomy' => 'site-tip-category',
             'field' => 'id',
-            'terms' => 456
+            'terms' => 480
         )
     ),
 	"posts_per_page"=> 1
-	/*	'meta_query'    => array(
-		    array(
-		        'key'       => 'select_page_to_show',
-		        'value'     => $value,
-		        'compare'   => 'LIKE',
-		    )
-		)*/
+	
 	);
 	$the_queries = new Wp_query($args);
 	if($the_queries->have_posts()){
 		while($the_queries->have_posts()){ $the_queries->the_post(); ?>
 			<div class="sidebar_title">
 				<span class="title_icon tips_icon"></span>
-				<h4><a href="<?php  the_permalink(); ?>"><?php echo get_the_title(); ?></h4></a>
+				<h4>Tip #<?php echo get_the_id(); ?></a>
 			</div>
 			<p><?php  $link = get_the_permalink(); 
 				$content = get_the_content();
@@ -106,35 +138,13 @@ function member_dashboard_sidebar_tips_function($value){
 function member_navigation_sidebar_tips_function($value){ ?>
 	<div class="special_box special_logo navi_thumbnail">
 		<div class="thumbnail"><img src="<?php  echo get_stylesheet_directory_uri(); ?>/img/navi_logo-icon.png" class="img-responsive"></div>
-		<?php 
-		$args = array(
-			"post_type"=>'tips',
-			"post_status"=>'publish',
-			//'orderby' => 'rand',
-			'order' => 'DESC',
-			"posts_per_page"=> 1,
-			'meta_query'    => array(
-			    array(
-			        'key'       => 'select_page_to_show',
-			        'value'     => $value,
-			        'compare'   => 'LIKE',
-			    )
-			)
-		);
-		$the_queries = new Wp_query($args);
-		if($the_queries->have_posts()){
-			while($the_queries->have_posts()){ $the_queries->the_post(); ?>
-				<h5><?php //echo get_the_title(); ?> MEMBER TIP</h5>
-				<p><?php  $link = get_the_permalink(); 
-					$content = get_the_content();
-					echo $content;  ?>
-				</p> <?php
-			}
+		<h5>MEMBER TIP</h5>
+		<?php
+		if(!is_numeric($value)){
+			echo ('<strong>DEV TO REPROGRAM jobseeker_basic_info_member_tips for '.$value.' to use category taxonomy insteady of select_page_to_show meta (line #70-76)</strong>');
+		}else{
+			echo (do_shortcode('[er_random_member_tip_content tax_id='.$value.']'));
 		}
-		else{ ?>
-			<h5>Tips not found</h5>
-		<?php } 
-		wp_reset_postdata();
 	echo "</div>"; 
 }
 

@@ -101,16 +101,32 @@ function save_user_login_history($login){
 
 add_action('wp_login','save_user_login_history');
 
-/*ASSESSMENT*/
-$sectionQuestions_work_act = 44;
-$sectionQuestions_tech     = 48;
-$sectionQuestions_tasks    = 32; 
-$sectionQuestions_know     = 14; 
-$sectionQuestions_skills   = 17; 
-$sectionQuestions_ability  = 18; 
-function getQuestions($qType){
-   global $sectionQuestions_work_act,$sectionQuestions_tech,$sectionQuestions_tasks,$sectionQuestions_know,$sectionQuestions_skills, $sectionQuestions_ability;
+/* ASSESSMENTS */
+function get_assessment_questions_count($terms_id){
+  //if id is numeric we assume actual id otherwise we pull by slug
+  if(is_numeric($terms_id)){
+    $field_type = 'id';
+  }else{
+    $field_type = 'slug';
+  }
 
+  $the_query = new WP_Query( array(
+      'post_type' => 'assessment-question',
+      'post_status' => 'publish',
+      'tax_query' => array(
+        array(
+          'taxonomy' => 'assessment-category',
+          'field' => $field_type,
+          'terms' => $terms_id
+          )
+        )
+      ) );
+    $count = $the_query->found_posts;
+    return $count;
+}
+
+function getQuestions($tag_id){
+   
     $current_user = wp_get_current_user();
     if(isset($_REQUEST['recruitID'])){
       $user_id = $_REQUEST['recruitID'];
@@ -134,39 +150,42 @@ function getQuestions($qType){
       $removeallow = "";
     }
 
-    if ($qType == 'TASKS'){
-      $qCnt= $sectionQuestions_tasks;
+    switch ($tag_id) {
+      case 483:
       $slugStart='tasks_q';
       $selfAssPagename = 'Tasks';
-    }
-    if ($qType == 'TECH'){
-      $qCnt= $sectionQuestions_tech;
+      break;
+
+      case 484:
       $slugStart='tech_q';
       $selfAssPagename = 'Tech Trends';
-    }
-    if ($qType == 'KNOW'){
-      $qCnt= $sectionQuestions_know;
+      break;
+
+      case 486:
       $slugStart='know_q';
       $selfAssPagename = 'Kwonledge';
-    }
-    if ($qType == 'SKILLS'){
-      $qCnt= $sectionQuestions_skills;
+      break;
+
+      case 487:
       $slugStart='skills_q';
       $selfAssPagename = 'Skills';
-    }
-    if ($qType == 'ABILITY'){
-      $qCnt= $sectionQuestions_ability;
+      break;
+
+      case 485:
       $slugStart='ability_q';
       $selfAssPagename = 'Abilities';
-    }
-    if ($qType == 'WORK_ACT'){
-      $qCnt=  $sectionQuestions_work_act;
+      break;
+
+      case 488:
       $slugStart='work_act_q';
       $selfAssPagename = 'Work';
+      break;
     }
 
+    $qCnt = get_assessment_questions_count($tag_id);
+
     
-  $j = 0;
+    $j = 0;
   $step = 2;
   $noOfP = 5;
   $pagi = ceil( $qCnt / $noOfP );

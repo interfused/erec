@@ -3212,7 +3212,7 @@ color: #ffffff;
   .view_points li a{ display: block; }
   .view_points li.locked, li.icon.locked {
     background-repeat: no-repeat; background-position: right 10px;
-    background-image:url(http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/lock_sm.png); background-size: 20px; padding-right:32px;
+    background-image:url(/assets/themes/eye-recruit-2015/img/lock_sm.png); background-size: 20px; padding-right:32px;
   }
   .view_points li.salary.locked:after{
     display: block;
@@ -3221,9 +3221,9 @@ color: #ffffff;
     font-style: italic;
   }
 
-li.icon.military{ background-image: url(http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/military_service_icon.png);}
-li.icon.law_enforcement{ background-image: url(http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/enforcement_icon.jpg);}
-li.icon.federal{ background-image: url(http://demo.eyerecruit.com/assets/themes/eye-recruit-2015/img/federal_shield.jpg);}
+li.icon.military{ background-image: url(/assets/themes/eye-recruit-2015/img/military_service_icon.png);}
+li.icon.law_enforcement{ background-image: url(/assets/themes/eye-recruit-2015/img/enforcement_icon.jpg);}
+li.icon.federal{ background-image: url(/assets/themes/eye-recruit-2015/img/federal_shield.jpg);}
 
 .avatar{border-radius: 1000px;}
 .page-template-template_navigation_Referrals .avatar{margin-right:10px; margin-top:10px;}

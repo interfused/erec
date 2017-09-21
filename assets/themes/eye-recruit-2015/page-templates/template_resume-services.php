@@ -75,7 +75,12 @@ get_header(); ?>
 							</div>
 						<?php } ?>
 					</div>
-					<?php the_field('footer_text_after_pricing_plan'); ?>
+					<?php if(true){ ?>
+					<h3>So, how do we get started?</h3>
+					<p>It's simple. You select a service above and we will provide you with a <strong>free resume critique</strong> from one our our resume consultants. The critique will provide you with an honest, direct assessment of your current resume. This will also give us a clear understanding of exactly how much support you are going to need.</p>
+					<p>We then tailor your needs to match your level of experience and specific requirements or we can continue by selecting one of our prepared Resume options.</p>
+				
+					<?php } ?>
 				</div>
 			</section>
 				

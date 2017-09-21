@@ -29,13 +29,15 @@ function getUpdatedEmployerQuestions($qType){
 	/*
 	global $sectionQuestions_work_act,$sectionQuestions_tech,$sectionQuestions_tasks,$sectionQuestions_know,$sectionQuestions_skills, $sectionQuestions_ability;
 	*/
-	$sectionQuestions_work_act   = 44;
-	$sectionQuestions_tech       = 47;
-	$sectionQuestions_tasks      = 32; 
-	$sectionQuestions_know       = 14; 
-	$sectionQuestions_skills     = 17; 
-	$sectionQuestions_ability    = 18; 
-///////////
+	//retrieve question count by category id
+	$sectionQuestions_work_act = get_assessment_questions_count(488);
+	$sectionQuestions_tech = get_assessment_questions_count(484);
+	$sectionQuestions_tasks = get_assessment_questions_count(483); 
+	$sectionQuestions_know = get_assessment_questions_count(486); 
+	$sectionQuestions_skills = get_assessment_questions_count(487); 
+	$sectionQuestions_ability = get_assessment_questions_count(485); 
+
+	///////////
 	if ($qType == 'TASKS'){
 		$qCnt		= $sectionQuestions_tasks;
 		$slugStart	='tasks_q';

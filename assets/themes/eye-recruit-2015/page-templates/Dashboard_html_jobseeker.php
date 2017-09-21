@@ -190,7 +190,7 @@ get_header();
 							<div class="col-sm-4 col-xs-6 devicehalf">
 								<a href="javascript:void(0);" class="asses_box">
 									<i class="fa fa-book"></i>
-									<h5>Kwonledge</h5>
+									<h5>Knowledge</h5>
 								</a>
 							</div>
 							<div class="col-sm-4 col-xs-6 devicehalf">
