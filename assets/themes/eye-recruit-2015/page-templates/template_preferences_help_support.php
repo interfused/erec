@@ -49,13 +49,13 @@ get_header(); ?>
 					<div class="indent help_center help_today">
 						<?php 
 						$pageID = get_the_ID(); 
-						$hcwht = get_post_meta($pageID, 'how_can_we_help_you_today_content', true); 
-						$kbase = get_post_meta($pageID, 'knowledge_base', true); 
-						$sattic = get_post_meta($pageID, 'submit_a_trouble_ticket', true); 
-						$jaw = get_post_meta($pageID, 'join_a_webinar', true); 
-						$callus = get_post_meta($pageID, 'call_us', true); 
-						$lchat = get_post_meta($pageID, 'live_chat', true); 
-						$sac1 = get_post_meta($pageID, 'schedule_a_1', true); 
+						$hcwht = get_post_meta($pageID, 'wpcf-how-can-we-help-you-today-content', true); 
+						$kbase = get_post_meta($pageID, 'wpcf-knowledge-base', true); 
+						$sattic = get_post_meta($pageID, 'wpcf-submit-a-trouble-ticket', true); 
+						$jaw = get_post_meta($pageID, 'wpcf-join-a-webinar', true); 
+						$callus = get_post_meta($pageID, 'wpcf-call-us', true); 
+						$lchat = get_post_meta($pageID, 'wpcf-live-chat', true); 
+						$sac1 = get_post_meta($pageID, 'wpcf-schedule-a-1-on-1', true); 
 						?>
 
 						<div class="sidebar_title cont_title">

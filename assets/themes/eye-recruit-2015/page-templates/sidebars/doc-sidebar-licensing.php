@@ -1,6 +1,7 @@
 <?php 
 $pageID = get_the_ID(); 
-$uar = get_post_meta($pageID, 'upload_file_content', true); 
+$uar = get_post_meta($pageID, 'wpcf-upload-file-content', true);
+$uors = get_post_meta($pageID, 'wpcf-use-our-services-content', true);
 $mt = get_post_meta($pageID, 'member_tips', true); 
 ?>
 <?php  if ( (is_user_logged_in()) &&  ($roles1 == 'employer') ) {  ?>
@@ -9,7 +10,7 @@ $mt = get_post_meta($pageID, 'member_tips', true);
 		<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
 	</div>
 	<h5>ABOUT LICENSING</h5>
-	<p>Ensuring that all candidates have current professional licensing protects Employers from negligent hiring claims. While the Employer remains responsible for confirming all licensing before and after hiring, Eyerecruit offers an easy way for Job Seekers to post their current licensing, so interested Employers can view licensure and expedite the hiring process when interested.</p>
+	<?php echo $uors; ?>
 </div>
 <div class="special_box special_logo navi_thumbnail">
 	<div class="thumbnail">
@@ -27,7 +28,7 @@ $mt = get_post_meta($pageID, 'member_tips', true);
 		<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
 	</div>
 	<h5>ABOUT LICENSING</h5>
-	<p>Ensuring that all candidates have current professional licensing protects Employers from negligent hiring claims. While the Employer remains responsible for confirming all licensing before and after hiring, Eyerecruit offers an easy way for Job Seekers to post their current licensing, so interested Employers can view licensure and expedite the hiring process when interested.</p>
+	<?php echo $uors; ?>
 </div>
 <div class="special_box special_logo navi_thumbnail">
 	<div class="thumbnail">

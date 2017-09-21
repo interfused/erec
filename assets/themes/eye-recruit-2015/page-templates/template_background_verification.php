@@ -64,7 +64,7 @@ get_header(); ?>
 									<h4>Background Verifications  Managed & Run By You</h4>
 								</div>
 								<div class="well">
-									<p><img src="<?php  echo get_stylesheet_directory_uri(); ?>/img/green_checklg.jpg"> <span>You haven’t saved any Background Verificationds.</span></p>
+									<p><img src="<?php  echo get_stylesheet_directory_uri(); ?>/img/green_checklg.jpg"> <span>You haven’t saved any Background Verifications.</span></p>
 									<p>A potential Employer may ligally look into your background during the hiring process and require a background checl to be conducted <strong>as a part of the hiring process.</strong> Over the course of a career you will have provided access to Local, State and Federal Criminal & civil histories, your credit report and a multitude of other background related inquiries to dozens, if not hunderds of times. Why not manage this process and give approval to people who should actually be seeing it? </p>
 									<p class="indent"><strong>You don’t need to have a Background Search done by one of the potential vendors we suggest. Even though you can, you don’t even need to post the results of  a tihrd party Background Search that you conduct & requests yourself on the site.</strong></p>
 									<p>In truth, you don't need to provide <em><u>anything</u></em> relating to your Background to a potential Employer to get the benefits of using the Eyerecruit.com services. Everything on Eyerecruit.com is self disclosed and designed to allow you to better manage your own carrier. But why not handle your Personal Background verifications like your Credit Report or FICO Score? </p>
@@ -81,9 +81,9 @@ get_header(); ?>
 						<div class="col-md-4">
 							<?php 
 							$pageID = get_the_ID(); 
-							$uobrc = get_post_meta($pageID, 'use_of_background_reports_content', true); 
-							$odc = get_post_meta($pageID, 'our_disclaimer_content', true); 
-							$ptc = get_post_meta($pageID, 'professional_tip_content', true); 
+							$uobrc = get_post_meta($pageID, 'wpcf-use-of-background-reports-content', true); 
+							$odc = get_post_meta($pageID, 'wpcf-our-disclaimer-content', true); 
+							$ptc = get_post_meta($pageID, 'wpcf-professional-tip-content', true); 
 							?>
 
 							<?php //if($allowView == 'allow'){ ?>		

@@ -1,6 +1,7 @@
 <?php 
 $pageID = get_the_ID(); 
-$uar = get_post_meta($pageID, 'upload_file_content', true); 
+$uar = get_post_meta($pageID, 'wpcf-upload-file-content', true); 
+$uors = get_post_meta($pageID, 'wpcf-use-our-services-content', true);
 $mt = get_post_meta($pageID, 'member_tips', true); 
 ?>
 <?php  if ( (is_user_logged_in()) &&  ($roles1 == 'employer') ) {  ?>
@@ -9,7 +10,7 @@ $mt = get_post_meta($pageID, 'member_tips', true);
 		<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
 	</div>
 	<h5>BEYOND A DEGREE</h5>
-	<p>Job Seekers understand that a college degree and skills gained though experience will provide a greater chance for financial freedom and quality employment. Leadership and management opportunities do require university degrees and many Job Seekers are aware that if they are looking to break into the middle class or higher, they need not only experience, but a degree as well. </p>
+	<?php echo $uors; ?>
 </div>
 <div class="special_box special_logo navi_thumbnail">
 	<div class="thumbnail">
@@ -29,7 +30,7 @@ $mt = get_post_meta($pageID, 'member_tips', true);
 		<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
 	</div>
 	<h5>BEYOND A DEGREE</h5>
-	<p>Job Seekers understand that a college degree and skills gained though experience will provide a greater chance for financial freedom and quality employment. Leadership and management opportunities do require university degrees and many Job Seekers are aware that if they are looking to break into the middle class or higher, they need not only experience, but a degree as well. </p>
+	<?php echo $uors; ?>
 </div>
 <div class="special_box special_logo navi_thumbnail">
 	<div class="thumbnail">

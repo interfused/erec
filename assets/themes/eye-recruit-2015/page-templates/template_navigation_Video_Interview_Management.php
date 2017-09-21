@@ -375,7 +375,7 @@ $role = array_shift( $roles );
                 <p>Having a Pre-Recorded video Interview posted here <b>IS NOT MANDATORY</b> to use the services offered thought EyeRecruit.com. Providing responses to the most basic pre-employment interview questions will do three things:1. Help to distinguish yourself in a positive way and stand out to a Decision Maker, 2. It gives you the chance to relax and be yourself because none of the questions will be a surprise, and 3. When you are called in for an in person interview, you know the Employer is serious about moving you to the nest step in the Hiring process.Think about what it says to a potential employers if you supply this data.  </p>
                     video_interview_management
                   </div> -->
-                  <?php member_navigation_sidebar_tips_function('video_interview_management'); ?>
+                  <?php member_navigation_sidebar_tips_function(490); ?>
 
                   <?php } ?>
 
@@ -398,7 +398,7 @@ $role = array_shift( $roles );
               <p>Having a Pre-Recorded video Interview posted here <b>IS NOT MANDATORY</b> to use the services offered thought EyeRecruit.com. Providing responses to the most basic pre-employment interview questions will do three things:1. Help to distinguish yourself in a positive way and stand out to a Decision Maker, 2. It gives you the chance to relax and be yourself because none of the questions will be a surprise, and 3. When you are called in for an in person interview, you know the Employer is serious about moving you to the nest step in the Hiring process.Think about what it says to a potential employers if you supply this data.  </p>
                   video_interview_management
                 </div> -->
-                <?php member_navigation_sidebar_tips_function('video_interview_management'); 
+                <?php member_navigation_sidebar_tips_function(490); 
 
               } 
               ?>
