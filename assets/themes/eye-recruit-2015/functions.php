@@ -1712,6 +1712,8 @@ add_action('restrict_manage_posts', 'tsm_filter_post_type_by_taxonomy');
 function tsm_filter_post_type_by_taxonomy() {
   er_admin_create_cpt_filter_dropdown('profile-builder-step','profile-category');
   er_admin_create_cpt_filter_dropdown('assessment-question','assessment-category');
+  er_admin_create_cpt_filter_dropdown('faq','faq-category');
+  er_admin_create_cpt_filter_dropdown('site-tip','site-tip-category');
 }
 /**
  * Filter posts by taxonomy in admin
@@ -1731,4 +1733,48 @@ add_filter('parse_query', 'tsm_convert_id_to_term_in_query1');
 function tsm_convert_id_to_term_in_query1($query) {
   er_admin_get_filtered_cpt_taxonomy_posts($query,'profile-builder-step','profile-category');
   er_admin_get_filtered_cpt_taxonomy_posts($query,'assessment-question','assessment-category');
+  er_admin_get_filtered_cpt_taxonomy_posts($query,'faq','faq-category');
+  er_admin_get_filtered_cpt_taxonomy_posts($query,'site-tip','site-tip-category');
 }
+
+/* FAQ CUSTOM POST TYPE */
+function get_er_faq($atts){
+  $atts = shortcode_atts( array(
+          'cat_id' => 0
+          ), $atts, 'get_er_faq' );
+  
+  if($atts['cat_id'] != 0){
+    $args=array(
+    'post_type'           => 'faq',
+    'post_status'         => array( 'publish'),
+    'tax_query' => array(
+        array( 
+            'taxonomy' => 'faq-category',
+            'field' => 'id',
+            'terms' => $atts['cat_id']
+        )
+    ),
+    'posts_per_page' => -1
+    );
+  }else{
+    $args=array(
+    'post_type'           => 'faq',
+    'post_status'         => array( 'publish'),
+    'posts_per_page' => -1
+    );
+  }
+
+  $html = '<div class="faq_wrapper">';
+
+  $questions = new WP_Query($args);
+  while ( $questions->have_posts() ) {
+    $questions->the_post();
+    $postMeta=get_post_meta(get_the_ID() );
+    $html .= '<h3 class="faq_title">'.get_the_title().'</h3>';
+    $html .= '<div class="faq_content">'.get_the_content().'</div>';
+  }
+  $html .= '<div>';
+  wp_reset_postdata();
+  return $html;
+}
+add_shortcode('faq','get_er_faq');
