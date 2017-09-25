@@ -1686,3 +1686,49 @@ function prefix_custom_options( $options, $title, $type ){
 	}
 	return $options;
 }
+
+/**
+ * Display a custom taxonomy dropdown in admin
+ * @author Mike Hemberger
+ * @link http://thestizmedia.com/custom-post-type-filter-admin-custom-taxonomy/
+ */
+function er_admin_create_cpt_filter_dropdown($post_type, $taxonomy){
+  global $typenow;
+  if ($typenow == $post_type) {
+    $selected      = isset($_GET[$taxonomy]) ? $_GET[$taxonomy] : '';
+    $info_taxonomy = get_taxonomy($taxonomy);
+    wp_dropdown_categories(array(
+      'show_option_all' => __("Show All {$info_taxonomy->label}"),
+      'taxonomy'        => $taxonomy,
+      'name'            => $taxonomy,
+      'orderby'         => 'name',
+      'selected'        => $selected,
+      'show_count'      => true,
+      'hide_empty'      => true,
+    ));
+  };
+}
+add_action('restrict_manage_posts', 'tsm_filter_post_type_by_taxonomy');
+function tsm_filter_post_type_by_taxonomy() {
+  er_admin_create_cpt_filter_dropdown('profile-builder-step','profile-category');
+  er_admin_create_cpt_filter_dropdown('assessment-question','assessment-category');
+}
+/**
+ * Filter posts by taxonomy in admin
+ * @author  Mike Hemberger
+ * @link http://thestizmedia.com/custom-post-type-filter-admin-custom-taxonomy/
+ */
+function er_admin_get_filtered_cpt_taxonomy_posts($query,$post_type,$taxonomy){
+    global $pagenow;
+  $q_vars    = &$query->query_vars;
+  if ( $pagenow == 'edit.php' && isset($q_vars['post_type']) && $q_vars['post_type'] == $post_type && isset($q_vars[$taxonomy]) && is_numeric($q_vars[$taxonomy]) && $q_vars[$taxonomy] != 0 ) {
+    $term = get_term_by('id', $q_vars[$taxonomy], $taxonomy);
+    $q_vars[$taxonomy] = $term->slug;
+  }
+}
+
+add_filter('parse_query', 'tsm_convert_id_to_term_in_query1');
+function tsm_convert_id_to_term_in_query1($query) {
+  er_admin_get_filtered_cpt_taxonomy_posts($query,'profile-builder-step','profile-category');
+  er_admin_get_filtered_cpt_taxonomy_posts($query,'assessment-question','assessment-category');
+}
