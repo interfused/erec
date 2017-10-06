@@ -17,6 +17,7 @@ if($_REQUEST['uID']){
 }
 
 $userdata = get_userdata($user_id);
+$userMeta = get_user_meta($user_id);
 ?>
 <?php  
 function getCimyOrUndefined ($field_name,$user_id){
@@ -28,36 +29,30 @@ function getCimyOrUndefined ($field_name,$user_id){
   }
 
 }
-function get_star_assessment($user_id,$field_name){
-  $star   = get_cimyFieldValue($user_id,$field_name);
-  $value  = '';
-  if($star == 'basic'){
-    $value = '<i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
-  }elseif ($star == 'average') {
 
-    $value = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
-  }
-  elseif ($star == 'good') {
-
-    $value = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
-  }
-  elseif ($star == 'excellent') {
-
-    $value = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-o"></i>';
-  }
-  elseif ($star == 'master') {
-    $value = '<i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>';
-
-  }else{
-
-    $value = '<i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i><i class="fa fa-star-o"></i>';
-  }
-
-  return $value;
-}
 ?>
 
 <style>
+.star_rating-1,.star_rating-2,.star_rating-3,.star_rating-4,.star_rating-5{
+  font-family: "FontAwesome"; 
+  display:inline-block;
+}
+.star_rating-1:after{
+  content: "\f005 \f006 \f006 \f006 \f006";
+}
+.star_rating-2:after{
+  content: "\f005 \f005 \f006 \f006 \f006";
+}
+.star_rating-3:after{
+  content: "\f005 \f005 \f005 \f006 \f006";
+}
+.star_rating-4:after{
+  content: "\f005 \f005 \f005 \f005 \f006";
+}
+.star_rating-5:after{
+  content: "\f005 \f005 \f005 \f005 \f005"; 
+}
+
 li.icon{
   position: relative;
 }
@@ -212,24 +207,11 @@ li.icon{
                           </div>
                         </div>
                         <h4><span class="iconpro iconpro_tasks"></span>Tasks Assessment</h4>
-                        <ul>    
-                          <li>Validating known intelligence data <?php echo checkupdateSelfAsses('Q1', $user_id); ?> 
-                            <span><?php echo get_star_assessment($user_id,'TASKS_Q1');   ?></span>
-                          </li>
-                          <li>Coordination of intelligence activities <?php echo checkupdateSelfAsses('TASKS_Q4', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'TASKS_Q4');   ?></span>
-                          </li>
-                          <li>Study of rings & security threats <?php echo checkupdateSelfAsses('TASKS_Q3', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'TASKS_Q3');   ?></span>
-                          </li>
-                          <li>Locating criminal groups? <?php echo checkupdateSelfAsses('TASKS_Q5', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'TASKS_Q5');   ?></span>
-                          </li>
-                          <li>Preparing comprehensive written reports? <?php echo checkupdateSelfAsses('TASKS_Q2', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'TASKS_Q2');   ?></span>
-                          </li>
-                        </ul>
-                        <a href="<?php echo site_url();  ?>/job-seekers/tasks-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a>
+                        <?php
+                          echo get_employer_pov_candidate_assessments_overview(483,$user_id);
+                        ?>
+
+                        <!-- <a href="<?php echo site_url();  ?>/job-seekers/tasks-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a> -->
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
@@ -243,116 +225,51 @@ li.icon{
                           </div>
                         </div>
                         <h4><span class="iconpro iconpro_knowledge"></span>Knowledge Assessment</h4>
-                        <ul>    
-                          <li>English language proficiency <?php echo checkupdateSelfAsses('KNOW_Q1', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'KNOW_Q1');   ?></span>
-                          </li>
-                          <li>Media production & dissemination <?php echo checkupdateSelfAsses('KNOW_Q4', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'KNOW_Q4');   ?></span>
-                          </li>
-                          <li>Public Safety & Security strategies <?php echo checkupdateSelfAsses('KNOW_Q3', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'KNOW_Q3');   ?></span>
-                          </li>
-                          <li>Computers, electronics & applications <?php echo checkupdateSelfAsses('KNOW_Q5', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'KNOW_Q5');   ?></span>
-                          </li>
-                          <li>Laws, codes, procedures & regulations <?php echo checkupdateSelfAsses('KNOW_Q2', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'KNOW_Q2');   ?></span>
-                          </li>
-                        </ul>
-                        <a href="<?php echo site_url();  ?>/job-seekers/knowledge-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a>
+                        <?php
+                          echo get_employer_pov_candidate_assessments_overview(486,$user_id);
+                        ?>
+                        
+                        <!-- <a href="<?php echo site_url();  ?>/job-seekers/knowledge-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a> -->
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                       <div class="side_assess-box">
                         <h4><span class="iconpro iconpro_abilities"></span>Abilities Assessment</h4>
-                        <ul>    
-                          <li>Relationship among seemingly unrelated events <?php echo checkupdateSelfAsses('ABILITY_Q1', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'ABILITY_Q1');   ?></span>
-                          </li>
-                          <li>Problem sensitivity and recognition <?php echo checkupdateSelfAsses('ABILITY_Q6', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'ABILITY_Q6');   ?></span>
-                          </li>
-                          <li>Communicate with others orally <?php echo checkupdateSelfAsses('ABILITY_Q4', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'ABILITY_Q4');   ?></span>
-                          </li>
-                          <li>Speech recognition of other persons <?php echo checkupdateSelfAsses('ABILITY_Q7', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'ABILITY_Q7');   ?></span>
-                          </li>
-                          <li>Read and understand information in writing <?php echo checkupdateSelfAsses('ABILITY_Q2', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'ABILITY_Q2');   ?></span>
-                          </li>
-                        </ul>
-                        <a href="<?php echo site_url();  ?>/job-seekers/abilities-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a>
+                        <?php
+                          echo get_employer_pov_candidate_assessments_overview(485,$user_id);
+                        ?>
+                        
+                        <!-- <a href="<?php echo site_url();  ?>/job-seekers/abilities-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a> -->
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                       <div class="side_assess-box">
                         <h4><span class="iconpro iconpro_tech"></span>Tech Assessment</h4>
-                        <ul>    
-                          <li>Biometrics <?php echo checkupdateSelfAsses('TECH_Q15', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'TECH_Q15');   ?></span>
-                          </li>
-                          <li>Charting software <?php echo checkupdateSelfAsses('TECH_Q2', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'TECH_Q2');   ?></span>
-                          </li>
-                          <li>Word processing software <?php echo checkupdateSelfAsses('TECH_Q13', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'TECH_Q13');   ?></span>
-                          </li>
-                          <li>Database user interface and query software <?php echo checkupdateSelfAsses('TECH_Q3', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'TECH_Q3');   ?></span>
-                          </li>
-                          <li>Covert / concealed video surveillance <?php echo checkupdateSelfAsses('TECH_Q14', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'TECH_Q14');   ?></span>
-                          </li>
-                        </ul>
-                        <a href="<?php echo site_url();  ?>/job-seekers/technology-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a>
+                        <?php
+                          echo get_employer_pov_candidate_assessments_overview(484,$user_id);
+                        ?>
+                        
+                        <!-- <a href="<?php echo site_url();  ?>/job-seekers/technology-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a> -->
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                       <div class="side_assess-box">
                         <h4><span class="iconpro iconpro_skills"></span>Skills Assessment</h4>
-                        <ul>    
-                          <li>Reading comprehension & understanding <?php echo checkupdateSelfAsses('SKILLS_Q1', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'SKILLS_Q1');   ?></span>
-                          </li>
-                          <li>Adjusting actions in relation to others <?php echo checkupdateSelfAsses('SKILLS_Q9', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'SKILLS_Q9');   ?></span>
-                          </li>
-                          <li>Instruction, mentoring and teaching others <?php echo checkupdateSelfAsses('SKILLS_Q12', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'SKILLS_Q12');   ?></span>
-                          </li>
-                          <li>Social perceptiveness & situational awareness <?php echo checkupdateSelfAsses('SKILLS_Q11', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'SKILLS_Q11');   ?></span>
-                          </li>
-                          <li>Active listening & follow up inquiry <?php echo checkupdateSelfAsses('SKILLS_Q2', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'SKILLS_Q2');   ?></span>
-                          </li>
-                        </ul>
-                        <a href="<?php echo site_url();  ?>/job-seekers/skills-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a>
+                        <?php
+                          echo get_employer_pov_candidate_assessments_overview(487,$user_id);
+                        ?>
+                        
+                        <!-- <a href="<?php echo site_url();  ?>/job-seekers/skills-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a> -->
                       </div>
                     </div>
                     <div class="col-lg-4 col-md-6">
                       <div class="side_assess-box">
                         <h4><span class="iconpro iconpro_work"></span>Work Assessment</h4>
-                        <ul>    
-                          <li>Representing to external sources <?php echo checkupdateSelfAsses('WORK_ACT_Q11', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'WORK_ACT_Q11');   ?></span>
-                          </li>
-                          <li>Coaching, developing & mentoring <?php echo checkupdateSelfAsses('WORK_ACT_Q22', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'WORK_ACT_Q22');   ?></span>
-                          </li>
-                          <li>Training, development or instruction <?php echo checkupdateSelfAsses('WORK_ACT_Q18', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'WORK_ACT_Q18');   ?></span>
-                          </li>
-                          <li>Coordinating work activities of others <?php echo checkupdateSelfAsses('WORK_ACT_Q23', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'WORK_ACT_Q23');   ?></span>
-                          </li>
-                          <li>Determining the best solution & solve problems <?php echo checkupdateSelfAsses('WORK_ACT_Q12', $user_id); ?>
-                            <span><?php echo get_star_assessment($user_id,'WORK_ACT_Q12');   ?></span>
-                          </li>
-                        </ul>
-                        <a href="<?php echo site_url();  ?>/job-seekers/work-activities-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a>
+                        <?php
+                          echo get_employer_pov_candidate_assessments_overview(488,$user_id);
+                        ?>
+                        
+                        <!-- <a href="<?php echo site_url();  ?>/job-seekers/work-activities-assessment/?recruitID=<?php echo $user_id; ?>"><i class="fa fa-angle-double-left"></i> See More <i class="fa fa-angle-double-right"></i></a> -->
                       </div>
                     </div>
                   </div>

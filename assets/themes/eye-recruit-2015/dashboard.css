@@ -908,7 +908,7 @@ transition:all 0.2s ease 0s;
   -ms-transition:all 0.2s ease 0s;
   transition:all 0.2s ease 0s;
 }
-.network_list article.blocked:before{background: rgba(255,255,255,0.50); position: absolute; top: 0; bottom: 39px; right: 0; left: 0; content: ''; z-index: 9}
+.network_list article.blocked:before{background: rgba(255,255,255,0.90); position: absolute; top: 0; bottom: 39px; right: 0; left: 0; content: ''; z-index: 9}
 .network_list article.blocked .block_btn{position: absolute; top: 50%; left: 0; right:0; margin-top: -42px;text-align: center; z-index: 10 }
 .network_list article:hover{background: #fff; border-color:transparent; box-shadow: 0 0 10px rgba(0,0,0,0.26)}
 .network_list article h4 {text-align: center;position: relative;padding-bottom: 4px;margin-bottom: 15px;}
@@ -1180,7 +1180,7 @@ transition:all 0.2s ease 0s;
   .job_filters .dashboard_sec .paginationDiv{margin-bottom: 30px}
   .jobsearch_map{box-shadow: 0 -1px 0 rgba(0,0,0,0.78);margin: 1px 0 20px;position: relative;z-index: 90}
   .jobsearch_bar{margin: -162px 0 26px;position: relative;z-index: 2}
-  .jobsearch_bar .form{padding: 20px; background: rgba(255,255,255,0.5);}
+  .jobsearch_bar .form{padding: 20px; background: rgba(255,255,255,0.9);}
   .jobsearch_bar .form .search_jobs.search_fields{padding: 0; box-shadow: none; padding-right: 120px; position: relative;background: transparent;}
   .jobsearch_bar .form .search_jobs.search_fields .form-group{margin: 0}
   .jobsearch_bar .form .search_jobs.search_fields .form-group .form-control{border-color: transparent; color: #999;}
@@ -1392,7 +1392,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 .jobdetail_page .sidebar{padding-right: 30px;padding-top: 50px;}
 .jobdetail_page .sidebar .snap_shot ul{padding-left: 0px}
 .jobdetail_page .sidebar .snap_shot ul li{font-size: 14px}
-.jobdetail_page .sidebar .snap_shot ul li span{text-transform: uppercase; color: #232323}
+.jobdetail_page .sidebar .snap_shot ul li span{text-transform: uppercase; color: #a12641;}
 .jobdetail_page .sidebar .snap_shot a{font-style: normal; text-decoration: underline;font-weight: 600;text-transform: none;s}
 .jobdetail_page .thumbnail{border-color: #cccccc; border-radius: 3px;line-height: 268px;min-height: 300px}
 .jobdetail_page a{color: #b31d11;text-transform: uppercase;line-height: 24px; font-style: italic;}
@@ -1411,7 +1411,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', end
 .about_jobcompany{margin-bottom: 46px; border-bottom: 1px solid #232323; padding-bottom: 23px; overflow: hidden;}
 .about_jobcompany p{padding-left: 30px; font-size: 15px; line-height: 24px; color: #585858; }
 
-.jobdetail_list h4{text-transform: none; font-size: 20px; color: #83170e; margin:0; padding: 12px 0}
+.jobdetail_list h4{text-transform: none; font-size: 20px; color: #a12641; margin:0; padding: 12px 0}
 .jobdetail_list ul{list-style-type: none; padding-left: 28px; margin-bottom: 30px;}
 .jobdetail_list ul li{position: relative;font-size: 14px; line-height: 20px; padding: 5px 0; color: #585858;padding-left: 20px;}
 .jobdetail_list ul li:before{position: absolute;top: 11px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: #585858; content: ''}
@@ -3229,3 +3229,10 @@ li.icon.federal{ background-image: url(/assets/themes/eye-recruit-2015/img/feder
 .page-template-template_navigation_Referrals .avatar{margin-right:10px; margin-top:10px;}
 
 label.question{text-align: left;}
+
+/* */
+
+  a[href^="https://maps.google.com/maps"], a[href^="http://maps.google.com/maps"]{display:none !important}
+  .gmnoprint a, .gmnoprint span, .gm-style-cc a { display:none; }
+  .gm-style-cc{ display:none}
+

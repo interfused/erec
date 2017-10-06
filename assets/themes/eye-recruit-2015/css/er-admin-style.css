@@ -1,0 +1,29 @@
+.er_admin_tabs li{
+  display: inline-block;
+  margin-right: 5px;
+}
+.er_admin_tabs a{
+  display: inline-block;
+  padding: 7px 15px;
+  text-decoration: none;
+  background: #ccc;
+  color: #fff;
+}
+.er_admin_tabs a.active{
+  background: #009;
+  color: #fff; 
+}
+
+.er_admin_tabbed_content{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.er_admin_tabbed_content h4{
+  width: 100%;
+}
+.question_container{
+  box-sizing: border-box;
+  width: 33%;
+  padding: 20px;
+}

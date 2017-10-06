@@ -41,28 +41,19 @@ get_header(); ?>
 });
 	});*/
 </script>
-<script>
-function hideMsg(){
-    // Hide dynamically added div
-	console.log('okie');
 
-}
+
 <?php
 //$_SESSION['restrictView']==true
-if(!is_user_logged_in()){
+if(is_user_logged_in() == false){
 /* // Listen for ajax completions */
 ?>
+<script>
 jQuery( document ).ajaxComplete(function() {
-	/*
-  //jQuery( ".log" ).text( "Triggered ajaxComplete handler." );
-//  alert('done');
-	//jQuery("div.company").remove();
-	jQuery("div.company").html('<a href="/job-seekers/get-started/">available to members</a>');
-	jQuery(".job_listings img.company_logo").removeAttr("alt");
-	jQuery(".job_listings img.company_logo").attr("src","/assets/uploads/2015/01/icon-resume.png");
-	
+  jQuery('#loaders').hide();
+  generateCustomPagination();
 });
-*/
+
 </script>
 <?php } ?>
 <?php 
@@ -71,7 +62,10 @@ if( (is_user_logged_in() == false) &&  !$_SESSION['findJobJobAlertsModal'] ){
 	$_SESSION['findJobJobAlertsModal'] = true; 
 	?>
     <script>
+
+
 jQuery(window).load(function(){
+
 jQuery.magnificPopup.open({
   //items: {src: '#createAcctModal'},type: 'inline'}, 0);
 });
@@ -80,3 +74,50 @@ jQuery.magnificPopup.open({
 }
 /* END MODAL SCRIPTS FOR LOGGED OUT USERS */
 ?>
+<?php // custom pagination... DEV TO DEBUG LATER: ORIGINAL PAGINATION NOT WORKING ?>
+
+<script>
+function generateCustomPagination(){
+  var maxListingsPerPage = 12;
+  //var totalJobListings = "<?php echo get_option( 'job_manager_per_page' );?>";
+  var totalJobListings = jQuery(".job_listing").length;
+  var totalPages = Math.ceil(totalJobListings/maxListingsPerPage);
+  var maxPages = 10;
+  jQuery('.job_listing:gt('+(maxListingsPerPage-1)+')').hide();
+  console.log('custom window pagination for '+totalJobListings +' with per page: '+maxListingsPerPage);
+  jQuery("#jobpaginationDiv").empty();
+  //generate the links
+  for(var i=1;i<=totalPages;i++){
+    if(i>maxPages){
+      break;
+    }
+    jQuery("#jobpaginationDiv").append('<a class="job_page_loader" data-page="'+ (i-1) +'" href="javascript:void(0);">'+i+'</a>');
+    jQuery("#jobpaginationDiv a:nth-of-type(1)").addClass('active');
+  }
+
+  /* click */
+  jQuery("#jobpaginationDiv a").click(function(){
+    jQuery("#jobpaginationDiv a").removeClass('active');
+    jQuery(this).addClass('active');
+    var activePage = jQuery(this).data('page');
+    var startShowIndex = (activePage*maxListingsPerPage) - 1;
+    var endShowIndex = startShowIndex + maxListingsPerPage;
+
+    if(activePage == 0){
+      startShowIndex = 0;
+      endShowIndex = maxListingsPerPage - 1;
+      jQuery("#searchSec").show();
+    }else{
+      jQuery("#searchSec").hide();
+    }
+    
+    jQuery('.job_listing').hide();
+    jQuery('.job_listing:gt('+startShowIndex+'):lt('+endShowIndex+')').fadeIn();
+
+    jQuery("html, body").animate({scrollTop:jQuery("#erJobListingTop").offset().top }, 500, 'swing', function() { 
+       console.log("Finished animating");
+    });
+
+  });
+}
+</script>
