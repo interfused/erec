@@ -2088,7 +2088,7 @@ function filter_by_salary_field() { ?>
 		//job type
 		jQuery('ul.quick_links_listing_type').each(function(){
 		  var LiN = jQuery(this).find('li').length;
-		  if( LiN > 2){    
+		  if( LiN > 10){    
 		    jQuery('li', this).eq(1).nextAll().hide().addClass('toggleable');
 		    jQuery(this).append('<a class="more">More...</a>');    
 		  }
@@ -2126,6 +2126,7 @@ function filter_by_salary_field() { ?>
 
 			var job_listing_type = '<?php echo $_GET["job_listing_type"]; ?>';
 			jQuery('input[value="'+job_listing_type+'"]').click();
+			jQuery(".quick_links_listing_type by_type a.more").trigger('click');
 			
 
 			var job_country = '<?php echo $_GET["job_country"]; ?>';

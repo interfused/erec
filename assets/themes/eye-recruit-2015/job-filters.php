@@ -70,7 +70,7 @@ $long = $location->longitude;
         <section class="dashboard_sec">
             <div class="container">
                 <div class="row">
-                    <div class="col-lg-6 col-md-12 col-lg-push-3 col-md-push-0">
+                    <div id="erJobListingTop" class="col-lg-6 col-md-12 col-lg-push-3 col-md-push-0">
                         <div id="searchSec" class="section_title">
                             <h3 class="notFeatured">Featured</h3>
                             <span class="text-warning"><a href="javascript:void(0);" id="getrss" target="_blank"> <i class="fa fa-rss" aria-hidden="true"></i> RSS</a> </span>
@@ -83,6 +83,7 @@ $long = $location->longitude;
                         </div>
                         <div id="jobpaginationDiv" class="paginationDiv text-center">
                         </div>
+
                     </div>
                     <div class="col-lg-3 col-md-6 col-lg-pull-6 col-md-pull-0">
                         <h3 class="quick_search">
@@ -128,6 +129,10 @@ $long = $location->longitude;
                         </div>
 
 
+                        <?php 
+                            $show_filter_element = false;
+                            if($show_filter_element){ 
+                        ?>
                         <div class="light_box quick_links include_list benifit_list">
                             <div class="sidebar_title">
                                 <h4>BENEFITS</h4>
@@ -178,7 +183,7 @@ $long = $location->longitude;
 
                             </ul>
                         </div>
-
+                        <?php } ?>
 
                      
 
@@ -462,9 +467,9 @@ $long = $location->longitude;
         });
     });
 </script>
-<?php  if(is_user_logged_in()){
+<?php  if(!is_user_logged_in()){
 
-}else{  ?>
+ ?>
 
 <script type="text/javascript">
 function dontShow(){

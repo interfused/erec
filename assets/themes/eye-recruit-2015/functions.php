@@ -15,6 +15,7 @@ include('functions_registration.php');
 include('functions_save_jobseeker_data.php');
 include('functions-wc.php');
 include('templates/email/functions.php');
+include('inc/eyerecruit/functions-assessments.php');
 // Sidebar for job find 
 function basicMailTest(){
 	mail('jeremy@interfused-inc.com','basic subject er test','this is the basic message');
@@ -800,8 +801,8 @@ function tmpempassessment_fn(){
 	//echo '<li>' . get_the_title() . '</li>';
 
 		$empQ = get_post_meta(get_the_ID(), 'wpcf-employer-to-seeker-question', true);
-
-		if($empQ == '' || (strpos('BACKSIDE', $empQ) >0)  ){
+//$empQ == '' || (strpos('BACKSIDE', $empQ) >0
+		if(true)  {
 			$html .= 'MISSING EMPLOYER QUESTION FOR: '.get_the_title();
 			$html .= '<br><a href="http://eyerecruit.com/wp-admin/post.php?post='.get_the_ID().'&action=edit" target="editWindow">EDIT</a>';
 			$html.="<hr>";
@@ -1778,3 +1779,46 @@ function get_er_faq($atts){
   return $html;
 }
 add_shortcode('faq','get_er_faq');
+/////////
+function load_custom_er_wp_admin_style() {
+        wp_register_style( 'custom_er_wp_admin_css', get_stylesheet_directory_uri() . '/css/er-admin-style.css', false, '1.0.0' );
+        wp_enqueue_style( 'custom_er_wp_admin_css' );
+        wp_register_script(
+        'custom-er-admin',
+        get_stylesheet_directory_uri() . '/inc/js/er-admin.js',
+        false,
+        '1.0',
+        true
+    );
+
+    wp_enqueue_script( 'custom-er-admin' );
+}
+add_action( 'admin_enqueue_scripts', 'load_custom_er_wp_admin_style' );
+
+/*
+RETURN AN ARRAY OF POST_IDS BY CUSTOM POST TYPE AND TAXONOMY
+*/
+function get_cpt_taxonomy_post_ids($post_type_slug,$taxonomy_slug,$terms_id){
+  //if id is numeric we assume actual id otherwise we pull by slug
+  if(is_numeric($terms_id)){
+    $field_type = 'id';
+  }else{
+    $field_type = 'slug';
+  }
+
+  $the_query = new WP_Query( array(
+    'post_type' => $post_type_slug,
+    'post_status' => 'publish',
+    'posts_per_page' => -1,
+    'order' => 'ASC',
+    'tax_query' => array(
+      array(
+        'taxonomy' => $taxonomy_slug,
+        'field' => $field_type,
+        'terms' => $terms_id
+        )
+      )
+    ) );
+  $post_ids = wp_list_pluck( $the_query->posts, 'ID' );
+  return $post_ids;
+}

@@ -18,7 +18,7 @@
 		</div>
 		<div class="post_btns">
 			<div class="postbtns_inner">
-				<h6><?php printf( __( 'Posted %s ago', 'jobify' ), human_time_diff( get_post_time( 'U' ), current_time( 'timestamp' ) ) ); ?></h6>
+<!--				<h6><?php printf( __( 'Posted %s ago', 'jobify' ), human_time_diff( get_post_time( 'U' ), current_time( 'timestamp' ) ) ); ?></h6> -->
 				<span class="label label-default">Follow Company</span>
 				<span class="label job-type <?php echo get_the_job_type() ? sanitize_title( get_the_job_type()->slug ) : ''; ?>"><?php the_job_type(); ?></span>
 				
@@ -79,6 +79,7 @@
 		<div class="clearfix"></div>
 	</div>
 </div>
+
 <script type="text/javascript">
 	jQuery(document).ready( function() {
 		var id = '<?php echo get_the_ID(); ?>';
@@ -101,10 +102,6 @@
 		var currID = '<?php echo get_the_ID(); ?>';
 		jQuery('#job_listing-'+currID+' .job-manager-applications-applied-notice').insertAfter("#getdesc"+currID);
 		jQuery(".job-manager-applications-applied-notice").addClass("label job-type full-timerr");
+
 	});
 </script>
-<style type="text/css">
-	a[href^="https://maps.google.com/maps"], a[href^="http://maps.google.com/maps"]{display:none !important}
-	.gmnoprint a, .gmnoprint span, .gm-style-cc a { display:none; }
-	.gm-style-cc{ display:none}
-</style>
