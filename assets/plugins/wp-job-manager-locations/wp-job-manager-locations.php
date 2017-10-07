@@ -1,12 +1,13 @@
 <?php
 /**
- * Plugin Name: WP Job Manager - Predefined Regions
+ * Plugin Name: Regions for WP Job Manager
  * Plugin URI:  https://wordpress.org/plugins/wp-job-manager-locations/
  * Description: Create predefined regions/locations that job submissions can associate themselves with.
  * Author:      Astoundify
  * Author URI:  http://astoundify.com
- * Version:     1.11.0
+ * Version:     1.14.0
  * Text Domain: wp-job-manager-locations
+ * Domain Path: /languages
  */
 
 // Exit if accessed directly

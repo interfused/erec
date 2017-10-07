@@ -1,0 +1,52 @@
+<?php 
+/*Custom add fileds on registration errors*/
+
+function custom_registration_errors( $errors ) {
+	if ( empty( $_POST['firstname'] ) )
+		$errors->add( 'firstname', '<strong>ERROR</strong>: Please enter a first name.' );
+	if ( empty( $_POST['lastname'] ) )
+		$errors->add( 'lastname', '<strong>ERROR</strong>: Please enter a last name.' );
+	if ( empty( $_POST['cell_phone'] ) )
+		$errors->add( 'cell_phone', '<strong>ERROR</strong>: Please enter a cell phone.' );
+	if(isset($_POST['office_phone'])){
+		if ( empty( $_POST['office_phone'] ) )
+			$errors->add( 'office_phone', '<strong>ERROR</strong>: Please enter a office phone.' );
+		
+	}
+
+	return $errors;
+}
+add_filter( 'registration_errors', 'custom_registration_errors' );
+
+/*
+Update user role and meta fields for jobseeker and employers
+*/
+function tml_user_register( $user_id ) {
+	if(isset($_POST)){
+		$userdata['firstname'] 			= $_POST['firstname'];
+		$userdata['lastname'] 			= $_POST['lastname'];
+		$userdata 						= array();
+		$userdata['ID'] 				= $user_id;
+		$userdata['role'] 				= $_POST['role'];
+		//only allow if user role is my_role
+		wp_update_user($userdata);
+		if(isset($_POST['role']) &&  $_POST['role'] == 'employer'){
+			update_user_meta( $user_id, 'office_phone', $_POST['office_phone']);
+			update_user_meta( $user_id, 'company', $_POST['company']);
+			update_user_meta( $user_id, 'ext', $_POST['ext']);
+		}
+		if (isset( $_POST['cell_phone'] ) )
+			update_user_meta( $user_id, 'cell_phone', $_POST['cell_phone'] );
+
+	}
+
+}
+add_action( 'user_register', 'tml_user_register');
+
+//after register  redirect on thanks page
+function tml_new_user_registered( $user_id ) {
+    wp_set_auth_cookie( $user_id, false, is_ssl() );
+    wp_redirect( admin_url( 'profile.php' ) );
+    exit;
+}
+add_action( 'tml_new_user_registered', 'tml_new_user_registered' )
