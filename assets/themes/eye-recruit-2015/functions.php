@@ -16,6 +16,46 @@ include('functions_save_jobseeker_data.php');
 include('functions-wc.php');
 include('templates/email/functions.php');
 include('inc/eyerecruit/functions-assessments.php');
+
+//tracking codes
+
+// Add scripts to wp_head()
+function hook_eyerecruit_head_script() { ?>
+<!-- Hotjar Tracking Code for http://www.eyerecruit.com -->
+
+<script>
+
+(function(h,o,t,j,a,r){
+
+  h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+
+  h._hjSettings={hjid:203897,hjsv:5};
+
+  a=o.getElementsByTagName('head')[0];
+
+  r=o.createElement('script');r.async=1;
+
+  r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+
+  a.appendChild(r);
+
+})(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
+
+</script>
+
+<!-- Global Site Tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-63934732-1"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'UA-63934732-1');
+</script>
+
+<?php }
+add_action( 'wp_head', 'hook_eyerecruit_head_script' );
+
 // Sidebar for job find 
 function basicMailTest(){
 	mail('jeremy@interfused-inc.com','basic subject er test','this is the basic message');
@@ -1670,9 +1710,9 @@ function prefix_custom_options( $options, $title, $type ){
 		case 'Assessment Type':
 		$options = array();
 		$options[] = array(
-				'#value' => 'Select',
-				'#title' => 'Select Assessment Type',
-				);
+      '#value' => 'Select',
+      '#title' => 'Select Assessment Type',
+      );
 		$args = array(
 			'hide_empty' => 'false');
 		$terms = get_terms( array('assessment-category'),$args );
@@ -1706,7 +1746,7 @@ function er_admin_create_cpt_filter_dropdown($post_type, $taxonomy){
       'selected'        => $selected,
       'show_count'      => true,
       'hide_empty'      => true,
-    ));
+      ));
   };
 }
 add_action('restrict_manage_posts', 'tsm_filter_post_type_by_taxonomy');
@@ -1722,7 +1762,7 @@ function tsm_filter_post_type_by_taxonomy() {
  * @link http://thestizmedia.com/custom-post-type-filter-admin-custom-taxonomy/
  */
 function er_admin_get_filtered_cpt_taxonomy_posts($query,$post_type,$taxonomy){
-    global $pagenow;
+  global $pagenow;
   $q_vars    = &$query->query_vars;
   if ( $pagenow == 'edit.php' && isset($q_vars['post_type']) && $q_vars['post_type'] == $post_type && isset($q_vars[$taxonomy]) && is_numeric($q_vars[$taxonomy]) && $q_vars[$taxonomy] != 0 ) {
     $term = get_term_by('id', $q_vars[$taxonomy], $taxonomy);
@@ -1741,28 +1781,28 @@ function tsm_convert_id_to_term_in_query1($query) {
 /* FAQ CUSTOM POST TYPE */
 function get_er_faq($atts){
   $atts = shortcode_atts( array(
-          'cat_id' => 0
-          ), $atts, 'get_er_faq' );
+    'cat_id' => 0
+    ), $atts, 'get_er_faq' );
   
   if($atts['cat_id'] != 0){
     $args=array(
-    'post_type'           => 'faq',
-    'post_status'         => array( 'publish'),
-    'tax_query' => array(
+      'post_type'           => 'faq',
+      'post_status'         => array( 'publish'),
+      'tax_query' => array(
         array( 
-            'taxonomy' => 'faq-category',
-            'field' => 'id',
-            'terms' => $atts['cat_id']
-        )
-    ),
-    'posts_per_page' => -1
-    );
+          'taxonomy' => 'faq-category',
+          'field' => 'id',
+          'terms' => $atts['cat_id']
+          )
+        ),
+      'posts_per_page' => -1
+      );
   }else{
     $args=array(
-    'post_type'           => 'faq',
-    'post_status'         => array( 'publish'),
-    'posts_per_page' => -1
-    );
+      'post_type'           => 'faq',
+      'post_status'         => array( 'publish'),
+      'posts_per_page' => -1
+      );
   }
 
   $html = '<div class="faq_wrapper">';
@@ -1781,17 +1821,17 @@ function get_er_faq($atts){
 add_shortcode('faq','get_er_faq');
 /////////
 function load_custom_er_wp_admin_style() {
-        wp_register_style( 'custom_er_wp_admin_css', get_stylesheet_directory_uri() . '/css/er-admin-style.css', false, '1.0.0' );
-        wp_enqueue_style( 'custom_er_wp_admin_css' );
-        wp_register_script(
-        'custom-er-admin',
-        get_stylesheet_directory_uri() . '/inc/js/er-admin.js',
-        false,
-        '1.0',
-        true
+  wp_register_style( 'custom_er_wp_admin_css', get_stylesheet_directory_uri() . '/css/er-admin-style.css', false, '1.0.0' );
+  wp_enqueue_style( 'custom_er_wp_admin_css' );
+  wp_register_script(
+    'custom-er-admin',
+    get_stylesheet_directory_uri() . '/inc/js/er-admin.js',
+    false,
+    '1.0',
+    true
     );
 
-    wp_enqueue_script( 'custom-er-admin' );
+  wp_enqueue_script( 'custom-er-admin' );
 }
 add_action( 'admin_enqueue_scripts', 'load_custom_er_wp_admin_style' );
 
