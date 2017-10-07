@@ -30,12 +30,9 @@ $_SESSION['restrictView'] = er_candidate_restricted_view_check() ;
 <?php wp_head(); ?>
 <?php 
 
-
 echo types_render_field("header-scripts", array("raw"=>"true"));
 
 ?> 
-<!-- Hotjar Tracking Code for http://www.eyerecruit.com -->
-
 
 </head>
 
