@@ -1,0 +1,33 @@
+#CFPP_field_form{
+	margin:20px;
+	width:500px;
+	overflow:hidden;
+}
+.CFPP_field{
+	margin-bottom:3px;
+}
+.CFPP_field_info{
+	padding:3px;
+	border:1px solid #DDD;
+	background-color:#e9f2fb;
+	overflow:hidden;
+}
+.CFPP_field_form{
+	display:none;
+	border:1px solid #EEE;
+	border-top:none;
+	padding:10px;
+}
+.CFPP_field_label{
+	padding:2px 5px;
+	display:inline-block;
+}
+.CFPP_edit_field,
+.CFPP_delete_field{
+	float:right;
+	outline:none;
+	margin-left:3px !important;
+}
+#CFPP_add_new_field{
+	float:right;
+}

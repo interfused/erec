@@ -1,0 +1,33 @@
+Doc \\
+its very easy plugin just activate and do following setting :-\\
+
+after activate plugin go cgs addon plugin page where you find post title, discription, author... \\
+
+now go to contact form 7 setting page add new or edit old form now you find below setting shortcode
+
+ 
+    [text* your-name] 
+
+ 
+    [email* your-email]  
+
+ 
+    [text your-subject] 
+
+ 
+    [textarea your-message]  
+
+now copy your-name to front of post author,
+your-subject in front of post title
+and final 
+your-message in front of post discription... 
+
+you can custom name any above as your requirment above is example. \\
+
+note please don't activate plugin if you don't have contact form7 \\
+
+post type setting \\
+
+select from drop down your custom post type and save setting.
+
+contact form 7 name where you want this setting work with. 
