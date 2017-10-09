@@ -505,7 +505,6 @@ if(is_page(2637)){
 ?>
 	<?php wp_footer(); ?>
   
-<link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>/assets/themes/eye-recruit-2015/css/overwrites.css"  />
 
 <?php
 ///HANDLE ACCORDION

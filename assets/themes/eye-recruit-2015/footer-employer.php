@@ -73,7 +73,6 @@ jQuery(document).ready(function(){
 
 	</script>
 	<?php wp_footer(); ?>
-<link rel="stylesheet" type="text/css" href="<?php echo site_url(); ?>/assets/themes/eye-recruit-2015/css/overwrites.css"  />
 
 </body>
 </html>
