@@ -2,6 +2,45 @@
 FRONT END */
 @import('variables');
 
+/* HEADER */
+#masthead{
+  background-color: $white;
+
+  .primary-menu-toggle{
+    color: $red1;
+  }  
+}
+
+/* PAGINATION */
+
+/* .paginationDiv { border: 1px solid #ccc; border-left: none; border-right: none; padding: 1rem; }
+    .paginationDiv a, .paginationDiv span { display: inline-block; padding: 5px 10px; }
+    .paginationDiv a.active, .paginationDiv span.current { background: #900; color: #fff; float: left;}
+    */
+.paginationDiv{
+  float: right; 
+  padding: 0; 
+  border: 1px solid $gray1; 
+  background-color: $white;
+
+  a{
+    display: inline-block;
+    padding: 5px 10px;
+    border-left: 1px solid $gray1;
+    
+    &:first-child{
+      border-left:none;
+    }
+
+    &:hover, &.active{
+      background-color: $red1;
+      color: $white;
+    }
+  }
+}
+  
+  
+
 /* STRUCTURE */
 .footer-social{
   a{

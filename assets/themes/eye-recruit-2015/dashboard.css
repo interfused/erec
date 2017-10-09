@@ -214,9 +214,6 @@
 
     input[type="email"], input[type="number"], input[type="password"], input[type="search"], input[type="text"], select, textarea{border-radius: 0; padding: 10px 12px}
 
-    .paginationDiv { border: 1px solid #ccc; border-left: none; border-right: none; padding: 1rem; }
-    .paginationDiv a, .paginationDiv span { display: inline-block; padding: 5px 10px; }
-    .paginationDiv a.active, .paginationDiv span.current { background: #900; color: #fff; float: left;}
     :focus{outline: none !important;}
 
 
@@ -832,9 +829,6 @@ transform:rotate(45deg);
 
 
   /*-------Accordian & Pagination-------*/
-  .paginationDiv{float: right; padding: 0; border:1px solid #cccccc; background: #fff}
-  .paginationDiv a{border-left:1px solid #cccccc;float: left;}
-  .paginationDiv a:first-child{border-left:none;}
 
   .ui-accordion{margin-bottom: 30px;padding-left:30px }
   .ui-accordion .ui-accordion-header{background: #ededed ; border: 2px solid #585858; box-shadow: none; border-radius: 25px; text-transform: none; font-size: 18px !important; line-height: 20px; margin: 28px 0 0; color: #585858;padding:10px 44px 12px;position: relative;z-index: 5}
@@ -2831,7 +2825,6 @@ ul.list_check label input[type="checkbox"]:checked ~ span.c_check:before{content
   .resume_services .pricing-table-widget-title {margin-top: 20px;}
   .sprofile_content .row:before {display: none;}
   .special_logo {margin-top: 70px;}
-  .paginationDiv{float: left;}
   .navs_listitem{min-height: 422px; margin-bottom: 20px;}
   .navs_listitem .nav_list_header{min-height: 75px;}
   .modal-dialog.modal-lg .recommendation_popup .popup_logo{width: 70px;}
@@ -2859,7 +2852,6 @@ ul.list_check label input[type="checkbox"]:checked ~ span.c_check:before{content
   .specialoffers_ad{margin: 0}
   .section_title > span {font-size: 13px;padding: 9px 10px;}
   .indent, .indent-2x{padding-left: 0}
-  .paginationDiv a{padding: 5px 8px}
   .cancel_membership .btn {margin-top: 0;}
   .network_list article .article_content h4 br:first-child {display: inherit;}
   .search_bar p{font-size: 13px; line-height: 18px;}
