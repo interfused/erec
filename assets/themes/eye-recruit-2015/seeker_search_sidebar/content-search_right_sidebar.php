@@ -248,14 +248,9 @@ $pageID = get_the_ID();
 		dynamic_sidebar('ad_search_candidate_page');
 	}
 	?>
+</div>
 
-	<!-- <div class="codeneric_ultimate_ads_manager_ad_wrapper" data-js="false" data-id="4559">
-		<div style="text-align:center;" data-reactid=".1">
-			<a class="codeneric_uam_link" target="_blank" href="https://www.google.co.in" title="" data-reactid=".1.0">
-				<img class="codeneric_uam_image" src="<?php //echo get_stylesheet_directory_uri(); ?>/img/ad1.jpg" data-reactid=".1.0.0">
-			</a>
-		</div>
-	</div> -->
+	
     <div class="light_box recruiter_box">
 		<h3>Your Recruiter</h3>
 		<div class="thumbnail"><img src="<?php echo site_url();  ?>/assets/uploads/2016/09/recruiter.jpg" class="img-responsive">
