@@ -200,11 +200,13 @@ function get_the_job_cat($postID) {
 									</li>
 									<li id="gsetJobCat">
 										<span>Job Category : </span>
+										<div class="value">
 										<?php 
 										$postID = $post->ID;
 										get_the_job_cat($postID); 
 
 										//the_widget( 'Jobify_Widget_Job_Categories', $args ); ?>
+									</div>
 										<script type="text/javascript">
 										jQuery(document).ready(function() {
 											jQuery('#gsetJobCat div').removeClass('widget jobify_widget_job_categories');

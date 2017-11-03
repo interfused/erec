@@ -467,37 +467,7 @@ $long = $location->longitude;
         });
     });
 </script>
-<?php  if(!is_user_logged_in()){
 
- ?>
-
-<script type="text/javascript">
-function dontShow(){
-var date = new Date();
-date.setTime(date.getTime() + (10*60 * 1000));
- jQuery('#mial_job').modal('hide');
- jQuery.cookie('visited', 'yes', { expires: date }); // set value='yes' and expiration in 30 days
-}
-
-jQuery(document).ready(function() {
-    var visited = jQuery.cookie('visited'); // create cookie 'visited' with no value
-    if (visited == 'yes') {
-        return false;
-    } else {
-           jQuery(document).ajaxComplete(function(){
-                jQuery('#mial_job').modal('show');
-        });
-    }
-
-
-
-});
-
-
-
-</script>
-
-<?php } ?>
 <!-- map -->
     <script>
       // This example requires the Places library. Include the libraries=places
@@ -1103,24 +1073,7 @@ jQuery(document).ready(function() {
 </div>
 
 
-<div class="modal fade email_leads" id="mial_job" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="vertical-alignment-helper">
-        <div class="modal-dialog modal-lg vertical-align-center" role="document">
-            <div class="modal-content absolutely_free_popup pop-eye">
-                <div class="modal-body">
-                    <button type="button" id="rfclosepopup" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <div  class="pop_logo popnew_logo">
-                        <a href="#"><img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/images/login_logo.png" alt="" class="img-responsive"></a>
-                    </div>
-                    <h3>Yes, email me job leads like this one!</h3>
-                   <?php echo do_shortcode('[contact-form-7 id="6498" title="Job Board Email Capture"]');  ?>
-                    <p>Contues without the <strong>free</strong> email updates <a id="noShow" href="javascript:dontShow()">Don't show this popup again</a></p>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+
 
 <script type="text/javascript">
   jQuery(document).ready( function(){
