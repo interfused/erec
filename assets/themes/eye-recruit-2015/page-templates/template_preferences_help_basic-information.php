@@ -14,7 +14,7 @@ if ( is_user_logged_in() ) {
 else{
 	echo wp_redirect( site_url() );
 }
-
+$compensation_setup_arr = array( 'Under $40k' => 'Under $40k annually', '$40,001 - $50,000' => '$40,001 - $50,000 annually', '$50,001 - $60,000' => '$50,001 - $60,000 annually', '$60,001 - $70,000' => '$60,001 - $70,000 annually', '$70,001 - $80,000' => '$70,001 - $80,000 annually', '$80,001 - $90,000' => '$80,001 - $90,000 annually', '$90,001 - $100,000' => '$90,001 - $100,000 annually', '$100,001 – $125,000' => '$100,001 - $125,000 annually', '$125,001 – $150,000' => '$125,001 - $150,000 annually', '$150,001 - $250,000' => '$150,001 - $250,000 annually', '$250,001 - $500,000' => '$250,001 - $500,000 annually', 'Over $500k' => 'Over $500k annually');
 
 get_header(); ?>
 
@@ -373,7 +373,7 @@ get_header(); ?>
 									$c_Curr = get_cimyFieldValue($UserID, 'COMPENSATION_CURRENT');
 									$c_CurrAcc = get_cimyFieldValue($UserID, 'COMPENSATION_ACC');
 
-									$c_Curr_Arr = array( 'Under $40k' => 'Under $40k annually', '$40k - $50k' => '$40k - $50k annually', '$50k - $60k' => '$50k - $60k annually', '$60k - $70k' => '$60k - $70k annually', '$70k - $80k' => '$70k - $80k annually', '$80k - $90k' => '$80k - $90k annually', '$90k - $100k' => '$90k - $100k annually', '$100k – $125k' => '$100k - $125k annually', '$125k – $150k' => '$125k - $150k annually', '$150k - $250k' => '$150k - $250k annually', '$250k - $500k' => '$250k - $500k annually', 'Over $500k' => 'Over $500k annually');
+									$c_Curr_Arr = $compensation_setup_arr;
 									?>
 									<div class="ange_most_accurately">
 										<p><strong>Please indicate which range most accurately reflects your ANNUAL COMPENSATION in your current or most recent position, including all forms of compensation (base salary, bonus, etc.):</strong></p>
@@ -409,7 +409,7 @@ get_header(); ?>
 									<?php
 									$c_Des = get_cimyFieldValue($UserID, 'COMPENSATION_DESIRED');
 									$c_DesAcc = get_cimyFieldValue($UserID, 'COMP_DESIRED_ACC');
-									$c_Des_Arr = array('Under $40k' => 'Under $40k annually', '$40k - $50k' => '$40k - $50k annually', '$50k - $60k' => '$50k - $60k annually', '$60k - $70k' => '$60k - $70k annually', '$70k - $80k' => '$70k - $80k annually', '$80k - $90k' => '$80k - $90k annually', '$90k - $100k' => '$90k - $100k annually', '$100k - $125k' => '$100k - $125k annually', '$125k - $150k' => '$125k - $150k annually', '$150k - $250k' => '$150k - $250k annually', '$250k - $500k' => '$250k - $500k annually', 'Over $500k' => 'Over $500k annually');
+									$c_Des_Arr = $compensation_setup_arr;
 									?>
 									<div class="compensation_desired">
 										<p><strong>Please indicate which range most accurately reflects your DESIRED ANNUAL COMPENSATION in your current or most recent position, including all forms of compensation (base salary, bonus, etc.):</strong></p> 

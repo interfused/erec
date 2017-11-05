@@ -194,7 +194,7 @@
 			<div class="form-group has-feedback">
 			    <label for="country_select">Compensation Level:</label>
 			    <?php
-				$c_Des_Arr = array('Under $40k','$40k - $50k','$50k - $60k','$60k - $70k','$70k - $80k','$80k - $90k','$90k - $100k','$100k – $125k','$125k – $150k','$150k - $250k','$250k - $500k','Over $500k');
+				$c_Des_Arr = array('Under $40k','$40,001 - $50,000','$50,001 - $60,000','$60,001 - $70,000','$70,001 - $80,000','$80,001 - $90,000','$90,001 - $100,000','$100,001 – $125,000','$125,001 – $150,000','$150,001 - $250,000','$250,001 - $500,000','Over $500k');
 				?>
 			    <select class="form-control employee-seeker-filter filterValid selectpicker" data-live-search="true" name="COMPENSATION_DESIRED" id="COMPENSATION_DESIRED">
 				  <option value="">All Levels</option>
