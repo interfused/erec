@@ -9,6 +9,13 @@
  */
 
 get_header(); ?>
+
+<style>
+#editPoPic{
+	display: none;
+}
+</style>
+
 <?php 
 	$user_id = get_current_user_id();
 	$value = get_cimyFieldValue($user_id,'PROFILE_VISIBILITY');
@@ -90,7 +97,7 @@ get_header(); ?>
 									<li><strong>Your Current Membership Level is : </strong><?php echo $membershipLevel; ?> <a href="<?php echo site_url(); ?>/seeker-pricing/" class="btn btn-sm btn-primary"><?php echo $buttonText; ?></a></li>
 									<li><strong>You have been a Member since : </strong><?php echo  date( "F d, Y", strtotime($data->user_registered)); ?></li>
 									<li><strong>Your Membership Spotlight Status is : </strong><?php echo $status; ?> <!-- <a href="javascript:void(0);" class="btn btn-sm btn-primary">Edit</a> -->
-										<!-- <div class=" alert" role="alert"> --><i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Increase your chances fo being seen!" data-placement="left"></i> <!-- <span>Increase yout chances fo being seen!</span> --><!-- </div> -->
+										<!-- <div class=" alert" role="alert"> --><i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Increase your chances of being seen!" data-placement="left"></i> <!-- <span>Increase yout chances fo being seen!</span> --><!-- </div> -->
 									</li>
 									<li><strong>Your signature</strong>  <a href="<?php echo site_url(); ?>/signature/" class="btn btn-sm btn-primary">Add</a>
 									</li>
@@ -125,9 +132,7 @@ get_header(); ?>
 											<label class="control-label" for="get_email_address">Email Address</label>
 										  	<p class="help-block" id="get_email_address"><?php echo $data->user_email;  ?></p>
 										</div>
-										<div class="col-sm-5">
-											<i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Tell us which emails you wish to receive & which you don’t Simple." data-placement="left"></i> 
-										</div>
+										
 									</div>
 								</div>
 								<div class="row">
@@ -137,6 +142,9 @@ get_header(); ?>
 										  	<p class="help-block" id="get_secondary_email"><?php echo get_user_meta( $user_id, 'sec_email',true); ?></p>
 										</div>
 									</div>
+									<div class="col-sm-5">
+											<i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Have an alternate email address?" data-placement="left"></i> 
+										</div>
 								</div>
 								<div class="form-group alert_row">
 									<div class="row">
@@ -178,7 +186,7 @@ get_header(); ?>
 											<span class="help-block"><?php echo get_cimyFieldValue($user_id, 'SEEKER_ZIP_CODE'); ?></span>
 										</div>
 										<div class="col-sm-5">
-											<i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Tell us which emails you wish to receive & which you don’t Simple." data-placement="left"></i>
+											<i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Your zip code" data-placement="left"></i>
 										</div>
 									</div>
 									
@@ -193,7 +201,7 @@ get_header(); ?>
 											<!-- <input type="text" aria-invalid="false" aria-required="true" class="form-control" size="40" value="<?php //echo get_user_meta( $user_id, 'cell_phone',true); ?>"  placeholder="Cellular Phone *" name="cellular_phone"> -->
 										</div>
 										<div class="col-sm-5">
-											<i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Provide us with your cellular telephone so we can contact you privately for positions personally and by text. Text charges may apply. Check with you carrier for details." data-placement="left"></i>
+											<i class="fa fa-info-circle info_tooltip" data-toggle="tooltip" title="Area of interest for seeking opportunities." data-placement="left"></i>
 										</div>
 									</div>
 								</div>
@@ -687,9 +695,7 @@ get_header(); ?>
 				jQuery('#ProfilePic').modal('show');
 			});
 
-			var prePic = jQuery('#wp-user-avatar-img').attr('src');
-			var prePicName = prePic.split('cache/');
-			jQuery('#wp-user-avatar-url').val(prePicName[1]);
+
 		});
 	</script>
 	<script src="<?php echo get_stylesheet_directory_uri(); ?>/js/jquery.mask.min.js" type="text/javascript"></script>
@@ -705,7 +711,7 @@ get_header(); ?>
       <div class="modal-body">
         <button type="button" class="close basic_in_close_button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 		<img class="popup_logo" src="<?php echo site_url();  ?>/assets/uploads/2016/04/EyeRecruit.com-logo_3-2.jpg">
-		<h3>Name & Contact Info</h3>
+		<h3>Name &amp; Contact Info</h3>
 		<div class="clearfix"></div>
 		<div class="wpcf7-form">
 			<div class="form-group">
