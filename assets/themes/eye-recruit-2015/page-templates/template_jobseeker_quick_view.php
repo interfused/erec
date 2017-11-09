@@ -410,7 +410,7 @@ if( is_user_logged_in() && in_array('candidate', $userdata->roles) ){
     <div class="modal-body">
     	<button type="button" id="rfclosepopup" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     	<img src="<?php echo site_url();  ?>/assets/uploads/2016/04/EyeRecruit.com-logo_3-2.jpg" class="popup_logo">
-    	<h3>Forword Candidate Detail</h3>
+    	<h3>Forward Candidate Detail</h3>
     	<div class="clearfix"></div>
     	<form class="wpcf7-form form-horizontal" id="forwordform">
     		<div id="userdetail_all_fields">
