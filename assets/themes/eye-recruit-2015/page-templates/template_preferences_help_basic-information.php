@@ -14,6 +14,55 @@ if ( is_user_logged_in() ) {
 else{
 	echo wp_redirect( site_url() );
 }
+
+function setupCimyQuestion($user_id, $fieldname){
+	global $wpdb;
+		//search eyecuwp_cimy_uef_fields
+	$result = $wpdb->get_row( 'SELECT * FROM eyecuwp_cimy_uef_fields WHERE NAME = "' .$fieldname.'"' );
+
+	$fieldLabel = $result->LABEL;
+
+	$parts = explode('/', $fieldLabel);
+	$question = $parts[0];
+	$responses_arr = explode(',', $parts[1] );
+
+	$user_answer = get_cimyFieldValue($user_id, $fieldname);
+
+	//replace any found spaces with underline
+	$convertedFieldname = str_replace(' ', '_', strtolower($fieldname) );
+	
+	
+	$htmlStr = '<div class="'.$convertedFieldname.'">';
+	$htmlStr .= '<p><strong>'.$question.'</strong></p>';
+
+	//setup responses for dropdowns.  We will convert to radio button $result->TYPE==='dropdown'
+	if($result->TYPE==='dropdown'){
+		$htmlStr .= '<div class="indent-2x">';
+		$htmlStr .='user answer is: '.$user_answer;
+
+		foreach ($responses_arr as $response) {
+			if($response == '' || $response == ' '){
+				continue;
+			}else{
+				$isChecked = ($user_answer == $response) ? " checked " : " ";
+				$htmlStr .= '<div class="radio"><label><input '.$isChecked.' name="'.$fieldname.'" type="radio" value="'.$response.'"> <span>'.$response.'</span></label></div>';
+			}
+		}
+
+		$htmlStr .= '</div>';
+	}
+	
+	$htmlStr .= '</div>';
+	return $htmlStr;
+}
+////
+function setupTaxonomyResponseQuestion($question,$post_type,$taxonomy_name){
+	//STUB: SETUP QUESTION.
+	//SETUP RESPONSES BASED OFF OF POST TYPE AND TAXONOMY NAME
+	//EX PULL CATEGORIES AND USE THEM AS OPTIONS
+}
+
+////SETUP THE DISPLAY COMPENSATION ARRAY
 $compensation_setup_arr = array( 'Under $40k' => 'Under $40k annually', '$40,001 - $50,000' => '$40,001 - $50,000 annually', '$50,001 - $60,000' => '$50,001 - $60,000 annually', '$60,001 - $70,000' => '$60,001 - $70,000 annually', '$70,001 - $80,000' => '$70,001 - $80,000 annually', '$80,001 - $90,000' => '$80,001 - $90,000 annually', '$90,001 - $100,000' => '$90,001 - $100,000 annually', '$100,001 – $125,000' => '$100,001 - $125,000 annually', '$125,001 – $150,000' => '$125,001 - $150,000 annually', '$150,001 - $250,000' => '$150,001 - $250,000 annually', '$250,001 - $500,000' => '$250,001 - $500,000 annually', 'Over $500k' => 'Over $500k annually');
 
 get_header(); ?>
@@ -45,31 +94,13 @@ get_header(); ?>
 
 								<!-- Step1 -->
 								<div class="basic_info_step_1 basic_info_steps" style="display:block;">
-									<?php $sap = get_cimyFieldValue($UserID, 'SYSTEM_AND_PROCE'); ?>
-									<div class="system_proc">
-										<p><strong>The questions that follow will allow the system and the process to work, and for us to put our efforts where they will have the greatest potential impact. For us to begin, we need to know if you are currently actively or passively looking for a job or career change.</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($sap == 'I am Actively looking for the right opportunity.'){ echo "checked"; } ?> id="actively" name="SYSTEM_AND_PROCE" type="radio" value="I am Actively looking for the right opportunity."> <span>I am <strong>Actively looking </strong> for the right opportunity.</span></label></div>
-											<div class="radio"><label><input <?php if($sap == 'I am Passively considering all options.'){ echo "checked"; } ?> id="passively" name="SYSTEM_AND_PROCE" type="radio" value="I am Passively considering all options."> <span>I am <strong>Passively </strong> considering all options.</span></label></div>
-										</div>
-									</div>
 									
-									<?php $bi = get_cimyFieldValue($UserID, 'BEST_INDUSTRY'); ?>
-									<div class="industry">
-										<p><strong>Please select from the part of the industry that best reflects your work experience.</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($bi == 'Investigation'){ echo "checked"; } ?> id="investigation" name="BEST_INDUSTRY" type="radio" value="Investigation"><span>Investigation</span></label></div>
-											<div class="radio"><label><input <?php if($bi == 'Surveillance'){ echo "checked"; } ?> id="surveillance" name="BEST_INDUSTRY" type="radio" value="Surveillance"><span>Surveillance</span></label></div>
-											<div class="radio"><label><input <?php if($bi == 'Security'){ echo "checked"; } ?> id="security" name="BEST_INDUSTRY" type="radio" value="Security"><span>Security</span></label></div>
-											<div class="radio"><label><input <?php if($bi == 'Risk Management'){ echo "checked"; } ?> id="risk_management" name="BEST_INDUSTRY" type="radio" value="Risk Management"><span> Risk Management</span></label></div>
-											<div class="radio"><label><input <?php if($bi == 'Information Technology'){ echo "checked"; } ?> id="information_technology" name="BEST_INDUSTRY" type="radio" value="Information Technology"><span>Information Technology</span></label></div>
-											<div class="radio"><label><input <?php if($bi == 'Investigative Journalist'){ echo "checked"; } ?> id="investigative_journalist" name="BEST_INDUSTRY" type="radio" value="Investigative Journalist"><span>Investigative Journalist</span></label></div>
-											<div class="radio"><label><input <?php if($bi == 'Loss Prevention'){ echo "checked"; } ?> id="loss_prevention" name="BEST_INDUSTRY" type="radio" value="Loss Prevention"><span>Loss Prevention</span></label></div>
-											<div class="radio"><label><input <?php if($bi == 'Operations Management'){ echo "checked"; } ?> id="OperationsManagement" name="BEST_INDUSTRY" type="radio" value="Operations Management"><span>Operations Management</span></label></div>
-											<div class="radio"><label><input <?php if($bi == 'Marketing & Sales'){ echo "checked"; } ?> id="MarketingSales" name="BEST_INDUSTRY" type="radio" value="Marketing & Sales"><span>Marketing & Sales</span></label></div>
-											<div class="radio"><label><input <?php if($bi == 'Support Staff'){ echo "checked"; } ?> id="SupportStaff" name="BEST_INDUSTRY" type="radio" value="Support Staff"><span>Support Staff</span></label></div>
-										</div>
-									</div>
+									<?php echo setupCimyQuestion($UserID, 'SYSTEM_AND_PROCE');?>
+									<?php 
+									///DEV NOTE: NEED TO MAKE THIS setupTaxonomyResponseQuestion
+									echo setupCimyQuestion($UserID, 'BEST_INDUSTRY');?>
+									
+
 									<?php $ClearanceLe = get_cimyFieldValue($UserID, 'CLEARANCE_LEVEL'); ?>
 									<div class="industry">
 										<p><strong>Clearance Level.</strong></p>
@@ -83,15 +114,8 @@ get_header(); ?>
 										</div>
 									</div>
 
-									<?php $ClearanceSta = get_cimyFieldValue($UserID, 'CLEARANCE_STATUS'); ?>
-									<div class="industry">
-										<p><strong>Clearance Status.</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($ClearanceSta == 'Active'){ echo "checked"; } ?> id="active" name="CLEARANCE_STATUS" type="radio" value="Active"><span>Active</span></label></div>
-											<div class="radio"><label><input <?php if($ClearanceSta == 'Expired'){ echo "checked"; } ?> id="expired" name="CLEARANCE_STATUS" type="radio" value="Expired"><span>Expired</span></label></div>
-											<div class="radio"><label><input <?php if($ClearanceSta == 'Not Sure'){ echo "checked"; } ?> id="not_sure" name="CLEARANCE_STATUS" type="radio" value="Not Sure"><span>Not Sure</span></label></div>
-										</div>
-									</div>
+									<?php echo setupCimyQuestion($UserID, 'CLEARANCE_STATUS');?>
+
 									<?php
 									jobseeker_basic_info_member_tips('seeker_update_basic_info');
 									?>
@@ -139,45 +163,11 @@ get_header(); ?>
 								</div>
 								<!-- Step3 -->
 								<div class="basic_info_step_3 basic_info_steps" style="display:none;">
-									<?php $jsr = get_cimyFieldValue($UserID, 'JOB_SEARCH_RADIUS'); ?>
-									<div class="Miles">
-										<p><strong>What is your desired Working Radius?</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($jsr == 'Under 10 miles'){ echo "checked"; } ?> id="5_miles" name="JOB_SEARCH_RADIUS" type="radio" value="Under 10 miles"> <span>Under 10 miles</span></label></div>
-											<div class="radio"><label><input <?php if($jsr == 'Under 25 miles'){ echo "checked"; } ?> id="21_miles" name="JOB_SEARCH_RADIUS" type="radio" value="Under 25 miles"> <span>Under 25 miles</span></label></div>
-											<div class="radio"><label><input <?php if($jsr == 'Under 50 miles'){ echo "checked"; } ?> id="51_miles" name="JOB_SEARCH_RADIUS" type="radio" value="Under 50 miles"> <span>Under 50 miles</span></label></div>
-											<div class="radio"><label><input <?php if($jsr == 'Over 50 miles'){ echo "checked"; } ?> id="anywhere" name="JOB_SEARCH_RADIUS" type="radio" value="Over 50 miles"> <span>Over 50 miles</span></label></div>
-											<div class="radio"><label><input <?php if($jsr == 'Any Radius'){ echo "checked"; } ?> id="Any Radius" name="JOB_SEARCH_RADIUS" type="radio" value="Any Radius"> <span> Any Radius</span></label></div>
-										</div>
-									</div>
-
-									<?php $ue = get_cimyFieldValue($UserID, 'US_ELIGIBLE'); ?>
-			    					<div class="eligible">
-										<strong>Are you eligible and legally authorized to work in the United States?</strong><p></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($ue == 'Yes'){ echo "checked"; } ?> id="authorized" name="US_ELIGIBLE" type="radio" value="Yes"> <span>Yes, I am Authorized.</span></label></div>
-											<div class="radio"><label><input <?php if($ue == 'No'){ echo "checked"; } ?> id="sponsorship" name="US_ELIGIBLE" type="radio" value="No"> <span>No, I need sponsorship.</span></label></div>
-										</div>
-									</div>
+									<?php echo setupCimyQuestion($UserID, 'JOB_SEARCH_RADIUS');?>
+									<?php echo setupCimyQuestion($UserID, 'US_ELIGIBLE');?>
+									<?php echo setupCimyQuestion($UserID, 'SECURITY_CLEAR_YN');?>
+									<?php echo setupCimyQuestion($UserID, 'OVER_18_YN');?>
 									
-									<?php $scYn = get_cimyFieldValue($UserID, 'SECURITY_CLEAR_YN'); ?>
-									<div class="security">
-										<p><strong>Do you have Security Clearance?</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($scYn == 'Yes'){ echo "checked"; } ?> id="security" name="SECURITY_CLEAR_YN" type="radio" value="Yes"> <span>Yes, I have security clearance</span></label></div>
-											<div class="radio"><label><input <?php if($scYn == 'No'){ echo "checked"; } ?> id="no_security" name="SECURITY_CLEAR_YN" type="radio" value="No"> <span>No, I do not have security clearance</span></label></div>
-										</div>
-									</div>
-
-									<?php $o18yn = get_cimyFieldValue($UserID, 'OVER_18_YN'); ?>
-									<div class="age">
-										<p><strong>Are you 18 Years of age or older?</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($o18yn == 'Yes'){ echo "checked"; } ?> id="older" name="OVER_18_YN" type="radio" value="Yes"> <span>Yes, I am 18 years or older.</span></label></div>
-											<div class="radio"><label><input <?php if($o18yn == 'No'){ echo "checked"; } ?> id="under" name="OVER_18_YN" type="radio" value="No"> <span>No, I am under 18 years of age.</span></label></div>
-										</div>
-									</div>
-
 									<?php
 									jobseeker_basic_info_member_tips('seeker_update_basic_info');
 									?>
@@ -186,15 +176,10 @@ get_header(); ?>
 
 			    				<!-- Step4 -->
 			    				<div class="basic_info_step_4 basic_info_steps" style="display:none;">
-			    					<?php $pdl = get_cimyFieldValue($UserID, 'POSSES_DRIVER_LICENS'); ?>
-									<div class="license">
-										<p><strong>Do you possess a valid state issued driver's license?</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($pdl == 'Yes'){ echo "checked"; } ?> id="license" name="POSSES_DRIVER_LICENS" type="radio" value="Yes"> <span>Yes</span></label></div>
-											<div class="radio"><label><input <?php if($pdl == 'No'){ echo "checked"; } ?> id="no_license" name="POSSES_DRIVER_LICENS" type="radio" value="No"> <span>No</span></label></div>
-										</div>
-									</div>
+			    					<?php echo setupCimyQuestion($UserID, 'POSSES_DRIVER_LICENS');?>
 
+			    					<?php $pdl = get_cimyFieldValue($UserID, 'POSSES_DRIVER_LICENS'); ?>
+									
 									<div id="state_field" class="state row" <?php if( $pdl != 'Yes' ){ echo 'style="display:none;"'; } ?> > <!-- style="display: none;" -->
 										<div class="col-md-8">
 											<div class="form-group has-feedback indent-2x">
@@ -216,24 +201,11 @@ get_header(); ?>
 										</div>
 									</div>
 
-									<?php $rt = get_cimyFieldValue($UserID, 'RELIABLE_TRANSPORT'); ?>
-									<div class="transportation">
-										<p><strong>Do you have reliable transportation for local travel?</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($rt == 'Yes'){ echo "checked"; } ?> id="transportation" name="RELIABLE_TRANSPORT" type="radio" value="Yes"> <span>Yes</span></label></div>
-											<div class="radio"><label><input <?php if($rt == 'No'){ echo "checked"; } ?> id="no_transportation" name="RELIABLE_TRANSPORT" type="radio" value="No"> <span>No</span></label></div>
-										</div>
-									</div>
+									<?php echo setupCimyQuestion($UserID, 'RELIABLE_TRANSPORT');?>
+									<?php echo setupCimyQuestion($UserID, 'CURR_EMPLOYED_YN');?>
 
 									<?php $cdYn = get_cimyFieldValue($UserID, 'CURR_EMPLOYED_YN'); ?>
-									<div class="currently_employed">
-										<p><strong>Are you currently employed?</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($cdYn == 'Yes'){ echo "checked"; } ?> id="yew_currently_employed" name="CURR_EMPLOYED_YN" type="radio" value="Yes"> <span>Yes</span></label></div>
-											<div class="radio"><label><input <?php if($cdYn == 'No'){ echo "checked"; } ?> id="no_currently_employed" name="CURR_EMPLOYED_YN" type="radio" value="No"> <span>No</span></label></div>
-										</div>
-									</div>
-
+									
 									<?php 
 									if ( $cdYn == 'Yes' ) {
 										$nOc = get_cimyFieldValue($UserID, 'NAME_OF_COMP'); 
@@ -352,14 +324,7 @@ get_header(); ?>
 										</div>
 									</div>
 
-									<?php $r_Yn = get_cimyFieldValue($UserID, 'RELOCATION_YN'); ?>
-									<div class="relocation_yn">
-										<p><strong>If we find you what we believe to be an outstanding opportunity for both you and an Employer, would you be willing to relocate?</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($r_Yn == 'Yes'){ echo "checked"; } ?> id="yew_relocation" name="RELOCATION_YN" type="radio" value="Yes"> <span>Yes</span></label></div>
-											<div class="radio"><label><input <?php if($r_Yn == 'No'){ echo "checked"; } ?> id="no_relocation" name="RELOCATION_YN" type="radio" value="No"> <span>No</span></label></div>
-										</div>
-									</div>
+									<?php echo setupCimyQuestion($UserID, 'RELOCATION_YN');?>
 
 									<?php
 									jobseeker_basic_info_member_tips('seeker_update_basic_info');
@@ -646,23 +611,8 @@ get_header(); ?>
 										</div>
 									</div>
 
-									<?php $lLfn = get_cimyFieldValue($UserID, 'LOCAL_LAW_FORCE_YN'); ?>
-									<div class="law_enforcement">
-										<p><strong>Are you or have you ever been active State of Local Law Enforcement?</strong></p>
-										<div class="indent-2x">
-											<div class="radio"><label><input <?php if($lLfn == 'Yes'){ echo "checked"; } ?> id="yes_law_enforcement" name="LOCAL_LAW_FORCE_YN" type="radio" value="Yes"> <span>Yes</span></label></div>
-											<div class="radio"><label><input <?php if($lLfn == 'No'){ echo "checked"; } ?> id="law_enforcement" name="LOCAL_LAW_FORCE_YN" type="radio" value="No"> <span>No</span></label></div>
-										</div>
-									</div>
-
-									<?php $fN = get_cimyFieldValue($UserID, 'FEDERAL_NVESTIGATIV'); ?>
-									<div id="law_enfo_agency" class="law_enforcement_agency <?php if($fN == 'Yes'){ echo 'thisValid'; } ?>">
-				    					<p><strong>Are you, or have you ever been, employed by a Federal Investigative or Law Enforcement Agency?</strong></p>
-										<div class="indent-2x">
-										<div class="radio"><label><input <?php if($fN == 'Yes'){ echo "checked"; } ?> id="yes_law_enforcement_agency" name="FEDERAL_NVESTIGATIV" type="radio" value="Yes"> <span>Yes</span></label> <?php if($fN == 'Yes'){ echo "<a href='javascript:void();' id='FnviewDetail'>View Detail</a>"; } ?> </div>
-										<div class="radio"><label><input <?php if($fN == 'No'){ echo "checked"; } ?> id="law_enforcement_agency" name="FEDERAL_NVESTIGATIV" type="radio" value="No"> <span>No</span></label></div>
-										</div>
-									</div>
+									<?php echo setupCimyQuestion($UserID, 'LOCAL_LAW_FORCE_YN');?>
+									<?php echo setupCimyQuestion($UserID, 'FEDERAL_NVESTIGATIV');?>
 
 									<?php
 									$majorM = get_cimyFieldValue($UserID, 'MAJOR_METROPOLITAN');
@@ -744,7 +694,7 @@ get_header(); ?>
 <script type="text/javascript">
 	jQuery(document).ready( function() {
 
-		var builderUnsavedChanges = false;
+		builderUnsavedChanges = false;
 
 		jQuery('#date_available_to_work').datepicker({
 			minDate : 'now',
@@ -759,7 +709,7 @@ get_header(); ?>
 		/*........View Basic Steps..............*/
 		jQuery('.view_this_step').on('click', function() {
 			//check previous unsaved changes
-			if(builderUnsavedChanges === true ){
+			if(builderUnsavedChanges == true ){
 				swal({
 						title: "Uh Oh!", 
 						html: true,
@@ -780,7 +730,7 @@ get_header(); ?>
 			
 		});
 
-		jQuery("#profilebuilder4390 input, #profilebuilder4390 textarea").on('input',function(e){
+		jQuery("#profilebuilder4390 input[type=text], #profilebuilder4390 textarea").on('input',function(e){
 			builderUnsavedChanges = true;
 		});
 		jQuery('#profilebuilder4390 input[type=radio], #profilebuilder4390 input[type=checkbox], #profilebuilder4390 select').change(function() {
@@ -1129,8 +1079,8 @@ get_header(); ?>
             jQuery('#Investigative').modal('show');
 		});
 
-		jQuery('#yes_law_enforcement_agency').click(function(){	
-			if (jQuery(this).attr("checked") == "checked") {
+		jQuery('input[name=FEDERAL_NVESTIGATIV]').change(function(){	
+			if (jQuery(this).val() == "Yes") {
 	            jQuery('#Investigative').modal('show');
 	      	}
 		});
@@ -1461,6 +1411,7 @@ get_header(); ?>
 
 			jQuery('#update_job_seeker_pro').val('Please wait...');
 			jQuery('#update_job_seeker_pro').attr('disabled','disabled');
+
 			jQuery.ajax({
 				type: 'POST',
 	            url: '<?php echo admin_url("admin-ajax.php"); ?>',
