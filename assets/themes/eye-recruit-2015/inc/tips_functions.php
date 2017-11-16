@@ -56,27 +56,27 @@ add_shortcode('er_random_member_tip_content','er_random_member_tip_content');
 
 function jobseeker_basic_info_member_tips($value){ ?>
 	<aside class="widget widget_wpb_widget special_box special_logo navi_thumbnail">
-		<strong>DEV TO REPROGRAM jobseeker_basic_info_member_tips for <?php echo $value;?> to use category taxonomy instead of select_page_to_show meta (line #70-76)</strong>
 		<?php
-		/*
+		//termsID is "Seeker preferences"
 		$args = array(
-			"post_type"=>'site-tip',
-			"post_status"=>'publish',
-			//'orderby' => 'rand',
-			'order' => 'DESC',
-			"posts_per_page"=> 1,
-			'meta_query'    => array(
-			    array(
-			        'key'       => 'select_page_to_show',
-			        'value'     =>  $value,
-			        'compare'   => 'LIKE',
-			    )
-			)
-		);
+		"post_type"=>'site-tip',
+		"post_status"=>'publish',
+		'orderby' => 'rand',
+		'order' => 'DESC',
+		 'tax_query' => array(
+        array( 
+            'taxonomy' => 'site-tip-category',
+            'field' => 'id',
+            'terms' => 532
+        )
+    ),
+	"posts_per_page"=> 1
+	
+	);
 		$the_queries = new Wp_query($args);
+		echo '<div class="thumbnail"><img class="img-responsive" src="'. site_url() .'/assets/themes/eye-recruit-2015/img/navi_logo-icon.png"></div>';
 		if($the_queries->have_posts()){
 			while($the_queries->have_posts()){ $the_queries->the_post(); ?>
-				<div class="thumbnail"><img class="img-responsive" src="<?php echo site_url(); ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png"></div>
 				<h5><a href="<?php  the_permalink(); ?>"><?php //echo get_the_title(); ?> MEMBER TIP</h5></a>
 				<?php 
 				$link = get_the_permalink(); 
@@ -88,9 +88,9 @@ function jobseeker_basic_info_member_tips($value){ ?>
 			wp_reset_postdata();
 		}
 		else{ ?>
-			<h3>Tips not found</h3>
+			<p>No tips found for this section.</p>
 		<?php } 
-		*/
+		
 	echo "</aside>";
 }
 
