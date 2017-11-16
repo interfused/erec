@@ -39,7 +39,7 @@ get_header(); ?>
 					</div>
 					<div class="indent-x">
 						
-						<form id="profilebuder4390" method="post" action="" enctype="multipart/form-data">
+						<form id="profilebuilder4390" method="post" action="" enctype="multipart/form-data">
 								
 							<div class="profilestep_inner">
 
@@ -719,23 +719,17 @@ get_header(); ?>
 								</div>
 							</div>
 
+							<div class="text-center paddedTopBottom"><button class="btn btn-primary" type="button" id="update_job_seeker_pro">Update</button></div>
 
-							<div class="clearfix gap-md"></div>
-				    		<div class="paginationDiv text-center">
-					    		<a href="javascript:void(0);" data-step="1" class="view_this_step active">1</a>
-					    		<a href="javascript:void(0);" data-step="2" class="view_this_step">2</a>
-					    		<a href="javascript:void(0);" data-step="3" class="view_this_step">3</a>
-					    		<a href="javascript:void(0);" data-step="4" class="view_this_step">4</a>
-					    		<a href="javascript:void(0);" data-step="5" class="view_this_step">5</a>
-					    		<a href="javascript:void(0);" data-step="6" class="view_this_step">6</a>
-					    		<a href="javascript:void(0);" data-step="7" class="view_this_step">7</a>
-					    		<a href="javascript:void(0);" data-step="8" class="view_this_step">8</a>
-					    		<a href="javascript:void(0);" data-step="9" class="view_this_step">9</a>
-					    		<a href="javascript:void(0);" data-step="10" class="view_this_step">10</a>
+								<div class="paginationDiv text-center paddedTopBottom">
+				    			<?php
+				    				for($i=1;$i<=10;$i++){
+				    					$tmpClass = ($i==1) ? 'view_this_step active' : 'view_this_step' ; 
+				    					echo ('<a href="javascript:void(0);" data-step="'.$i.'" class="'.$tmpClass.'">'.$i.'</a>');
+				    				}
+				    			?>					    		
 				    		</div>
-				    		<p class="clearfix"></p>
-				    		<div class="text-center"><button class="btn btn-primary" type="button" id="update_job_seeker_pro">Update</button></div>
-				    		<p class="clearfix gap-md"></p>
+				    		
 			    		</form>
 					</div>
 				</div>
@@ -750,6 +744,8 @@ get_header(); ?>
 <script type="text/javascript">
 	jQuery(document).ready( function() {
 
+		var builderUnsavedChanges = false;
+
 		jQuery('#date_available_to_work').datepicker({
 			minDate : 'now',
 		    dateFormat : "yy-mm-dd",
@@ -762,16 +758,34 @@ get_header(); ?>
 		
 		/*........View Basic Steps..............*/
 		jQuery('.view_this_step').on('click', function() {
-			var step = jQuery(this).data('step');
-			jQuery('.view_this_step').removeClass('active');
-			jQuery(this).addClass('active');
-			jQuery('.basic_info_steps').hide();
-			jQuery('.basic_info_step_'+step).show();
-			jQuery('html, body').animate({
-		        scrollTop: jQuery('.basic_info_step_'+step).offset().top - 200
-		    }, 500);
+			//check previous unsaved changes
+			if(builderUnsavedChanges === true ){
+				swal({
+						title: "Uh Oh!", 
+						html: true,
+						text: "<span class='text-center'>Please 'update/save' your changes before switching pages.</span>",
+						type: "error",
+						confirmButtonClass: "btn-primary btn-sm",
+					});
+			}else{
+				var step = jQuery(this).data('step');
+				jQuery('.view_this_step').removeClass('active');
+				jQuery(this).addClass('active');
+				jQuery('.basic_info_steps').hide();
+				jQuery('.basic_info_step_'+step).show();
+				jQuery('html, body').animate({
+			        scrollTop: jQuery('.basic_info_step_'+step).offset().top - 200
+			    }, 500);	
+			}
+			
 		});
 
+		jQuery("#profilebuilder4390 input, #profilebuilder4390 textarea").on('input',function(e){
+			builderUnsavedChanges = true;
+		});
+		jQuery('#profilebuilder4390 input[type=radio], #profilebuilder4390 input[type=checkbox], #profilebuilder4390 select').change(function() {
+			builderUnsavedChanges = true;
+		});
 
 		/*..........aSSOCIATES degree popup validation..............*/
 		jQuery('.basic_info_step_2').on('click','#view_detail' , function() {
@@ -1570,6 +1584,7 @@ get_header(); ?>
 					'SEEKER_ZIP_CODE': SEEKER_ZIP_CODE,
 	            },
 	            success: function(r){
+	            	builderUnsavedChanges = false;
 	            	jQuery('#update_job_seeker_pro').val('Update');
 					jQuery('#update_job_seeker_pro').removeAttr('disabled');
 					swal({

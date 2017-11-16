@@ -63,20 +63,15 @@ a.button{
     .paginationDiv a.active, .paginationDiv span.current { background: #900; color: #fff; float: left;}
     */
 .paginationDiv{
-  float: right; 
-  padding: 0; 
-  border: 1px solid $gray1; 
-  background-color: $white;
+  padding: 2em 0; 
 
   a{
     display: inline-block;
     padding: 5px 10px;
-    border-left: 1px solid $gray1;
+    border: 1px solid $gray1; 
+    background-color: $white;
+    margin-right: -1px;
     
-    &:first-child{
-      border-left:none;
-    }
-
     &:hover, &.active{
       background-color: $red1;
       color: $white;
