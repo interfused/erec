@@ -1541,7 +1541,7 @@ get_header(); ?>
 					swal({
 						title: "Success", 
 						html: true,
-						text: "<span class='text-center'>Your basic information is successfully updated.</span>",
+						text: "<span class='text-center'>Your information has been successfully updated.</span>",
 						type: "success",
 						confirmButtonClass: "btn-primary btn-sm",
 					});
