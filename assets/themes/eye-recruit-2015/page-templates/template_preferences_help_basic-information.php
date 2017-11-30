@@ -38,8 +38,7 @@ function setupCimyQuestion($user_id, $fieldname){
 	//setup responses for dropdowns.  We will convert to radio button $result->TYPE==='dropdown'
 	if($result->TYPE==='dropdown'){
 		$htmlStr .= '<div class="indent-2x">';
-		$htmlStr .='user answer is: '.$user_answer;
-
+		
 		foreach ($responses_arr as $response) {
 			if($response == '' || $response == ' '){
 				continue;
