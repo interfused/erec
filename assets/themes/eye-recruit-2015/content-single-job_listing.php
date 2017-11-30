@@ -25,12 +25,7 @@ function isAllowedBranded($str){
 	return false;
 }
 
-if(is_interfused()){ ?>
-<div id="debug">restrict view check: <?php echo $_SESSION['restrictView']; ?>
-	uncloak check: 
-	<?php echo is_er_listing_uncloaked(); ?>
-</div>
-<?php } ?>
+?>
 <div class="single_job_listing" itemscope itemtype="http://schema.org/JobPosting">
 	<meta itemprop="title" content="<?php echo esc_attr( $post->post_title ); ?>" />
 
