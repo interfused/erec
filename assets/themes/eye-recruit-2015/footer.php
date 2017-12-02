@@ -283,7 +283,7 @@ $ignore_arr=array(1882,2685);
 		        var lastname = jQuery('#your_last_name').val(); 
 		        var postid = '<?php echo $post->ID; ?>';
 
-				fd.append('action', 'applyforjobwithoutlogin_demo');   //Action in inc/custom_functions.php
+				fd.append('action', 'applyforjobwithoutlogin');   //Action in inc/custom_functions.php
 				fd.append('uname', uname);
 				fd.append('lastname', lastname);
 				fd.append('postid', postid);
