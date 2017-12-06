@@ -22,12 +22,6 @@ function get_client_ip_env() {
 
 $user_ip = get_client_ip_env();
 
-if($user_ip == '192.168.1.49' || $user_ip == '192.168.1.53'){
-    $user_ip = '61.16.138.242';
-}else{
-    $user_ip = get_client_ip_env();
-}
-
 $location = json_decode(file_get_contents("http://api.ipinfodb.com/v3/ip-city/?key=2b3d7d0ad1a285279139487ce77f3f58d980eea9546b5ccc5d08f5ee62ce7471&ip=".$user_ip."&format=json"));
 
 if(!empty($location)){
@@ -706,7 +700,8 @@ $long = $location->longitude;
       function callback(results, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           for (var i = 0; i < results.length; i++) {
-            createMarker(results[i]);
+            //remove marker creation
+            //createMarker(results[i]);
           }
         }
       }
