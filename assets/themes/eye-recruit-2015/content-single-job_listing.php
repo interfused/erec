@@ -236,7 +236,7 @@ function get_the_job_cat($postID) {
 									</li>
 									<li><span>Career Level : </span><?php echo $er_JobMeta['_job_position_career_level'][0] ? $er_JobMeta['_job_position_career_level'][0] : 'n/a'; ?></li>
 									<li><span>Status : </span><?php the_job_type(); ?></li>
-									<li><span>Reference # : </span><?php echo $er_JobMeta['_job_reference'][0] ? $er_JobMeta['_job_reference'][0] : 'n/a'; ?></li>
+									<li><span>Reference # : </span><?php echo $er_JobMeta['_job_reference'][0] ? $er_JobMeta['_job_reference'][0] : 'None specified'; ?></li>
 									
 									<!-- <li><span>Work Experience : </span><?php echo getMultiSelectValuescomma('_job_experience_length'); ?></li>
 									<li> 
@@ -352,7 +352,7 @@ function get_the_job_cat($postID) {
 											} 
 										} 
 										else {
-											echo "<li>None Specified</li>";
+											echo "<li>None specified</li>";
 										} ?>
 									</ul>
 								</div>
@@ -371,7 +371,7 @@ function get_the_job_cat($postID) {
 											} 
 										} 
 										else {
-											echo "<li>None Specified</li>";
+											echo "<li>None specified</li>";
 										} ?>
 									</ul>
 								</div>
@@ -388,7 +388,7 @@ function get_the_job_cat($postID) {
 											} 
 										} 
 										else {
-											echo "<li>None Specified</li>";
+											echo "<li>None specified</li>";
 										} ?>
 									</ul>
 									<?php 
@@ -411,7 +411,7 @@ function get_the_job_cat($postID) {
 											} 
 										} 
 										else {
-											echo "<li>None Specified</li>";
+											echo "<li>None specified</li>";
 										} ?>
 									</ul>  
 								</div>
@@ -427,7 +427,7 @@ function get_the_job_cat($postID) {
 										} 
 									} 
 									else {
-										echo "<li>None Specified</li>";
+										echo "<li>None specified</li>";
 									} ?>
 								</ul></div>
 							</div>
@@ -442,7 +442,7 @@ function get_the_job_cat($postID) {
 										} 
 									} 
 									else {
-										echo "<li>None Specified</li>";
+										echo "<li>None specified</li>";
 									} ?>
 								</ul>
 							</div>  
@@ -460,7 +460,7 @@ function get_the_job_cat($postID) {
 										} 
 									} 
 									else {
-										echo "<li>None Specified</li>";
+										echo "<li>None specified</li>";
 									} ?>
 								</ul>  
 							</div>
@@ -485,7 +485,7 @@ function get_the_job_cat($postID) {
 										} 
 									} 
 									else {
-										echo "<li>None Specified</li>";
+										echo "<li>None specified</li>";
 									} ?>
 								</ul>
 							</div>
@@ -494,7 +494,7 @@ function get_the_job_cat($postID) {
 						<!-- MINIMUM REQUIREMENTS -->
 						<div class="indent paddedBottom">
 							<h4>Other Requirements :</h4>
-							<?php echo ($er_JobMeta['_job_preferred_qualifications_other'][0] ? $er_JobMeta['_job_preferred_qualifications_other'][0] : 'n/a'); ?>
+							<?php echo ($er_JobMeta['_job_preferred_qualifications_other'][0] ? $er_JobMeta['_job_preferred_qualifications_other'][0] : 'None specified'); ?>
 						</div>
 
 						<!-- POST ACCEPTANCE TESTS -->
@@ -509,7 +509,7 @@ function get_the_job_cat($postID) {
 										} 
 									} 
 									else {
-										echo "<li>None Specified</li>";
+										echo "<li>None specified</li>";
 									} ?>
 								</ul>
 							</div>
@@ -526,7 +526,7 @@ function get_the_job_cat($postID) {
 									} 
 								} 
 								else {
-									echo "<li>None Specified</li>";
+									echo "<li>None specified</li>";
 								} ?>
 							</ul>
 

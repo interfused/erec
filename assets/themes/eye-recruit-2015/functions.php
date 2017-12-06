@@ -196,7 +196,7 @@ add_action('widgets_init','eyerecruit_sidebar');
 function jobify_child_styles() {
 	//wp_enqueue_style('blockgrid', get_stylesheet_directory().'/css/block-grid.css');
 	
-	wp_enqueue_style('fontawesome', 'http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css');
+	wp_enqueue_style('fontawesome', get_stylesheet_directory_uri().'/css/font-awesome.min.css');
 	wp_enqueue_style('opensans', 'http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800');
 	wp_enqueue_style('Sacramento', 'https://fonts.googleapis.com/css?family=Sacramento');
 	wp_enqueue_style('Rokkitt', 'http://fonts.googleapis.com/css?family=Rokkitt:400,700');
