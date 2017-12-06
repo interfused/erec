@@ -22,7 +22,7 @@ include('inc/eyerecruit/functions-assessments.php');
 // Add scripts to wp_head()
 function hook_eyerecruit_head_script() { ?>
 <!-- Hotjar Tracking Code for http://www.eyerecruit.com -->
-
+<!-- 
 <script>
 
 (function(h,o,t,j,a,r){
@@ -42,7 +42,7 @@ function hook_eyerecruit_head_script() { ?>
 })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
 
 </script>
-
+-->
 <!-- Global Site Tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-63934732-1"></script>
 <script>
