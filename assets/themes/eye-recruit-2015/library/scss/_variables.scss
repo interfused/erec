@@ -5,6 +5,8 @@ $break-medium: 768px;
 $break-large: 992px;
 $break-xl: 1200px;
 
+$radius: 6px;
+
 
 /* COLORS */
 $white: #ffffff;
@@ -26,6 +28,12 @@ $gray3: #333333;
 /* TYPOPGRAHY */
 .typography-header{
   font-family: "Rokkitt",serif;
+  text-transform: uppercase;
+}
+
+.typography-button{
+  font-weight: 700;
+  font-family: Montserrat,sans-serif;
   text-transform: uppercase;
 }
 

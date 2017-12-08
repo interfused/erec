@@ -46,10 +46,13 @@ FRONT END */
 }
 
 a.button{
+  @extend .typography-button;
   background-color: $red1;
   color: $white;
   display: block;
   margin-bottom: 1em;
+  border-radius: $radius;
+
 
   @media screen and (min-width: $break-medium) {
     display: inline-block;

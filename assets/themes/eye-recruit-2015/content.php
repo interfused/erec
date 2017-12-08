@@ -6,7 +6,6 @@
  * @since Jobify 1.0
  */
 ?>
-<p>CONTENT.PHP</p>
 <article id="post-<?php the_ID(); ?>" <?php post_class( '' ); ?>>
 	<!-- <header class="entry-header col-sm-3 col-xs-12">
 		<div class="entry-author">
@@ -30,9 +29,8 @@
 		</h1>
 		<?php endif; ?>
 		<div class="entry-meta">
-		<?php printf( __( 'Written by <a class="author-link" href="%s" rel="author">%s</a>', 'jobify' ), esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ), get_the_author() ); ?>
-		<data itemprop="datePublished" value="<?php echo get_the_date(); ?>"><?php echo get_the_date(); ?></data>
-
+		<?php // printf( __( 'Written by <a class="author-link" href="%s" rel="author">%s</a>', 'jobify' ), esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ), get_the_author() ); ?>
+		
 			<?php if ( comments_open() ) : ?>
 				<span class="comments-link">
 					<?php comments_popup_link( __( '0 Comments', 'jobify' ), __( '1 Comment', 'jobify' ), __( '% Comments', 'jobify' ) ); ?>
@@ -50,11 +48,18 @@
 			<?php if ( is_singular() ) : ?>
 			<?php the_tags( '<p class="entry-tags"><i class="icon-tag"></i> ' . __( 'Tags:', 'jobify' ) . ' ', ', ', '</p>' ); ?>
 			<?php wp_link_pages( array( 'before' => '<div class="page-links"><span class="page-links-title">' . __( 'Pages:', 'jobify' ) . '</span>', 'after' => '</div>', 'link_before' => '<span>', 'link_after' => '</span>' ) ); ?>
+			<div class="padded text-center">
+				<a href="<?php echo get_permalink( get_option( 'page_for_posts' ) ); ?>" class="button button-medium">Our Blog</a>
+			</div>
+
+
 			<?php endif; ?>
 		<?php else : ?>
 			<?php the_excerpt(); ?>
 
-			<p><a href="<?php the_permalink(); ?>" rel="bookmark" class="button button-medium"><?php _e( 'Continue Reading', 'jobify' ); ?></a></p>
+			<div class="padded text-center">
+				<a href="<?php the_permalink(); ?>" rel="bookmark" class="button button-medium"><?php _e( 'Continue Reading', 'jobify' ); ?></a>
+			</div>
 		<?php endif; ?>
 	</div>
 </article><!-- #post -->

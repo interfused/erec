@@ -9,7 +9,6 @@
  */
 
 get_header(); ?>
-<p>SINGLE.php</p>
 	<?php while ( have_posts() ) : the_post(); ?>
 
 	<div id="primary" class="content-area">
