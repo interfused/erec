@@ -1,6 +1,6 @@
 <?php
 /**
- * Template Name: Preferences renewals-billing page
+ * Template Name: (OLD) Preferences renewals-billing page
  *
  * Learn more: http://codex.wordpress.org/Template_Hierarchy
  *

@@ -206,6 +206,61 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+/* PAID MEMBERSHIP PRO */
+.pmpro_box {
+  margin-bottom: 2em;
+}
+
+.pmpro_box table{
+  background-color: $white;
+  th{
+    font-weight: 700;
+    background-color: $gray1b;
+    padding: 10px;
+  }
+  td{
+    padding: 10px;
+    vertical-align: top;
+
+    .pmpro_actionlinks{
+      border-top: 1px solid $gray2;
+    }
+  }
+}
+.pmpro_actionlinks{
+  padding-top: 1em;
+  margin-top: 1em;
+}
+.pmpro_actionlinks a{
+  @extend .typography-button;
+  background-color: $red1;
+  color: $white;
+  margin-bottom: 1em;
+  border-radius: $radius;
+  padding: 7px 15px;
+}
+
+.pmpro_box > h3{
+  position: relative;
+  padding: 0 0 8px;
+  text-align: left;
+  text-transform: none;
+  margin: 0 0 15px;
+  display: block;
+  border-bottom: 1px solid #fff;
+  overflow: visible;
+
+  &:before{
+    position: absolute;
+    width: 54px;
+    bottom: -1px;
+    left: 0;
+    content: '';
+    height: 1px;
+    background: #983421;
+  }
+}
+
 /* PAGE SPECIFIC */
 
 .jobdetail_list {
