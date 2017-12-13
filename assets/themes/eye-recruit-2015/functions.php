@@ -201,7 +201,7 @@ function jobify_child_styles() {
 	wp_enqueue_style('Sacramento', 'https://fonts.googleapis.com/css?family=Sacramento');
 	wp_enqueue_style('Rokkitt', 'http://fonts.googleapis.com/css?family=Rokkitt:400,700');
 	wp_enqueue_style( 'jobify-child', get_stylesheet_uri(), array('Rokkitt','opensans','fontawesome') );
-	wp_enqueue_style( 'custom-switchbtn', get_stylesheet_directory_uri() . '/css/swichbtn.css' );
+	//wp_enqueue_style( 'custom-switchbtn', get_stylesheet_directory_uri() . '/css/swichbtn.css' );
 	wp_enqueue_style( 'custom-circleprogress', get_stylesheet_directory_uri() . '/css/circle_progress.css' );
 	wp_enqueue_script( 'custom-validate', get_stylesheet_directory_uri() . '/inc/js/jquery.validate.min.js' );
 
@@ -1156,12 +1156,19 @@ add_action('wp_ajax_communication_preferences', 'communication_preferences');
 add_action('wp_ajax_nopriv_communication_preferences', 'communication_preferences');
 
 function communication_preferences(){
+  //these are toggle/checkboxes 
 	$user_id = $_POST['user_id'];
 	$field_names = $_POST['field_names'];
 	$field_values = $_POST['field_values'];
 	if(isset($user_id) && isset($field_names)){
-		set_cimyFieldValue($user_id, $field_names, $field_values);
+		
+    //we are using wordpress types plugin for custom user fields and need to prepend for proper field name
+    $wpcf_key = 'wpcf-'.$field_names;
+    //put 0 or 1 instead of no/yes
+    $subcheck = (isset($_POST['field_values'])) ? 1 : 0;
+    update_user_meta( $user_id, $wpcf_key, $subcheck  );
 	}
+
 	die();
 }
 

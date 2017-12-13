@@ -193,23 +193,7 @@ function ey_seeker_user(){
 					); 
 
 		    	set_cimyFieldValue($user_id, 'CP_EMAIL_NOTIFY', 'HTML');
-		    	// for communiction preferences
-		    	set_cimyFieldValue($user_id, 'CP_DES_GOAL_CAREER', 'No');
-				set_cimyFieldValue($user_id, 'CP_UNLISTED_JOB_OPP', 'No');
-				set_cimyFieldValue($user_id, 'CP_JOB_RECOMMENDS', 'No');
-				set_cimyFieldValue($user_id, 'CP_MESS_ON_PROFILE', 'No');
-				set_cimyFieldValue($user_id, 'CP_CAREER_DOCS', 'No');
-				set_cimyFieldValue($user_id, 'CP_INV_TO_PART_IN_PC', 'No');
-				set_cimyFieldValue($user_id, 'CP_WEEK_REP_VIS_EMP', 'No');
-				set_cimyFieldValue($user_id, 'CP_EMP_INT_PATH_PROF', 'No');
-				set_cimyFieldValue($user_id, 'CP_DIS_LOC_REG_NAT', 'No');
-				set_cimyFieldValue($user_id, 'CP_DIR_COM_FRM_RECTR', 'No');
-				set_cimyFieldValue($user_id, 'CP_PRI_CHAT_BY__RECT', 'No');
-				set_cimyFieldValue($user_id, 'CP_WEEK_REP_VIS_REC', 'No');
-				set_cimyFieldValue($user_id, 'CP_UPDATED_EYE_NEWS', 'No');
-				set_cimyFieldValue($user_id, 'CP_EXCLUSIVE_OFFERS', 'No');
-				set_cimyFieldValue($user_id, 'CP_OFFER_FRM_EYE_PAR', 'No');
-				set_cimyFieldValue($user_id, 'CP_EYE_NEWS_CAR_ADV', 'No');
+		    	
 
 				//for permissions and allowances for employers preferences
 				set_cimyFieldValue($user_id, 'PNA_BACK_VERI_REPORT' ,'No');
