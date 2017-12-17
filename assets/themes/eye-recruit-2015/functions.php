@@ -348,6 +348,50 @@ function get_edit_profile_link_fn(){
     add_shortcode( 'eye_recruit_profile_edit', 'get_edit_profile_link_fn' );
 
 
+/* GET LIST OF CITY OPTIONS BY REGION BASED OFF OF JOB MANAGER REGION LISTINGS */
+function wpjm_region_cities_fn($atts){
+
+  $atts = shortcode_atts(
+    array(
+      'field' => 'MAJOR_METROPOLITAN',
+      'emptylabel' => ''
+      ),
+    $atts,
+    'wpjm_region_cities_fn'
+    );
+
+  $htmlStr = '';
+
+  //get the terms of the taxonomy
+  $terms = get_terms( array(
+    'taxonomy' => 'job_listing_region',
+    'hide_empty' => false,
+  ));
+    
+  //filter array of objects
+  $cities_array = array_filter($terms, function($obj){
+    //do not include country and states
+    if ($obj->parent != 0 && $obj->parent != 27) {
+      return true;        
+    }
+  });
+
+
+  $htmlStr .='<select name="'.$atts['field'].'" class="form-control">';
+  $htmlStr .= '<option>Choose City</option>';
+
+  foreach($cities_array as $cityObj){
+    $tmpCity = $cityObj->name;
+    $htmlStr .= '<option value="'.$tmpCity.'">'.$tmpCity.'</option>';
+  }
+
+  $htmlStr .= '<option value="Other">Other</option>';
+  $htmlStr .='</select>';
+
+  return $htmlStr;
+}
+
+add_shortcode('wpjm_region_cities','wpjm_region_cities_fn');
 
 
 ///after login
