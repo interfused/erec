@@ -329,13 +329,7 @@ get_header(); ?>
                   <p><?php echo (($roafar))? $roafar : 'Data not found'; ?></p>
                   <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#reach_out_n_ask_fr_Referral">Ask Now</a>
                 </div>
-                <div class="special_box navi_thumbnail">
-                  <h5>How it Works</h5>
-                  <p><?php echo (($hiw))? $hiw : 'Data not found'; ?></p>
-                </div>
-
-                <?php member_navigation_sidebar_tips_function('seeker_referrals'); ?>
-
+                
                 <?php } ?>
 
 
@@ -344,14 +338,17 @@ get_header(); ?>
                   <h5>Reach out & ask for a Recommendation Now</h5>
                   <p><?php echo (($roafar))? $roafar : 'Data not found'; ?></p>
                 </div>
+                
+
+                <?php } ?>
                 <div class="special_box navi_thumbnail">
                   <h5>How it Works</h5>
                   <p><?php echo (($hiw))? $hiw : 'Data not found'; ?></p>
                 </div>
 
-                <?php member_navigation_sidebar_tips_function('seeker_referrals'); ?>
-
-                <?php } ?>
+                <?php 
+                echo member_navigation_sidebar_tips_function('seeker-referrals');
+                ?>
 
               </div>
             </div>
@@ -442,14 +439,15 @@ jQuery(document).ready(function(){
       return (v.match(r) == null) ? false : true;
     }
 
-
+    var optionVals = jQuery('select#Relationship').clone();
     jQuery('.userdetail_add_more').live('click', function(){
 
       var ln_no = jQuery(this).attr('count');
 
       var count = parseInt(ln_no)+1;
 
-      jQuery("#userdetail_all_fields").append('<div id="userdetail_pr_'+count+'" class="edit-main-dv form-group row"><div class="col-sm-4"><label class="control-label" for="fname">First Name:</label><br /><input id="fname_'+count+'" class="regular-text code form-control" name="fname[]" type="text" /></div><div class="col-sm-4"> <label class="control-label" for="lname">Last Name:</label><br /><input id="lname_'+count+'" class="regular-text code form-control" name="lname[]" type="text" /></div><div class="col-sm-4"><label class="control-label" for="user_email">Email Address:</label><br /><input id="user_email_'+count+'" class="regular-text code form-control" name="user_email[]" type="text" /></div><div class="col-sm-6"><label class="control-label" for="Relationship">Relationship: *</label><br /><select id="Relationship" name="Relationship[]"><option value="">---Selection---</option><option value="Colleague">Colleague</option><option value="Direct Supervisor">Direct Supervisor</option><option value="Direct Manager">Direct Manager</option><option value="Business Partner">Business Partner</option><option value="Mentor/Mastermind">Mentor/Mastermind</option><option value="Friend/Relative">Friend/Relative</option></select></div><div class="col-sm-6"><label class="control-label" for="Years">What year did you meet each other?</label><br /><input id="Years_'+count+'" class="regular-text code form-control" name="Years[]" type="text" maxlength="4" /></div></div><span class="remove_edu btn btn-default btn-sm pull-right" id="remove_edu_'+count+'" rel="'+count+'">remove</span><div class="clearfix"></div></div>');
+      jQuery("#userdetail_all_fields").append('<div id="userdetail_pr_'+count+'" class="edit-main-dv form-group row"><div class="col-sm-4"><label class="control-label" for="fname">First Name:</label><br /><input id="fname_'+count+'" class="regular-text code form-control" name="fname[]" type="text" /></div><div class="col-sm-4"> <label class="control-label" for="lname">Last Name:</label><br /><input id="lname_'+count+'" class="regular-text code form-control" name="lname[]" type="text" /></div><div class="col-sm-4"><label class="control-label" for="user_email">Email Address:</label><br /><input id="user_email_'+count+'" class="regular-text code form-control" name="user_email[]" type="text" /></div><div class="col-sm-6"><label class="control-label" for="Relationship">Relationship: *</label><br /><select id="Relationship" name="Relationship[]">'+optionVals.clone().html()+'</select></div><div class="col-sm-6"><label class="control-label" for="Years">What year did you meet each other?</label><br /><input id="Years_'+count+'" class="regular-text code form-control" name="Years[]" type="text" maxlength="4" /></div></div><span class="remove_edu btn btn-default btn-sm pull-right" id="remove_edu_'+count+'" rel="'+count+'">remove</span><div class="clearfix"></div></div>
+        ');
 
       jQuery(this).attr('count', count);
     });
@@ -670,12 +668,14 @@ jQuery('.remove_edu').live('click', function(){
                 <label class="control-label" for="Relationship">Relationship: *</label><br />
                 <select id="Relationship" name="Relationship[]">
                   <option value="">---Selection---</option>
+                  <option value="Former Employer">Former Employer</option>
                   <option value="Colleague">Colleague</option>
                   <option value="Direct Supervisor">Direct Supervisor</option>
                   <option value="Direct Manager">Direct Manager</option>
                   <option value="Business Partner">Business Partner</option>
                   <option value="Mentor/Mastermind">Mentor/Mastermind</option>
                   <option value="Friend/Relative">Friend/Relative</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
             </div>

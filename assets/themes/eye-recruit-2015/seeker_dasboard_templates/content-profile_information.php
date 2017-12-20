@@ -5,6 +5,17 @@
 * @since Jobify 1.0
 */
 
+define('NOT_DEFINED_STR','Not defined');
+function getCimyOrUndefined ($user_id, $field_name){
+  $value   = get_cimyFieldValue($user_id,$field_name);
+  if($value){
+    return $value;
+  }else{
+    return 'Not defined';        
+  }
+
+}
+
 $user_id = get_current_user_id();
 $tofOpArr = explode(',', get_cimyFieldValue($user_id,'TYPE_OF_OPPORTUNITY') );
 $tofOp = implode(', ', $tofOpArr );
@@ -18,6 +29,7 @@ else{
 }
 
 $emStatus = get_cimyFieldValue($user_id, 'SYSTEM_AND_PROCE');
+
 if ( $emStatus == 'I am Actively looking for the right opportunity.') {
 	$emStatus = 'Actively looking';
 }
@@ -25,7 +37,7 @@ elseif( $emStatus == 'I am Passively considering all options.' ){
 	$emStatus = 'Passively considering';
 }
 else{
-	$emStatus = 'None';
+	$emStatus = NOT_DEFINED_STR;
 }
 
 $language_array = array('mandarin','vietnamese','english','javanese','spanish','tamil','hindi','Korean','russian','turkish','arabic','telugu','portuguese','marathi','bengali','italian','french','thai','malay','burmese','german','cantonese','japanese','kannada','farsi','gujarati','urdu','polish','punjabi','wu','other');
@@ -62,35 +74,36 @@ if($value3){
 	}
 
 }else{
-	$Relocation = 'None';
+	$Relocation = NOT_DEFINED_STR;
 }
 
 ?>
+
 <ul class="view_points row">
-	<li class="col-xs-6 devicefull"><strong>Industry Sector : </strong><?php  echo get_cimyFieldValue($user_id,'BEST_INDUSTRY'); ?></li>
-	<li class="col-xs-6 devicefull"><strong>Years of Service : </strong><?php  echo get_cimyFieldValue($user_id,'INDUSTRY_YEARS'); ?></li>
+	<li class="col-xs-6 devicefull"><strong>Industry Sector : </strong><?php  echo getCimyOrUndefined($user_id,'BEST_INDUSTRY'); ?></li>
+	<li class="col-xs-6 devicefull"><strong>Years of Service : </strong><?php  echo getCimyOrUndefined($user_id,'INDUSTRY_YEARS'); ?></li>
 	<li class="col-xs-6 devicefull"><strong>Employment Status : </strong><?php  echo $emStatus; ?></li>
-	<li class="col-xs-6 devicefull"><strong>Desired Opportunity : </strong><?php  echo $tofOp; ?></li>
-	<li class="col-xs-6 devicefull"><strong>Career Level : </strong><?php  echo get_cimyFieldValue($user_id,'CURR_CAREER_LVL'); ?></li>
-	<li class="col-xs-6 devicefull"><strong>Closest Metropolitan Area : </strong><?php  echo get_cimyFieldValue($user_id,'MAJOR_METROPOLITAN'); ?></li>
+	<li class="col-xs-6 devicefull"><strong>Desired Opportunity : </strong><?php  echo $tofOp ? $tofOp : NOT_DEFINED_STR; ?></li>
+	<li class="col-xs-6 devicefull"><strong>Career Level : </strong><?php  echo getCimyOrUndefined($user_id,'CURR_CAREER_LVL'); ?></li>
+	<li class="col-xs-6 devicefull"><strong>Closest Metropolitan Area : </strong><?php  echo getCimyOrUndefined($user_id,'MAJOR_METROPOLITAN'); ?></li>
 	<li class="col-xs-6 devicefull"><strong>Highest Education Level : </strong><?php  echo $value6; ?></li>
 	
 	<li id="currEmp" class="col-xs-6 devicefull <?php  if (strtolower($cuEm)=='no'){echo 'locked';} ?>">
-		<strong>Current Employer : </strong><?php  echo $cuEm; ?>
+		<strong>Visible to Current Employer : </strong><?php  echo $cuEm; ?>
 	</li>
 	
 	<li class="col-xs-6 devicefull"><strong>Spoken Language(s) : </strong><?php  echo $LANGUAGES_SPOKEN; ?></li>
 	
 	<li class="col-xs-6 devicefull salary <?php  if (strtolower(get_cimyFieldValue($user_id,'COMPENSATION_ACC'))=='do not show employer'){echo 'locked';} ?>">
 		<a href="/preferences/basic-information/?pg=6">
-			<strong>Current Income Range : </strong><?php  echo get_cimyFieldValue($user_id,'COMPENSATION_CURRENT'); ?>
+			<strong>Current Income Range : </strong><?php  echo getCimyOrUndefined($user_id,'COMPENSATION_CURRENT'); ?>
 		</a>
 	</li>
 	
 	<li class="col-xs-6 devicefull"><strong>Willing to Relocate : </strong><?php  echo $Relocation; ?></li>
 	<li class="col-xs-6 devicefull salary <?php  if (strtolower(get_cimyFieldValue($user_id,'COMP_DESIRED_ACC'))=='do not show employer'){echo 'locked';} ?>">
 		<a href="/preferences/basic-information/?pg=6">
-			<strong>Desired Income Range : </strong><?php  echo get_cimyFieldValue($user_id,'COMPENSATION_DESIRED'); ?>
+			<strong>Desired Income Range : </strong><?php  echo getCimyOrUndefined($user_id,'COMPENSATION_DESIRED'); ?>
 		</a>
 	</li>
 </ul>

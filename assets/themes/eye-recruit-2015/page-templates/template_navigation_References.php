@@ -201,230 +201,230 @@ get_header(); ?>
 
                              <div class="article_content">
 
-                                <div class="text-center">
-                                  <?php echo get_avatar($email); ?>
-                                  <h4 style="text-align:center; padding:0; margin:0;"><?php echo $name; ?></h4>
-                                  <small><?php echo $value->rcvr_curr_company;?><br>
-                                    <?php echo $value->rcvr_curr_title;?>
-                                  </small>
-                                  <hr>
-                                  <small>
-                                    <span><strong>Affiliated through:</strong></span><br><?php echo $value->affiliation_loc;?><br>
-                                    <?php echo $value->affiliation_year; ?>
-                                  </small>
+                              <div class="text-center">
+                                <?php echo get_avatar($email); ?>
+                                <h4 style="text-align:center; padding:0; margin:0;"><?php echo $name; ?></h4>
+                                <small><?php echo $value->rcvr_curr_company;?><br>
+                                  <?php echo $value->rcvr_curr_title;?>
+                                </small>
+                                <hr>
+                                <small>
+                                  <span><strong>Affiliated through:</strong></span><br><?php echo $value->affiliation_loc;?><br>
+                                  <?php echo $value->affiliation_year; ?>
+                                </small>
 
-                                  
-                                  <hr>
-                                  <div class="">
-                                    <ul class="network_list_info">
-                                      
-                                      <li><span>Best Contact Method:</span><?php echo $value->rcvr_pref_contact_method;?> :
-                                      	<?php 
-                                      	    switch(strtolower($value->rcvr_pref_contact_method)){
-                                      	    	case "email":
-                                      	    		echo $email;
-                                      	    	break;
-                                      	    	case "office phone":
-                                      	    	echo $value->rcvr_phone_office;
-                                      	    	break;
-                                      	    	case "cell phone":
-                                      	    	echo $value->rcvr_phone_cell;
-                                      	    	break;
-                                      	    } 
-                                      	?>
-                                      </li>
-                                      <li><span>Best Time to Contact:</span><?php echo $value->rcvr_pref_contact_time;?></li>
 
-                                      <li><span>Status:</span><?php echo (email_exists($email)? "Member" : "Not a Member"); ?></li>
+                                <hr>
+                                <div class="">
+                                  <ul class="network_list_info">
 
-                                    </ul>
-                                  </div>
-                                  
-                                </div>
-                                
-                             
+                                    <li><span>Best Contact Method:</span><?php echo $value->rcvr_pref_contact_method;?> :
+                                     <?php 
+                                     switch(strtolower($value->rcvr_pref_contact_method)){
+                                      case "email":
+                                      echo $email;
+                                      break;
+                                      case "office phone":
+                                      echo $value->rcvr_phone_office;
+                                      break;
+                                      case "cell phone":
+                                      echo $value->rcvr_phone_cell;
+                                      break;
+                                    } 
+                                    ?>
+                                  </li>
+                                  <li><span>Best Time to Contact:</span><?php echo $value->rcvr_pref_contact_time;?></li>
 
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="article_footer">
-                              <div class="checkbox">
-                                <?php if ( in_array( 'candidate', $current_user->roles) && !isset($_REQUEST['recruitID']) ){ ?>
-                                <label>
-                                  <input class="delete_anchor" data-toggle="confirmation" buttonid="<?php echo $value->id; ?>" type="checkbox"> 
-                                  <span>Remove</span> 
-                                </label>
-                                <?php } ?>
+                                  <li><span>Status:</span><?php echo (email_exists($email)? "Member" : "Not a Member"); ?></li>
+
+                                </ul>
                               </div>
+
                             </div>
-                          </article>
-                        </div>
-                        <?php } ?>
+
+
+
+                          </div>
+                          <div class="clearfix"></div>
+                          <div class="article_footer">
+                            <div class="checkbox">
+                              <?php if ( in_array( 'candidate', $current_user->roles) && !isset($_REQUEST['recruitID']) ){ ?>
+                              <label>
+                                <input class="delete_anchor" data-toggle="confirmation" buttonid="<?php echo $value->id; ?>" type="checkbox"> 
+                                <span>Remove</span> 
+                              </label>
+                              <?php } ?>
+                            </div>
+                          </div>
+                        </article>
                       </div>
-                      <?php } else{ ?>
-                      <div class="no-jobs-found restrict_notice">
-                        <h4 class="no_job_listings_found"><?php echo $cand_name; ?> has set the Security settings on this section of the profile to Restricted.</h4>
-                        <div class="media">
-                          <div class="media-left">
-                            <img class="media-object" src="<?php echo get_stylesheet_directory_uri(); ?>/img/big_minus.jpg" alt="0">
-                          </div>
-                          <div class="media-body">
-                            <p>What does that mean? To view this material, you will need to click the link below and a message will be sent notifying the candidate that you would like access to view this material. Once <?php echo $cand_name; ?> approves the material to be viewed, you will recieve a message via mail and within your profile that your access has been granted.</p>
-                          </div>
-                        </div>
-                        <div class="text-center">
-                          <a href="mailto:<?php echo $userdata->user_email; ?>" class="btn btn-sm btn-success">Notify</a>
-                        </div>
-                      </div><!-- no-jobs-found -->
                       <?php } ?>
-                    </div>  
+                    </div>
+                    <?php } else{ ?>
+                    <div class="no-jobs-found restrict_notice">
+                      <h4 class="no_job_listings_found"><?php echo $cand_name; ?> has set the Security settings on this section of the profile to Restricted.</h4>
+                      <div class="media">
+                        <div class="media-left">
+                          <img class="media-object" src="<?php echo get_stylesheet_directory_uri(); ?>/img/big_minus.jpg" alt="0">
+                        </div>
+                        <div class="media-body">
+                          <p>What does that mean? To view this material, you will need to click the link below and a message will be sent notifying the candidate that you would like access to view this material. Once <?php echo $cand_name; ?> approves the material to be viewed, you will recieve a message via mail and within your profile that your access has been granted.</p>
+                        </div>
+                      </div>
+                      <div class="text-center">
+                        <a href="mailto:<?php echo $userdata->user_email; ?>" class="btn btn-sm btn-success">Notify</a>
+                      </div>
+                    </div><!-- no-jobs-found -->
+                    <?php } ?>
+                  </div>  
 
 
-                  </div>
                 </div>
               </div>
-              
-              <div class="col-md-3">
-						<?php 
-						$pageID = get_the_ID(); 
-						$roafar = get_post_meta($pageID, 'wpcf-referral-now-content', true); 
-						$hiw = get_post_meta($pageID, 'wpcf-how-it-works', true); 
-						$mt = get_post_meta($pageID, 'member_tip', true); 
-						?>
-						
-						<?php  if ( (is_user_logged_in()) &&  ($roles1 == 'employer') ) {  ?>
+            </div>
 
-							<div class="special_box special_logo navi_thumbnail">
-									<div class="thumbnail">
-										<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
-									</div>
-									<h5> REFERENCE CHECKING</h5>
-									<p>Checking references is critical to making a final decision between candidates and it also helps Hiring Managers, HR personnel and Recruiters better understand how the potential new employee might transition into the new role.  It’s more than looking for “dirt” or confirming something you already know. The goal it to make a positive distinction among candidates.</p>
-								</div>
-								<div class="special_box special_logo navi_thumbnail">
-									<div class="thumbnail">
-										<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
-									</div>
-									<h5>GATHERING REFERENCES</h5>
-									<p>Our goal in automating this process is for you to be able to reach out to their professional network, with pre-approval, and for the Candidate to provide interested Employers immediate access to reference names, phone numbers and how they know each other professionally.  Ideally you will be able to choose which reference you would like to confirm this candidates skills, track record and competencies, and even discuss their role within the organization, specific responsibilities & performance. </p>
-								</div>
+            <div class="col-md-3">
+              <?php 
+              $pageID = get_the_ID(); 
+              $roafar = get_post_meta($pageID, 'wpcf-referral-now-content', true); 
+              $hiw = get_post_meta($pageID, 'wpcf-how-it-works', true); 
+              $mt = get_post_meta($pageID, 'member_tip', true); 
+              ?>
 
+              <?php  if ( (is_user_logged_in()) &&  ($roles1 == 'employer') ) {  ?>
 
-						<?php } elseif ((is_user_logged_in()) &&  ($roles1 == 'candidate')){ ?>
+              <div class="special_box special_logo navi_thumbnail">
+               <div class="thumbnail">
+                <img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
+              </div>
+              <h5> REFERENCE CHECKING</h5>
+              <p>Checking references is critical to making a final decision between candidates and it also helps Hiring Managers, HR personnel and Recruiters better understand how the potential new employee might transition into the new role.  It’s more than looking for “dirt” or confirming something you already know. The goal it to make a positive distinction among candidates.</p>
+            </div>
+            <div class="special_box special_logo navi_thumbnail">
+             <div class="thumbnail">
+              <img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
+            </div>
+            <h5>GATHERING REFERENCES</h5>
+            <p>Our goal in automating this process is for you to be able to reach out to their professional network, with pre-approval, and for the Candidate to provide interested Employers immediate access to reference names, phone numbers and how they know each other professionally.  Ideally you will be able to choose which reference you would like to confirm this candidates skills, track record and competencies, and even discuss their role within the organization, specific responsibilities & performance. </p>
+          </div>
 
 
-   							<?php   if ( isset($_REQUEST['recruitID']) ) { ?>
+          <?php } elseif ((is_user_logged_in()) &&  ($roles1 == 'candidate')){ ?>
 
-   								<div class="special_box special_logo navi_thumbnail">
-									<div class="thumbnail">
-										<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
-									</div>
-									<h5> REFERENCE CHECKING</h5>
-									<p>Checking references is critical to making a final decision between candidates and it also helps Hiring Managers, HR personnel and Recruiters better understand how the potential new employee might transition into the new role.  It’s more than looking for “dirt” or confirming something you already know. The goal it to make a positive distinction among candidates.</p>
-								</div>
-								<div class="special_box special_logo navi_thumbnail">
-									<div class="thumbnail">
-										<img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
-									</div>
-									<h5>GATHERING REFERENCES</h5>
-									<p>Our goal in automating this process is for you to be able to reach out to their professional network, with pre-approval, and for the Candidate to provide interested Employers immediate access to reference names, phone numbers and how they know each other professionally.  Ideally you will be able to choose which reference you would like to confirm this candidates skills, track record and competencies, and even discuss their role within the organization, specific responsibilities & performance. </p>
-								</div>
 
-								<?php  }else{  ?>
+          <?php   if ( isset($_REQUEST['recruitID']) ) { ?>
 
-									<div class="special_box navi_thumbnail">
-										<h5>Reach out & ask for a Reference Now</h5>
-										<p><?php echo (($roafar))? $roafar : 'Data not found'; ?></p>
-										<a href="javascript:void(0);" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#reach_out_n_ask_fr_References">Ask Now</a>
-									</div>
-							
-									<div class="special_box navi_thumbnail">
-										<h5>How it Works</h5>
-										<p><?php echo (($hiw))? $hiw : 'Data not found'; ?></p>
-									</div>
-									<?php member_navigation_sidebar_tips_function('seeker_references'); ?>
+          <div class="special_box special_logo navi_thumbnail">
+           <div class="thumbnail">
+            <img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
+          </div>
+          <h5>REFERENCE CHECKING</h5>
+          <p>Checking references is critical to making a final decision between candidates and it also helps Hiring Managers, HR personnel and Recruiters better understand how the potential new employee might transition into the new role.  It’s more than looking for “dirt” or confirming something you already know. The goal it to make a positive distinction among candidates.</p>
+        </div>
 
-								<?php } ?>
-							
-							<?php  }else { ?>
+        <div class="special_box special_logo navi_thumbnail">
+         <div class="thumbnail">
+          <img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/img/navi_logo-icon.png" class="img-responsive">
+        </div>
+        <h5>GATHERING REFERENCES</h5>
+        <p>Our goal in automating this process is for you to be able to reach out to their professional network, with pre-approval, and for the Candidate to provide interested Employers immediate access to reference names, phone numbers and how they know each other professionally.  Ideally you will be able to choose which reference you would like to confirm this candidates skills, track record and competencies, and even discuss their role within the organization, specific responsibilities & performance. </p>
+      </div>
 
-							<div class="special_box navi_thumbnail">
-								<h5>Reach out & ask for a Reference Now</h5>
-								<p><?php echo (($roafar))? $roafar : 'Data not found'; ?></p>
-							</div>
-					
-							<div class="special_box navi_thumbnail">
-								<h5>How it Works</h5>
-								<p><?php echo (($hiw))? $hiw : 'Data not found'; ?></p>
-							</div>
-							<?php member_navigation_sidebar_tips_function('seeker_references'); ?>
+      <?php  }else{  ?>
 
-							<?php } ?>
-					</div>
+      <div class="special_box navi_thumbnail">
+        <h5>Reach out & ask for a Reference Now</h5>
+        <p><?php echo (($roafar))? $roafar : 'Data not found'; ?></p>
+        <a href="javascript:void(0);" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#reach_out_n_ask_fr_References">Ask Now</a>
+      </div>
 
-          </section>  
-        </div><!-- #content -->
+      
+      <?php } ?>
 
-        <?//php do_action( 'jobify_loop_after' ); ?>
-      </div><!-- #primary -->
+      <?php  }else { ?>
 
-    <?php endwhile; ?>
-    <?php get_footer('preferences'); ?>
-    <link rel="stylesheet" type="text/css" href="<?php echo get_stylesheet_directory_uri(); ?>/css/sweetalert.css">
-    <script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/js/sweetalert.js"></script>
-    <script type="text/javascript">
-    jQuery(document).ready(function(){
-      jQuery("#inv_frn_n_coll, .pendingResult").on('click', '.delete_anchor', function(){
-        var _this = jQuery(this);
-        var refcid = jQuery(this).attr('buttonid');
-        var counttotalref = jQuery('#counttotalref').attr('count');
-        var img = '<?php echo get_stylesheet_directory_uri()."/images/danger_icon.jpg"; ?>';
-        swal({
-          imageUrl: img,
-          title: "warning",
-          text: "You are about to permanently DELETE this reference. Once you select continue, this can not be undone.",
-          showCancelButton: true,
-          confirmButtonClass: "btn-default btn-sm changetext",
-          confirmButtonText: "Continue Delete",
-          cancelButtonText: "Cancel",
-          cancelButtonClass: "btn-primary btn-sm cancelbutton",
-          closeOnConfirm: false,
-          closeOnCancel: false,
-          customClass: 'daner_sweet'
-        },
-        function(isConfirm){
-          if (isConfirm) {
-            jQuery('.changetext').html('Please Wait...');
-            jQuery.ajax({
-              type : 'POST',
-              url : '<?php echo admin_url("admin-ajax.php"); ?>',
-              dataType: 'json',
-              data : {
-                action : 'delete_reach_reference',
-                refcid : refcid
-              },
-              success : function(r) {
-                if ( r.msg == 'success' ) {
-                  jQuery('.changetext').html('Continue Delete');
-                  jQuery('#refralno'+refcid).remove();
-                  swal({
-                    title: "Deleted!", 
-                    type: "success",
-                    confirmButtonClass: "btn-primary btn-sm",
-                  });
-                  jQuery('#counttotalref').attr('count', parseInt(counttotalref)-1 );
-                  jQuery('#counttotalref').text( parseInt(counttotalref)-1 );
-                }
-                else{
-                  jQuery('.changetext').html('Continue Delete');
-                  swal({
-                    title: "Error!", 
-                    type: "error",
-                    confirmButtonClass: "btn-primary btn-sm",
-                  });
-                  _this.prop('checked',false);
-                }
-              }
-            });
+      <div class="special_box navi_thumbnail">
+        <h5>Reach out & ask for a Reference Now</h5>
+        <p><?php echo (($roafar))? $roafar : 'Data not found'; ?></p>
+      </div>
+
+      <?php } ?>
+
+      <div class="special_box navi_thumbnail">
+        <h5>How it Works</h5>
+        <p><?php echo (($hiw))? $hiw : 'Data not found'; ?></p>
+      </div>
+
+      <?php 
+      echo member_navigation_sidebar_tips_function('seeker-references');
+      ?>
+
+    </div>
+
+  </section>  
+</div><!-- #content -->
+
+<?//php do_action( 'jobify_loop_after' ); ?>
+</div><!-- #primary -->
+
+<?php endwhile; ?>
+<?php get_footer('preferences'); ?>
+<link rel="stylesheet" type="text/css" href="<?php echo get_stylesheet_directory_uri(); ?>/css/sweetalert.css">
+<script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/js/sweetalert.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  jQuery("#inv_frn_n_coll, .pendingResult").on('click', '.delete_anchor', function(){
+    var _this = jQuery(this);
+    var refcid = jQuery(this).attr('buttonid');
+    var counttotalref = jQuery('#counttotalref').attr('count');
+    var img = '<?php echo get_stylesheet_directory_uri()."/images/danger_icon.jpg"; ?>';
+    swal({
+      imageUrl: img,
+      title: "warning",
+      text: "You are about to permanently DELETE this reference. Once you select continue, this can not be undone.",
+      showCancelButton: true,
+      confirmButtonClass: "btn-default btn-sm changetext",
+      confirmButtonText: "Continue Delete",
+      cancelButtonText: "Cancel",
+      cancelButtonClass: "btn-primary btn-sm cancelbutton",
+      closeOnConfirm: false,
+      closeOnCancel: false,
+      customClass: 'daner_sweet'
+    },
+    function(isConfirm){
+      if (isConfirm) {
+        jQuery('.changetext').html('Please Wait...');
+        jQuery.ajax({
+          type : 'POST',
+          url : '<?php echo admin_url("admin-ajax.php"); ?>',
+          dataType: 'json',
+          data : {
+            action : 'delete_reach_reference',
+            refcid : refcid
+          },
+          success : function(r) {
+            if ( r.msg == 'success' ) {
+              jQuery('.changetext').html('Continue Delete');
+              jQuery('#refralno'+refcid).remove();
+              swal({
+                title: "Deleted!", 
+                type: "success",
+                confirmButtonClass: "btn-primary btn-sm",
+              });
+              jQuery('#counttotalref').attr('count', parseInt(counttotalref)-1 );
+              jQuery('#counttotalref').text( parseInt(counttotalref)-1 );
+            }
+            else{
+              jQuery('.changetext').html('Continue Delete');
+              swal({
+                title: "Error!", 
+                type: "error",
+                confirmButtonClass: "btn-primary btn-sm",
+              });
+              _this.prop('checked',false);
+            }
+          }
+        });
 } else {
   swal({
     title:  "Cancelled",
@@ -447,14 +447,16 @@ jQuery(document).ready(function(){
       return (v.match(r) == null) ? false : true;
     }
 
+    var optionVals = jQuery('select#Relationship').clone();
 
     jQuery('.userdetail_add_more').live('click', function(){
 
       var ln_no = jQuery(this).attr('count');
 
       var count = parseInt(ln_no)+1;
+      
 
-      jQuery("#userdetail_all_fields").append('<div id="userdetail_pr_'+count+'" class="edit-main-dv form-group row"><div class="col-sm-4"><label class="control-label" for="fname">First Name:</label><br /><input id="fname_'+count+'" class="regular-text code form-control" name="fname[]" type="text" /></div><div class="col-sm-4"> <label class="control-label" for="lname">Last Name:</label><br /><input id="lname_'+count+'" class="regular-text code form-control" name="lname[]" type="text" /></div><div class="col-sm-4"><label class="control-label" for="user_email">Email Address:</label><br /><input id="user_email_'+count+'" class="regular-text code form-control" name="user_email[]" type="text" /></div><div class="col-sm-6"><label class="control-label" for="Relationship">Relationship: *</label><br /><select id="Relationship" name="Relationship[]"><option value="">---Selection---</option><option value="Colleague">Colleague</option><option value="Direct Supervisor">Direct Supervisor</option><option value="Direct Manager">Direct Manager</option><option value="Business Partner">Business Partner</option><option value="Mentor/Mastermind">Mentor/Mastermind</option><option value="Friend/Relative">Friend/Relative</option></select></div><div class="col-sm-6"><label class="control-label" for="Years">What year did you meet each other?</label><br /><input id="Years_'+count+'" class="regular-text code form-control" name="Years[]" type="text" maxlength="4" /></div></div><span class="remove_edu btn btn-default btn-sm pull-right" id="remove_edu_'+count+'" rel="'+count+'">remove</span><div class="clearfix"></div></div>');
+      jQuery("#userdetail_all_fields").append('<div id="userdetail_pr_'+count+'" class="edit-main-dv form-group row"><div class="col-sm-4"><label class="control-label" for="fname">First Name:</label><br /><input id="fname_'+count+'" class="regular-text code form-control" name="fname[]" type="text" /></div><div class="col-sm-4"> <label class="control-label" for="lname">Last Name:</label><br /><input id="lname_'+count+'" class="regular-text code form-control" name="lname[]" type="text" /></div><div class="col-sm-4"><label class="control-label" for="user_email">Email Address:</label><br /><input id="user_email_'+count+'" class="regular-text code form-control" name="user_email[]" type="text" /></div><div class="col-sm-6"><label class="control-label" for="Relationship">Relationship: *</label><br /><select id="Relationship" name="Relationship[]">'+optionVals.clone().html()+'</select></div><div class="col-sm-6"><label class="control-label" for="Years">What year did you meet each other?</label><br /><input id="Years_'+count+'" class="regular-text code form-control" name="Years[]" type="text" maxlength="4" /></div></div><span class="remove_edu btn btn-default btn-sm pull-right" id="remove_edu_'+count+'" rel="'+count+'">remove</span><div class="clearfix"></div></div>');
 
       jQuery(this).attr('count', count);
     });
@@ -675,12 +677,14 @@ jQuery('.remove_edu').live('click', function(){
                 <label class="control-label" for="Relationship">Relationship: *</label><br />
                 <select id="Relationship" name="Relationship[]">
                   <option value="">---Selection---</option>
+                  <option value="Former Employer">Former Employer</option>
                   <option value="Colleague">Colleague</option>
                   <option value="Direct Supervisor">Direct Supervisor</option>
                   <option value="Direct Manager">Direct Manager</option>
                   <option value="Business Partner">Business Partner</option>
                   <option value="Mentor/Mastermind">Mentor/Mastermind</option>
                   <option value="Friend/Relative">Friend/Relative</option>
+                  <option value="Other">Other</option>
                 </select>
               </div>
             </div>
@@ -699,16 +703,16 @@ jQuery('.remove_edu').live('click', function(){
           <label class="control-label" for="user_msg">Your Message</label><br />
           <textarea id="user_msg" class="regular-text code form-control" name="user_msg" readonly>Hello {First Name},
 
-As you know I am looking to better myself and my financial future with positive career opportunities. I am working with a Recruiter and I have been asked to get all of my career documents in order. I would really assist me when dealing with a potential employer if you could provide me with a reference that I can provide if requested.
+            As you know I am looking to better myself and my financial future with positive career opportunities. I am working with a Recruiter and I have been asked to get all of my career documents in order. I would really assist me when dealing with a potential employer if you could provide me with a reference that I can provide if requested.
 
-Please take a minute and follow the link provided in this email to confirm the infomation I have provided a for my career profile.
+            Please take a minute and follow the link provided in this email to confirm the infomation I have provided a for my career profile.
 
-This is really helps me out. Thank you.
+            This is really helps me out. Thank you.
 
-{reference_link} 
+            {reference_link} 
 
-Sincerely,
-<?php 
+            Sincerely,
+            <?php 
             $current_user_id = get_current_user_id();
             $userdata = get_userdata($current_user_id);
             $user_fname = $userdata->first_name;

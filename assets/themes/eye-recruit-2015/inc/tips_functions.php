@@ -22,9 +22,28 @@ PULL ONLY THE CONTENT OF A RANDOM GENERATED MEMBER TIP
 */
 function er_random_member_tip_content($atts){
 	$atts = shortcode_atts( array(
-    			'tax_id' => 1
+    			'tax_id' => 1,
+    			'tax_slug' => 'default'
     			), $atts, 'er_random_member_tip_content' );
-
+	//args only if tax_slug is defined
+	if($atts['tax_term'] != 'default'){
+		//by tax id
+	$args = array(
+		"post_type"=>'site-tip',
+		"post_status"=>'publish',
+		'orderby' => 'rand',
+		'order' => 'DESC',
+		 'tax_query' => array(
+        array( 
+            'taxonomy' => 'site-tip-category',
+            'field' => 'slug',
+            'terms' => $atts['tax_slug']
+        )
+    ),
+	"posts_per_page"=> 1
+	);
+	}else{
+		//by tax id
 	$args = array(
 		"post_type"=>'site-tip',
 		"post_status"=>'publish',
@@ -38,8 +57,10 @@ function er_random_member_tip_content($atts){
         )
     ),
 	"posts_per_page"=> 1
-	
 	);
+	}
+	
+
 	$the_queries = new Wp_query($args);
 	if($the_queries->have_posts()){
 		while($the_queries->have_posts()){ $the_queries->the_post(); 
@@ -48,7 +69,8 @@ function er_random_member_tip_content($atts){
 		}
 	}
 	else{ 
-		return '<h4>Tips not found</h4>';
+		$notFoundTerm = $atts['tax_term']? $atts['tax_term'] : $atts['tax_id'];
+		return '<p>Tips not found for tip category: '. $notFoundTerm .'</p>';
 	} 
 	wp_reset_postdata();
 }
@@ -141,7 +163,8 @@ function member_navigation_sidebar_tips_function($value){ ?>
 		<h5>MEMBER TIP</h5>
 		<?php
 		if(!is_numeric($value)){
-			echo ('<strong>DEV TO REPROGRAM jobseeker_basic_info_member_tips for '.$value.' to use category taxonomy insteady of select_page_to_show meta (line #70-76)</strong>');
+			//echo ('<strong>DEV TO REPROGRAM jobseeker_basic_info_member_tips for '.$value.' to use category taxonomy insteady of select_page_to_show meta (line #70-76)</strong>');
+			echo (do_shortcode('[er_random_member_tip_content tax_slug='.$value.']'));
 		}else{
 			echo (do_shortcode('[er_random_member_tip_content tax_id='.$value.']'));
 		}
