@@ -32,6 +32,9 @@ FRONT END */
     display: none;
   }
 }
+.text-center{
+  text-align: center;
+}
 /* HEADER */
 #masthead{
   background-color: $white;
@@ -260,6 +263,16 @@ input:checked + .slider:before {
     background: #983421;
   }
 }
+
+/**** MODALS ****/
+.modal-body {
+    background: $lightGray;
+}
+
+.modal-dialog .absolutely_free_popup.pop-eye{
+  h3{ margin-top: 0; padding-top: 0; text-align: left;}
+}
+.modal-dialog .absolutely_free_popup .popup_logo {padding-left: 25px; width: 150px; margin-top: -10px;}
 
 /* PAGE SPECIFIC */
 

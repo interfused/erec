@@ -758,11 +758,11 @@ jQuery(document).ready( function() {
 				<h3>SAVE THIS JOB</h3>		
 			</div>		
 			<div class="modal-body vscroll">		
-				<p>Saving a job is reserved for Members only. <br>We do offer a Free Membership & Career Profile to our community where you can save Jobs like this one, follow Employers you like and communicate your interest in advertised positions.  From your profile you will also be able to upload you current Resume and important career documents and send them directly to Employers to show your interest. </p>		
+				<p>Saving a job is reserved for Members only. <br>We do offer a <strong>FREE Membership &amp; career profile</strong> to our community where you can save Jobs like this one, follow employers you like and communicate your interest in advertised positions.  From your profile you will also be able to upload you current resume and important career documents and send them directly to employers to show your interest. </p>		
 				<div class="process-buttons">		
-					<h4>Would you like to start you own<br> Professional Career Profile now?</h4>		
-					<a href="<?php echo site_url(); ?>/job-seekers/get-started/" class="button button button-medium custSaveBookmark">Yes, I would.</a>		
-					<a href="javascript:void(0)" class="button button button-medium" data-dismiss="modal" aria-label="Close">No, not now.</a>		
+					<h4>Would you like to start you own<br> professional career profile now?</h4>		
+					<a href="<?php echo site_url(); ?>/job-seekers/get-started/" class="button button button-medium custSaveBookmark">Yes</a>		
+					<a href="javascript:void(0)" class="button button button-medium" data-dismiss="modal" aria-label="Close">No</a>		
 				</div>		
 			</div>		
 		</div>		

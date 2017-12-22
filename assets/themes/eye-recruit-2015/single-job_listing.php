@@ -20,8 +20,6 @@ get_header(); ?>
 
 <?php endwhile; ?>
 
-<?php get_footer('employer'); ?>
-
 <?php
 if(!is_user_logged_in() ){
 
@@ -34,12 +32,25 @@ if(!is_user_logged_in() ){
         <div class="modal-content absolutely_free_popup pop-eye">
           <div class="modal-body">
             <button type="button" id="rfclosepopup" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <div  class="pop_logo popnew_logo">
-              <a href="#"><img src="<?php echo site_url();  ?>/assets/themes/eye-recruit-2015/images/login_logo.png" alt="" class="img-responsive"></a>
+            <h2>Want job leads like this one?</h2>
+            <hr>
+            <div class="row paddedTop">
+              <div class="col-md-4">
+                <p class="lead">create your <strong>FREE PROFILE</strong> now and get industry specific opportunities delivered to your inbox.</p>
+              </div>
+              <div class="col-md-8">
+                <ul class="checkmarks lead">
+                  <li>Stop “blindly” applying to job postings!</li>
+                  <li>Get notified of jobs that match your experience!</li>
+                  <li>Receive access to unpublished job opportunities!</li>
+                  <li>Let employers &amp; recruiters search for you!</li>
+                  <li>Increase your chances for getting on the “short list”!</li>
+                </ul>
+                <a class="button button-primary btn-lg marginTop" href="<?php echo site_url(); ?>/job-seekers/get-started">Get Started Now</a>
+              </div>
             </div>
-            <h3 class="text-center">Yes, email me job leads like this one!</h3>
-            <?php echo do_shortcode('[contact-form-7 id="6498" title="Job Board Email Capture"]');  ?>
-            <p>Continues without the <strong>free</strong> email updates <a id="noShow" href="javascript:dontShow()">Don't show this popup again</a></p>
+            
+            <p class="marginTop"><a id="noShow" href="javascript:dontShow()">Continue without the free profile and don't show this popup again</a></p>
 
           </div>
         </div>
@@ -61,39 +72,20 @@ if(!is_user_logged_in() ){
   }
 
   jQuery(document).mouseleave(function() {
-
     var visited = jQuery.cookie('visited'); // create cookie 'visited' with no value
-    if (visited == 'yesqwerqwer') {
+    if (visited == 'yes') {
       return false;
     } else {
-      if(activeClicks == 0){
+      if(activeClicks === 0){
         jQuery('#mail_job').modal('show');
-        var t = jQuery("#gsetJobCat div.value").text();
-        
-        jQuery('span.jobs select').val( jQuery.trim(t) );
       }
-    
    }
 
  });
-  /* listen to close */
- 
-  document.addEventListener( 'wpcf7submit', function( event ) {
-    var formID = event.detail.contactFormId;
-    var inputs = event.detail.inputs;
-    
-    if(formID == '6498'){
-      setTimeout(function(){
-        jQuery('#mail_job').modal('hide');
-      },3000);
-    }
-    
-}, false );
-
-
-
   </script>
 
-  <?php
+<?php
 }
 ?>
+
+<?php get_footer(); ?>

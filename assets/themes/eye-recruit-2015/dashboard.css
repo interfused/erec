@@ -3095,13 +3095,10 @@ body.single-job_listing .modal .mfp-close:hover {background: transparent;}
 .mail-form-new .wpcf7-not-valid {border: 1px solid red;}
 .smt-btn-row .wpcf7-form-control-wrap .wpcf7-not-valid-tip {position: absolute; bottom: -72px; width: 339px; text-align: center;}
 
-.modal-content.absolutely_free_popup.pop-eye h3 {margin-top: 0; margin-bottom:-20px;}
-
 .pop_logo.popnew_logo {margin-top: -25px; text-align: center;}
 .modal.email_leads .smt-btn-row .form-control {width: 372px;}
 .input-group.smt-btn-row {margin-top: -14px;}
 .pop_logo.popnew_logo img.img-responsive {max-width: 75%; display: inline-block;}
-.modal-content.absolutely_free_popup.pop-eye {border: 4px solid #333;}
 
 .order_verification p.provider {font-size: 11px;}
 .orderprice_table .order_col.selected .ordercol_body {background:#591926 ;}
@@ -3139,8 +3136,8 @@ body.single-job_listing .modal .mfp-close:hover {background: transparent;}
 #Quick_Forward_Now .modal-body form .option-block .form-group input[type="submit"]{border: 0; outline: none; background-color: #85110d; border-radius: 30px; height: 30px; padding:0 30px; color: #fff; font-size: 16px; font-weight: bold; margin-top: 15px; box-shadow:0 7px 7px #8c8c8c;  }
 #Quick_Forward_Now .modal-body form .disclaimer{ padding:5px 20px 15px 20px; font-size: 11px; text-align: center; line-height: 18px; color: #6e747c; font-style: italic; }
 
-.modal-dialog .absolutely_free_popup .popup_logo {padding-left: 25px; width: 150px; margin-top: -10px;}
-.modal-dialog .absolutely_free_popup h3 {padding-right: 100px;  }
+
+
 #welcome_back .modal-dialog .absolutely_free_popup .modal-body {padding: 35px 15px 15px 25px;}
 .welcome_back h4 {color: #a14d44;     margin-bottom: 38px;}
 #welcome_back .modal-dialog .absolutely_free_popup .modal-body ul.list_check label {margin-bottom: 12px; color: #666;}
