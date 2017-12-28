@@ -2,7 +2,7 @@
 /*
 Plugin Name: WP Job Manager - Alerts
 Plugin URI: https://wpjobmanager.com/add-ons/job-alerts/
-Description: Allow users to subscribe to job alerts for their searches. Once registered, users can access a 'My Alerts' page which you can create with the shortcode [job_alerts].
+Description: DO NOT UPDATE THIS PLUGIN as it has been modified (specifically the "format_email" function. Allow users to subscribe to job alerts for their searches. Once registered, users can access a 'My Alerts' page which you can create with the shortcode [job_alerts].
 Version: 1.4.1
 Author: Automattic
 Author URI: http://wpjobmanager.com

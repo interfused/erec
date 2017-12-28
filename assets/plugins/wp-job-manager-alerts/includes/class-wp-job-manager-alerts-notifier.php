@@ -59,6 +59,7 @@ class WP_Job_Manager_Alerts_Notifier {
 	 * Send an alert
 	 */
 	public function job_manager_alert( $alert_id, $force = false ) {
+
 		$alert = get_post( $alert_id );
 
 		if ( ! $alert || $alert->post_type !== 'job_alert' ) {
@@ -78,12 +79,15 @@ class WP_Job_Manager_Alerts_Notifier {
 
 			add_filter( 'wp_mail_from_name', array( $this, 'mail_from_name' ) );
 			add_filter( 'wp_mail_from', array( $this, 'mail_from_email' ) );
+
 			/* INTERFUSED HACK */
 			add_filter( 'wp_mail_content_type', array( $this, 'set_content_type' ) );
 
-/* END HACK */
+			/* END HACK */
 			if ( $email ) {
+
 				wp_mail( $user->user_email, apply_filters( 'job_manager_alerts_subject', sprintf( __( 'Available career opportunities in your area', 'wp-job-manager-alerts' ), $alert->post_title ), $alert ), $email );
+					
 			}
 
 			remove_filter( 'wp_mail_from_name', array( $this, 'mail_from_name' ) );
@@ -166,7 +170,7 @@ class WP_Job_Manager_Alerts_Notifier {
 		if ( ! $template ) {
 			$template = $GLOBALS['job_manager_alerts']->get_default_email();
 		}
-
+		
 		if ( $jobs && $jobs->have_posts() ) {
 			ob_start();
 
@@ -181,7 +185,7 @@ class WP_Job_Manager_Alerts_Notifier {
 		} else {
 			$job_content = __( 'No jobs were found matching your search. Login to your account to change your alert criteria', 'wp-job-manager-alerts' );
 		}
-
+		
 		// Reschedule next alert
 		$schedules = WP_Job_Manager_Alerts_Notifier::get_alert_schedules();
 
@@ -202,16 +206,19 @@ class WP_Job_Manager_Alerts_Notifier {
 		$action_url = wp_nonce_url( $action_url, 'job_manager_alert_actions' );
 		$currentdate = date("l, F jS \ Y");
 	   $userID = $user->ID; 
-		 $profileUrl =  get_wp_user_avatar($userID); 
-		if(!empty($profileUrl)){
-		   	$pattern = '/src=[\'"]?([^\'" >]+)[\'" >]/';
+		
+		$profileUrl='';
+		//leverage Interfused Custom Avatar Plugin
+		if(function_exists('ica_avatar')){
+			$profileUrl = ica_avatar();
+			$pattern = '/src=[\'"]?([^\'" >]+)[\'" >]/';
 		    preg_match($pattern, $profileUrl, $link);
 		    $link = $link[1];
 		    $link = urldecode($link);
-			// get_wp_user_avatar($userID, ''); die;
 		}else{
 			$link = site_url().'/assets/uploads/2016/08/EyeRecruit_Avitar.png';
-		}
+		}	   
+		  
 		$replacements = array(
 			'{display_name}'    => $user->display_name,
 			'{alert_name}'      => $alert->post_title,

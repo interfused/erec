@@ -23,8 +23,8 @@ $city = $wpdb->get_row("SELECT * FROM $cityTable WHERE cityId = '".$cityId."' ")
 $state = $wpdb->get_row("SELECT * FROM $stateTable WHERE regionId = '".$regionId."' ");
 
 $er_JobMeta = get_post_meta( get_the_ID() );
-$tmp=$er_JobMeta['_job_pay_hourly'][0];
-$tmp2=$er_JobMeta['_job_pay_yearly'][0];									
+$compensation_hourly=$er_JobMeta['_job_pay_hourly'][0];
+$compensation_yearly=$er_JobMeta['_job_pay_yearly'][0];									
 /*
 echo "\n";
 echo "<h2>";*/
@@ -61,12 +61,10 @@ if ( $company ) {
 			<tr><td height="20"></td></tr>
 			<tr>
 				<td width="35"></td>
-				<td width="56"><img width="100px" src="<?php echo $companyLogo; ?>"></td>
+				<td width="56"><a href="<?php echo $permalink; ?>"><img width="100px" src="<?php echo $companyLogo; ?>" style="border:none;"></a></td>
 				<td width="35"></td>
 				<td>
 					<p style="font-size:13px;color:#585858;margin:0px;font-weight:normal;line-height: 22px;">
-						JOB SOURCE: COMPANY
-						<br>
 						<span style="font-size:14px;color:#a12641;margin:0px;font-weight:bold;">
 							<?php echo $company; ?>
 						</span>
@@ -80,26 +78,32 @@ if ( $company ) {
 						<br> 
 						<span style="font-size:13px;font-weight:bold;color:#333333;">
 							<?php
-							if($tmp != 'n/a'){
-								echo '$ '.$tmp. '/Hour';
+							if($compensation_hourly != 'n/a'){
+								echo  $compensation_hourly ;
 							}
-							if($tmp != 'n/a' && $tmp2 != 'n/a'){
+							if($compensation_hourly != 'n/a' && $compensation_yearly != 'n/a'){
 								echo ' / ';
 							}
 
-							if($tmp2 != 'n/a'){
-								echo '$ '.$tmp2. '/Year';
+							if($compensation_yearly != 'n/a'){
+								echo '$ '.$compensation_yearly. '/Year';
 							}
 
-							if($tmp == 'n/a' && $tmp2 == 'n/a'){
-								echo 'DOE';
+							if($compensation_hourly == 'n/a' && $compensation_yearly == 'n/a'){
+								echo 'Depends on experience';
 							}
 							?>
 						</span>
 					</p>
 				</td>
-				<td align="right" style="vertical-align:top;font-size:13px;color:#333333;font-style: italic;font-weight:bold;">
-					<?php echo human_time_diff( get_the_time('U'), current_time('timestamp') ) . ''; ?>
+				<td align="right" style="vertical-align:top;font-size:13px;color:#333333;">
+					<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="ffffff">
+                        <tr>
+                          <td width="20"></td>
+                          <td align="right"><a href="<?php echo $permalink; ?>" style="display:inline-block;background: #a12641;color: #ffffff;font-size: 14px;padding: 13px 30px;text-decoration: none;border-radius: 25px;"><font color="ffffff">View details</font></a></td>
+                          <td width="20"></td>
+                        </tr>
+                      </table>
 				</td>
 			</tr>
 			<tr><td height="20"></td></tr>
