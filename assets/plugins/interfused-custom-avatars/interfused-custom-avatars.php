@@ -208,7 +208,7 @@ function ica_get_avatar_filter($avatar, $id_or_email="", $size="", $default="", 
   // User has Interfused Custom Avatar
   //$avatar = str_replace('gravatar_default','',$avatar);
   
-    $avatar = '<img src="http://demo.eyerecruit.com/assets/uploads/usr/uid_273/avatar_273.jpeg?d=1500523286" alt="avatar" class="ica_avatar">';
+    $avatar = '<img src="/assets/uploads/usr/uid_273/avatar_273.jpeg?d=1500523286" alt="avatar" class="ica_avatar">';
   
   /*
     if(is_object($id_or_email)) {

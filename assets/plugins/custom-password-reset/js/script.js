@@ -18,7 +18,7 @@ jQuery( document ).ready( function( $ ){
        		jQuery('.invalid_user_login, .valid_user_login, .user_stats_pending, .user_stats_denied').remove();
 			var user_login = jQuery('#user_login').val();
 			jQuery.ajax({
-				url: 'http://demo.eyerecruit.com/wp-admin/admin-ajax.php',
+				url: '/wp-admin/admin-ajax.php',
 				type: 'POST',
 				dataType: 'json',
 				data: {
@@ -103,7 +103,7 @@ jQuery( document ).ready( function( $ ){
 			var pass = jQuery('#pass1').val();
 			var user_login = jQuery('#user_login').val();
 			jQuery.ajax({
-				url: 'http://demo.eyerecruit.com/wp-admin/admin-ajax.php',
+				url: '/wp-admin/admin-ajax.php',
 				method: 'POST',
 				dataType: 'json',
 				data: {

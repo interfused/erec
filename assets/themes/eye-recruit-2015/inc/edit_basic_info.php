@@ -227,7 +227,7 @@ function edit_basic_info() {
 				'user_id'  => $user_id,
 				'action'   => 'UpdateBasicInfo',
 				'datetime' => time(),
-				'meta' 	   => 'Modified Preferences > basic info'
+				'meta'     => 'Modified Preferences > basic info'
 			),
 			array( '%d', '%s', '%s', '%s' )
 		);
@@ -279,7 +279,7 @@ function editContactInfo() {
 					'user_id'  => $user_id,
 					'action'   => 'NameAndContactInfo',
 					'datetime' => time(),
-					'meta' 	   => 'Modified Preferences > name and contact info'
+					'meta'     => 'Modified Preferences > name and contact info'
 				),
 				array( '%d', '%s', '%s', '%s' )
 			);
@@ -297,22 +297,22 @@ function editContactInfo() {
 
 
 function my_avatar_filter() {
-  // Remove from show_user_profile hook
-  remove_action('show_user_profile', array('wp_user_avatar', 'wpua_action_show_user_profile'));
-  remove_action('show_user_profile', array('wp_user_avatar', 'wpua_media_upload_scripts'));
+	// Remove from show_user_profile hook
+	remove_action('show_user_profile', array('wp_user_avatar', 'wpua_action_show_user_profile'));
+	remove_action('show_user_profile', array('wp_user_avatar', 'wpua_media_upload_scripts'));
 
-  // Remove from edit_user_profile hook
-  remove_action('edit_user_profile', array('wp_user_avatar', 'wpua_action_show_user_profile'));
-  remove_action('edit_user_profile', array('wp_user_avatar', 'wpua_media_upload_scripts'));
+	// Remove from edit_user_profile hook
+	remove_action('edit_user_profile', array('wp_user_avatar', 'wpua_action_show_user_profile'));
+	remove_action('edit_user_profile', array('wp_user_avatar', 'wpua_media_upload_scripts'));
 
-  // Add to edit_user_avatar hook
-  add_action('edit_user_avatar', array('wp_user_avatar', 'wpua_action_show_user_profile'));
-  add_action('edit_user_avatar', array('wp_user_avatar', 'wpua_media_upload_scripts'));
+	// Add to edit_user_avatar hook
+	add_action('edit_user_avatar', array('wp_user_avatar', 'wpua_action_show_user_profile'));
+	add_action('edit_user_avatar', array('wp_user_avatar', 'wpua_media_upload_scripts'));
 }
 
 // Loads only outside of administration panel
 if(!is_admin()) {
-  add_action('init','my_avatar_filter');
+	add_action('init','my_avatar_filter');
 }
 
 
@@ -324,9 +324,9 @@ function addRemoveSecQuestion() {
 	$user_id = get_current_user_id();
 	$msg = array();
 	if ( isset($_POST['actType']) && isset($_POST['ques']) && isset($_POST['ans']) && !empty($_POST['ques']) && !empty($_POST['ans']) ) {
-		$ques 		= $_POST['ques'];
-		$ans 		= $_POST['ans'];
-		$quesCon 	= $_POST['quesCon'];
+		$ques     = $_POST['ques'];
+		$ans    = $_POST['ans'];
+		$quesCon  = $_POST['quesCon'];
 
 		set_cimyFieldValue($user_id, 'YOUR_SECURITY', $ques);
 		set_cimyFieldValue($user_id, 'YOUR_ANSWER', $ans);
@@ -339,7 +339,7 @@ function addRemoveSecQuestion() {
 				'user_id'  => $user_id,
 				'action'   => 'changeSecurityquestion',
 				'datetime' => time(),
-				'meta' 	   => 'Modified Preferences > Change security question'
+				'meta'     => 'Modified Preferences > Change security question'
 			),
 			array( '%d', '%s', '%s', '%s' )
 		);
@@ -381,43 +381,43 @@ function cvf_upload_resumefiles(){
 	}
 	$user_id = get_current_user_id();
 	global $wpdb;
-    $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 3000000;
-    $wp_upload_dir = wp_upload_dir();
-    $path = $wp_upload_dir['basedir'].'/resume/';
-    if (!file_exists( $path.date('Y/m/d') ) ) {
-	    mkdir($path.date('Y/m/d'), 0777, true);
+		$valid_formats = array("pdf", "doc", "docx");
+		$max_file_size = 3000000;
+		$wp_upload_dir = wp_upload_dir();
+		$path = $wp_upload_dir['basedir'].'/resume/';
+		if (!file_exists( $path.date('Y/m/d') ) ) {
+			mkdir($path.date('Y/m/d'), 0777, true);
 	}
 	$path = $path.date('Y/m/d').'/';
 
-    if( $_SERVER['REQUEST_METHOD'] == "POST" ){
-    	foreach ( $_FILES['files']['name'] as $f => $name ) {
-    		$actual_name = pathinfo($name, PATHINFO_FILENAME);
+		if( $_SERVER['REQUEST_METHOD'] == "POST" ){
+			foreach ( $_FILES['files']['name'] as $f => $name ) {
+				$actual_name = pathinfo($name, PATHINFO_FILENAME);
 			$original_name = $actual_name;
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
-		    if ( $_FILES['files']['error'][$f] == 0 ) {
-		        if ( $_FILES['files']['size'][$f] > $max_file_size ) {
-		            $upload_message[] = '<label class="error">File is too large!.</label>';
-		            continue;
-		        } elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
-		            $upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
-		            continue;
-		        } 
-		        else{
+				if ( $_FILES['files']['error'][$f] == 0 ) {
+						if ( $_FILES['files']['size'][$f] > $max_file_size ) {
+								$upload_message[] = '<label class="error">File is too large!.</label>';
+								continue;
+						} elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
+								$upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, doc, and docx format.</label>';
+								continue;
+						} 
+						else{
 					$i = 1;
 					while( file_exists($path.$actual_name.".".$extension) )
 					{           
-					    $actual_name = $original_name.$i;
-				    	$name = $actual_name.".".$extension;
-					    $i++;
+							$actual_name = $original_name.$i;
+							$name = $actual_name.".".$extension;
+							$i++;
 					}
-    				$basename = basename($name);
-			        if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
-			            $filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
-			            $file = '/resume/'.date('Y/m/d').'/'.$basename;
+						$basename = basename($name);
+							if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
+									$filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
+									$file = '/resume/'.date('Y/m/d').'/'.$basename;
 
 
-			            $reargs = array(
+									$reargs = array(
 							'author__in' => array($user_id),
 							'post_type'   => 'resume',
 							'post_status' => 'publish'
@@ -426,39 +426,39 @@ function cvf_upload_resumefiles(){
 						if ( ($the_query->have_posts()) || ($countfile > 0) ) {
 							
 							$wpdb->insert(
-			        			$wpdb->prefix.'jobseeker_resume',
-				        		array(
-				        			'user_id' => $user_id,
+										$wpdb->prefix.'jobseeker_resume',
+										array(
+											'user_id' => $user_id,
 									'datetime' => time(),
 									'filefullpath' => $filefullpath,
 									'file' => $file,
 									'access' => 'Restrict Access',
 									'other' => $actual_name,
 									'docType' => 'resume'
-				        		),
-				        		array('%d','%s','%s','%s','%s', '%s', '%s')
-				        	);
+										),
+										array('%d','%s','%s','%s','%s', '%s', '%s')
+									);
 							wp_reset_postdata();
 						} 
 						else {
 							$wpdb->insert(
-			        			$wpdb->prefix.'jobseeker_resume',
-				        		array(
-				        			'user_id' => $user_id,
+										$wpdb->prefix.'jobseeker_resume',
+										array(
+											'user_id' => $user_id,
 									'datetime' => time(),
 									'filefullpath' => $filefullpath,
 									'file' => $file,
 									'access' => 'Restrict Access',
 									'other' => $actual_name,
 									'docType' => 'resume'
-				        		),
-				        		array('%d','%s','%s','%s','%s', '%s', '%s')
-				        	);
+										),
+										array('%d','%s','%s','%s','%s', '%s', '%s')
+									);
 
-				        	$fileid = $wpdb->insert_id;
-				        	$userdata = get_userdata($user_id);
+									$fileid = $wpdb->insert_id;
+									$userdata = get_userdata($user_id);
 							$candidate_name = $userdata->first_name.' '.$userdata->last_name;
-				        	$data = array(
+									$data = array(
 								'post_title'     => $candidate_name,
 								'post_type'      => 'resume',
 								'comment_status' => 'closed',
@@ -479,24 +479,24 @@ function cvf_upload_resumefiles(){
 								'user_id'  => $user_id,
 								'action'   => 'resume',
 								'datetime' => time(),
-								'meta' 	   => 'Navigation > Upload a resume ( '.$basename.' )'
+								'meta'     => 'Navigation > Upload a resume ( '.$basename.' )'
 							),
 							array( '%d', '%s', '%s', '%s' )
 						);
 
-			        	$upload_message[] = '<p class="success">Successfully added.</p>';
-			        }
+								$upload_message[] = '<p class="success">Successfully added.</p>';
+							}
 				}
 			}
 		}
 	}
 
 	if ( isset( $upload_message ) ) :
-        foreach ( $upload_message as $msg ){       
-            printf( __('%s'), $msg );
-        }
-    endif;
-    die();
+				foreach ( $upload_message as $msg ){       
+						printf( __('%s'), $msg );
+				}
+		endif;
+		die();
 }
 
 /*..............AjAx Delete resume..................*/
@@ -571,7 +571,7 @@ function removeJobseekerResume() {
 						'user_id'  => $user_id,
 						'action'   => 'removeResume',
 						'datetime' => time(),
-						'meta' 	   => 'Navigation > Delete a '.$docType.' that use for <b>Job Apply</b> ( '.$basename.' )'
+						'meta'     => 'Navigation > Delete a '.$docType.' that use for <b>Job Apply</b> ( '.$basename.' )'
 					),
 					array( '%d', '%s', '%s', '%s' )
 				);
@@ -590,7 +590,7 @@ function removeJobseekerResume() {
 						'user_id'  => $user_id,
 						'action'   => 'removeResume',
 						'datetime' => time(),
-						'meta' 	   => 'Navigation > Delete a '.$docType.' ( '.$basename.' )'
+						'meta'     => 'Navigation > Delete a '.$docType.' ( '.$basename.' )'
 					),
 					array( '%d', '%s', '%s', '%s' )
 				);
@@ -609,12 +609,12 @@ function removeJobseekerResume() {
 					'user_id'  => $user_id,
 					'action'   => 'removeResume',
 					'datetime' => time(),
-					'meta' 	   => 'Navigation > Delete a '.$docType.' ( '.$basename.' )'
+					'meta'     => 'Navigation > Delete a '.$docType.' ( '.$basename.' )'
 				),
 				array( '%d', '%s', '%s', '%s' )
 			);
 		}
-		echo "success";	
+		echo "success"; 
 	}
 	die();
 }
@@ -662,7 +662,7 @@ function accessJobseekerResume() {
 				'user_id'  => $user_id,
 				'action'   => 'changePer',
 				'datetime' => time(),
-				'meta' 	   => 'Navigation > change permission for '.$docType.'( '.$basename.' ) from '.$access.'  to  '.$_POST['thisVal']
+				'meta'     => 'Navigation > change permission for '.$docType.'( '.$basename.' ) from '.$access.'  to  '.$_POST['thisVal']
 			),
 			array( '%d', '%s', '%s', '%s' )
 		);
@@ -685,78 +685,78 @@ function cvf_upload_educationfiles(){
 	}
 	$user_id = get_current_user_id();
 	global $wpdb;
-    $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 3000000;
-    $wp_upload_dir = wp_upload_dir();
-    $path = $wp_upload_dir['basedir'].'/resume/';
-    if (!file_exists( $path.date('Y/m/d') ) ) {
-	    mkdir($path.date('Y/m/d'), 0777, true);
+		$valid_formats = array("pdf", "jpg", "jpeg", "png");
+		$max_file_size = 3000000;
+		$wp_upload_dir = wp_upload_dir();
+		$path = $wp_upload_dir['basedir'].'/resume/';
+		if (!file_exists( $path.date('Y/m/d') ) ) {
+			mkdir($path.date('Y/m/d'), 0777, true);
 	}
 	$path = $path.date('Y/m/d').'/';
 
-    if( $_SERVER['REQUEST_METHOD'] == "POST" ){
-    	foreach ( $_FILES['files']['name'] as $f => $name ) {
-    		$actual_name = pathinfo($name, PATHINFO_FILENAME);
+		if( $_SERVER['REQUEST_METHOD'] == "POST" ){
+			foreach ( $_FILES['files']['name'] as $f => $name ) {
+				$actual_name = pathinfo($name, PATHINFO_FILENAME);
 			$original_name = $actual_name;
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
-		    if ( $_FILES['files']['error'][$f] == 0 ) {
-		        if ( $_FILES['files']['size'][$f] > $max_file_size ) {
-		            $upload_message[] = '<label class="error">File is too large!.</label>';
-		            continue;
-		        } elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
-		            $upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
-		            continue;
-		        } 
-		        else{
+				if ( $_FILES['files']['error'][$f] == 0 ) {
+						if ( $_FILES['files']['size'][$f] > $max_file_size ) {
+								$upload_message[] = '<label class="error">File is too large!.</label>';
+								continue;
+						} elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
+								$upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
+								continue;
+						} 
+						else{
 					$i = 1;
 					while( file_exists($path.$actual_name.".".$extension) )
 					{           
-					    $actual_name = $original_name.$i;
-				    	$name = $actual_name.".".$extension;
-					    $i++;
+							$actual_name = $original_name.$i;
+							$name = $actual_name.".".$extension;
+							$i++;
 					}
-    				$basename = basename($name);
-			        if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
-			            $filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
-			            $file = '/resume/'.date('Y/m/d').'/'.$basename;
-			        	$wpdb->insert(
-			        		$wpdb->prefix.'jobseeker_resume',
-			        		array(
-			        			'user_id' => $user_id,
+						$basename = basename($name);
+							if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
+									$filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
+									$file = '/resume/'.date('Y/m/d').'/'.$basename;
+								$wpdb->insert(
+									$wpdb->prefix.'jobseeker_resume',
+									array(
+										'user_id' => $user_id,
 								'datetime' => time(),
 								'filefullpath' => $filefullpath,
 								'file' => $file,
 								'access' => 'Restrict Access',
 								'other' => $actual_name,
 								'docType' => 'education'
-			        		),
-			        		array('%d','%s','%s','%s','%s', '%s', '%s')
-			        	);
+									),
+									array('%d','%s','%s','%s','%s', '%s', '%s')
+								);
 
-			        	$wpdb->insert(
+								$wpdb->insert(
 							$wpdb->prefix.'user_activity_log',
 							array(
 								'user_id'  => $user_id,
 								'action'   => 'education',
 								'datetime' => time(),
-								'meta' 	   => 'Navigation > Upload a education document ( '.$basename.' )'
+								'meta'     => 'Navigation > Upload a education document ( '.$basename.' )'
 							),
 							array( '%d', '%s', '%s', '%s' )
 						);
-			        	
-			        	$upload_message[] = '<p class="success">Successfully added.</p>';
-			        }
+								
+								$upload_message[] = '<p class="success">Successfully added.</p>';
+							}
 				}
 			}
 		}
 	}
 
 	if ( isset( $upload_message ) ) :
-        foreach ( $upload_message as $msg ){       
-            printf( __('%s'), $msg );
-        }
-    endif;
-    die();
+				foreach ( $upload_message as $msg ){       
+						printf( __('%s'), $msg );
+				}
+		endif;
+		die();
 }
 
 
@@ -772,78 +772,78 @@ function cvf_upload_certificatesfiles(){
 	}
 	$user_id = get_current_user_id();
 	global $wpdb;
-    $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 3000000;
-    $wp_upload_dir = wp_upload_dir();
-    $path = $wp_upload_dir['basedir'].'/resume/';
-    if (!file_exists( $path.date('Y/m/d') ) ) {
-	    mkdir($path.date('Y/m/d'), 0777, true);
+		$valid_formats = array("pdf", "jpg", "jpeg", "png");
+		$max_file_size = 3000000;
+		$wp_upload_dir = wp_upload_dir();
+		$path = $wp_upload_dir['basedir'].'/resume/';
+		if (!file_exists( $path.date('Y/m/d') ) ) {
+			mkdir($path.date('Y/m/d'), 0777, true);
 	}
 	$path = $path.date('Y/m/d').'/';
 
-    if( $_SERVER['REQUEST_METHOD'] == "POST" ){
-    	foreach ( $_FILES['files']['name'] as $f => $name ) {
-    		$actual_name = pathinfo($name, PATHINFO_FILENAME);
+		if( $_SERVER['REQUEST_METHOD'] == "POST" ){
+			foreach ( $_FILES['files']['name'] as $f => $name ) {
+				$actual_name = pathinfo($name, PATHINFO_FILENAME);
 			$original_name = $actual_name;
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
-		    if ( $_FILES['files']['error'][$f] == 0 ) {
-		        if ( $_FILES['files']['size'][$f] > $max_file_size ) {
-		            $upload_message[] = '<label class="error">File is too large!.</label>';
-		            continue;
-		        } elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
-		            $upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
-		            continue;
-		        } 
-		        else{
+				if ( $_FILES['files']['error'][$f] == 0 ) {
+						if ( $_FILES['files']['size'][$f] > $max_file_size ) {
+								$upload_message[] = '<label class="error">File is too large!.</label>';
+								continue;
+						} elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
+								$upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
+								continue;
+						} 
+						else{
 					$i = 1;
 					while( file_exists($path.$actual_name.".".$extension) )
 					{           
-					    $actual_name = $original_name.$i;
-				    	$name = $actual_name.".".$extension;
-					    $i++;
+							$actual_name = $original_name.$i;
+							$name = $actual_name.".".$extension;
+							$i++;
 					}
-    				$basename = basename($name);
-			        if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
-			            $filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
-			            $file = '/resume/'.date('Y/m/d').'/'.$basename;
-			        	$wpdb->insert(
-			        		$wpdb->prefix.'jobseeker_resume',
-			        		array(
-			        			'user_id' => $user_id,
+						$basename = basename($name);
+							if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
+									$filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
+									$file = '/resume/'.date('Y/m/d').'/'.$basename;
+								$wpdb->insert(
+									$wpdb->prefix.'jobseeker_resume',
+									array(
+										'user_id' => $user_id,
 								'datetime' => time(),
 								'filefullpath' => $filefullpath,
 								'file' => $file,
 								'access' => 'Restrict Access',
 								'other' => $actual_name,
 								'docType' => 'certificate'
-			        		),
-			        		array('%d','%s','%s','%s','%s', '%s', '%s')
-			        	);
+									),
+									array('%d','%s','%s','%s','%s', '%s', '%s')
+								);
 
-			        	$wpdb->insert(
+								$wpdb->insert(
 							$wpdb->prefix.'user_activity_log',
 							array(
 								'user_id'  => $user_id,
 								'action'   => 'certificate',
 								'datetime' => time(),
-								'meta' 	   => 'Navigation > Upload a certificate ( '.$basename.' )'
+								'meta'     => 'Navigation > Upload a certificate ( '.$basename.' )'
 							),
 							array( '%d', '%s', '%s', '%s' )
 						);
-			        	
-			        	$upload_message[] = '<p class="success">Successfully added.</p>';
-			        }
+								
+								$upload_message[] = '<p class="success">Successfully added.</p>';
+							}
 				}
 			}
 		}
 	}
 
 	if ( isset( $upload_message ) ) :
-        foreach ( $upload_message as $msg ){       
-            printf( __('%s'), $msg );
-        }
-    endif;
-    die();
+				foreach ( $upload_message as $msg ){       
+						printf( __('%s'), $msg );
+				}
+		endif;
+		die();
 }
 
 
@@ -858,78 +858,78 @@ function cvf_upload_licensesfiles(){
 	}
 	$user_id = get_current_user_id();
 	global $wpdb;
-    $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 3000000;
-    $wp_upload_dir = wp_upload_dir();
-    $path = $wp_upload_dir['basedir'].'/resume/';
-    if (!file_exists( $path.date('Y/m/d') ) ) {
-	    mkdir($path.date('Y/m/d'), 0777, true);
+		$valid_formats = array("pdf", "jpg", "jpeg", "png");
+		$max_file_size = 3000000;
+		$wp_upload_dir = wp_upload_dir();
+		$path = $wp_upload_dir['basedir'].'/resume/';
+		if (!file_exists( $path.date('Y/m/d') ) ) {
+			mkdir($path.date('Y/m/d'), 0777, true);
 	}
 	$path = $path.date('Y/m/d').'/';
 
-    if( $_SERVER['REQUEST_METHOD'] == "POST" ){
-    	foreach ( $_FILES['files']['name'] as $f => $name ) {
-    		$actual_name = pathinfo($name, PATHINFO_FILENAME);
+		if( $_SERVER['REQUEST_METHOD'] == "POST" ){
+			foreach ( $_FILES['files']['name'] as $f => $name ) {
+				$actual_name = pathinfo($name, PATHINFO_FILENAME);
 			$original_name = $actual_name;
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
-		    if ( $_FILES['files']['error'][$f] == 0 ) {
-		        if ( $_FILES['files']['size'][$f] > $max_file_size ) {
-		            $upload_message[] = '<label class="error">File is too large!.</label>';
-		            continue;
-		        } elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
-		            $upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
-		            continue;
-		        } 
-		        else{
+				if ( $_FILES['files']['error'][$f] == 0 ) {
+						if ( $_FILES['files']['size'][$f] > $max_file_size ) {
+								$upload_message[] = '<label class="error">File is too large!.</label>';
+								continue;
+						} elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
+								$upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
+								continue;
+						} 
+						else{
 					$i = 1;
 					while( file_exists($path.$actual_name.".".$extension) )
 					{           
-					    $actual_name = $original_name.$i;
-				    	$name = $actual_name.".".$extension;
-					    $i++;
+							$actual_name = $original_name.$i;
+							$name = $actual_name.".".$extension;
+							$i++;
 					}
-    				$basename = basename($name);
-			        if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
-			            $filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
-			            $file = '/resume/'.date('Y/m/d').'/'.$basename;
-			        	$wpdb->insert(
-			        		$wpdb->prefix.'jobseeker_resume',
-			        		array(
-			        			'user_id' => $user_id,
+						$basename = basename($name);
+							if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
+									$filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
+									$file = '/resume/'.date('Y/m/d').'/'.$basename;
+								$wpdb->insert(
+									$wpdb->prefix.'jobseeker_resume',
+									array(
+										'user_id' => $user_id,
 								'datetime' => time(),
 								'filefullpath' => $filefullpath,
 								'file' => $file,
 								'access' => 'Restrict Access',
 								'other' => $actual_name,
 								'docType' => 'license'
-			        		),
-			        		array('%d','%s','%s','%s','%s', '%s', '%s')
-			        	);
+									),
+									array('%d','%s','%s','%s','%s', '%s', '%s')
+								);
 
-			        	$wpdb->insert(
+								$wpdb->insert(
 							$wpdb->prefix.'user_activity_log',
 							array(
 								'user_id'  => $user_id,
 								'action'   => 'license',
 								'datetime' => time(),
-								'meta' 	   => 'Navigation > Upload a license ( '.$basename.' )'
+								'meta'     => 'Navigation > Upload a license ( '.$basename.' )'
 							),
 							array( '%d', '%s', '%s', '%s' )
 						);
-			        	
-			        	$upload_message[] = '<p class="success">Successfully added.</p>';
-			        }
+								
+								$upload_message[] = '<p class="success">Successfully added.</p>';
+							}
 				}
 			}
 		}
 	}
 
 	if ( isset( $upload_message ) ) :
-        foreach ( $upload_message as $msg ){       
-            printf( __('%s'), $msg );
-        }
-    endif;
-    die();
+				foreach ( $upload_message as $msg ){       
+						printf( __('%s'), $msg );
+				}
+		endif;
+		die();
 }
 
 
@@ -945,78 +945,78 @@ function cvf_upload_honorsfiles(){
 	}
 	$user_id = get_current_user_id();
 	global $wpdb;
-    $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 3000000;
-    $wp_upload_dir = wp_upload_dir();
-    $path = $wp_upload_dir['basedir'].'/resume/';
-    if (!file_exists( $path.date('Y/m/d') ) ) {
-	    mkdir($path.date('Y/m/d'), 0777, true);
+		$valid_formats = array("pdf", "jpg", "jpeg", "png");
+		$max_file_size = 3000000;
+		$wp_upload_dir = wp_upload_dir();
+		$path = $wp_upload_dir['basedir'].'/resume/';
+		if (!file_exists( $path.date('Y/m/d') ) ) {
+			mkdir($path.date('Y/m/d'), 0777, true);
 	}
 	$path = $path.date('Y/m/d').'/';
 
-    if( $_SERVER['REQUEST_METHOD'] == "POST" ){
-    	foreach ( $_FILES['files']['name'] as $f => $name ) {
-    		$actual_name = pathinfo($name, PATHINFO_FILENAME);
+		if( $_SERVER['REQUEST_METHOD'] == "POST" ){
+			foreach ( $_FILES['files']['name'] as $f => $name ) {
+				$actual_name = pathinfo($name, PATHINFO_FILENAME);
 			$original_name = $actual_name;
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
-		    if ( $_FILES['files']['error'][$f] == 0 ) {
-		        if ( $_FILES['files']['size'][$f] > $max_file_size ) {
-		            $upload_message[] = '<label class="error">File is too large!.</label>';
-		            continue;
-		        } elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
-		            $upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
-		            continue;
-		        } 
-		        else{
+				if ( $_FILES['files']['error'][$f] == 0 ) {
+						if ( $_FILES['files']['size'][$f] > $max_file_size ) {
+								$upload_message[] = '<label class="error">File is too large!.</label>';
+								continue;
+						} elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
+								$upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
+								continue;
+						} 
+						else{
 					$i = 1;
 					while( file_exists($path.$actual_name.".".$extension) )
 					{           
-					    $actual_name = $original_name.$i;
-				    	$name = $actual_name.".".$extension;
-					    $i++;
+							$actual_name = $original_name.$i;
+							$name = $actual_name.".".$extension;
+							$i++;
 					}
-    				$basename = basename($name);
-			        if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
-			            $filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
-			            $file = '/resume/'.date('Y/m/d').'/'.$basename;
-			        	$wpdb->insert(
-			        		$wpdb->prefix.'jobseeker_resume',
-			        		array(
-			        			'user_id' => $user_id,
+						$basename = basename($name);
+							if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
+									$filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
+									$file = '/resume/'.date('Y/m/d').'/'.$basename;
+								$wpdb->insert(
+									$wpdb->prefix.'jobseeker_resume',
+									array(
+										'user_id' => $user_id,
 								'datetime' => time(),
 								'filefullpath' => $filefullpath,
 								'file' => $file,
 								'access' => 'Restrict Access',
 								'other' => $actual_name,
 								'docType' => 'honors'
-			        		),
-			        		array('%d','%s','%s','%s','%s', '%s', '%s')
-			        	);
+									),
+									array('%d','%s','%s','%s','%s', '%s', '%s')
+								);
 
-			        	$wpdb->insert(
+								$wpdb->insert(
 							$wpdb->prefix.'user_activity_log',
 							array(
 								'user_id'  => $user_id,
 								'action'   => 'honors',
 								'datetime' => time(),
-								'meta' 	   => 'Navigation > Upload a honors and awards document ( '.$basename.' )'
+								'meta'     => 'Navigation > Upload a honors and awards document ( '.$basename.' )'
 							),
 							array( '%d', '%s', '%s', '%s' )
 						);
-			        	
-			        	$upload_message[] = '<p class="success">Successfully added.</p>';
-			        }
+								
+								$upload_message[] = '<p class="success">Successfully added.</p>';
+							}
 				}
 			}
 		}
 	}
 
 	if ( isset( $upload_message ) ) :
-        foreach ( $upload_message as $msg ){       
-            printf( __('%s'), $msg );
-        }
-    endif;
-    die();
+				foreach ( $upload_message as $msg ){       
+						printf( __('%s'), $msg );
+				}
+		endif;
+		die();
 }
 
 
@@ -1031,78 +1031,78 @@ function cvf_upload_coverlettersfiles(){
 	}
 	$user_id = get_current_user_id();
 	global $wpdb;
-    $valid_formats = array("pdf", "jpg", "jpeg", "png");
-    $max_file_size = 3000000;
-    $wp_upload_dir = wp_upload_dir();
-    $path = $wp_upload_dir['basedir'].'/resume/';
-    if (!file_exists( $path.date('Y/m/d') ) ) {
-	    mkdir($path.date('Y/m/d'), 0777, true);
+		$valid_formats = array("pdf", "jpg", "jpeg", "png");
+		$max_file_size = 3000000;
+		$wp_upload_dir = wp_upload_dir();
+		$path = $wp_upload_dir['basedir'].'/resume/';
+		if (!file_exists( $path.date('Y/m/d') ) ) {
+			mkdir($path.date('Y/m/d'), 0777, true);
 	}
 	$path = $path.date('Y/m/d').'/';
 
-    if( $_SERVER['REQUEST_METHOD'] == "POST" ){
-    	foreach ( $_FILES['files']['name'] as $f => $name ) {
-    		$actual_name = pathinfo($name, PATHINFO_FILENAME);
+		if( $_SERVER['REQUEST_METHOD'] == "POST" ){
+			foreach ( $_FILES['files']['name'] as $f => $name ) {
+				$actual_name = pathinfo($name, PATHINFO_FILENAME);
 			$original_name = $actual_name;
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
-		    if ( $_FILES['files']['error'][$f] == 0 ) {
-		        if ( $_FILES['files']['size'][$f] > $max_file_size ) {
-		            $upload_message[] = '<label class="error">File is too large!.</label>';
-		            continue;
-		        } elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
-		            $upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
-		            continue;
-		        } 
-		        else{
+				if ( $_FILES['files']['error'][$f] == 0 ) {
+						if ( $_FILES['files']['size'][$f] > $max_file_size ) {
+								$upload_message[] = '<label class="error">File is too large!.</label>';
+								continue;
+						} elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
+								$upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg and png format.</label>';
+								continue;
+						} 
+						else{
 					$i = 1;
 					while( file_exists($path.$actual_name.".".$extension) )
 					{           
-					    $actual_name = $original_name.$i;
-				    	$name = $actual_name.".".$extension;
-					    $i++;
+							$actual_name = $original_name.$i;
+							$name = $actual_name.".".$extension;
+							$i++;
 					}
-    				$basename = basename($name);
-			        if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
-			            $filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
-			            $file = '/resume/'.date('Y/m/d').'/'.$basename;
-			        	$wpdb->insert(
-			        		$wpdb->prefix.'jobseeker_resume',
-			        		array(
-			        			'user_id' => $user_id,
+						$basename = basename($name);
+							if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
+									$filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
+									$file = '/resume/'.date('Y/m/d').'/'.$basename;
+								$wpdb->insert(
+									$wpdb->prefix.'jobseeker_resume',
+									array(
+										'user_id' => $user_id,
 								'datetime' => time(),
 								'filefullpath' => $filefullpath,
 								'file' => $file,
 								'access' => 'Restrict Access',
 								'other' => $actual_name,
 								'docType' => 'cover_letters'
-			        		),
-			        		array('%d','%s','%s','%s','%s', '%s', '%s')
-			        	);
+									),
+									array('%d','%s','%s','%s','%s', '%s', '%s')
+								);
 
-			        	$wpdb->insert(
+								$wpdb->insert(
 							$wpdb->prefix.'user_activity_log',
 							array(
 								'user_id'  => $user_id,
 								'action'   => 'cover_letters',
 								'datetime' => time(),
-								'meta' 	   => 'Navigation > Upload a cover letter ( '.$basename.' )'
+								'meta'     => 'Navigation > Upload a cover letter ( '.$basename.' )'
 							),
 							array( '%d', '%s', '%s', '%s' )
 						);
-			        	
-			        	$upload_message[] = '<p class="success">Successfully added.</p>';
-			        }
+								
+								$upload_message[] = '<p class="success">Successfully added.</p>';
+							}
 				}
 			}
 		}
 	}
 
 	if ( isset( $upload_message ) ) :
-        foreach ( $upload_message as $msg ){       
-            printf( __('%s'), $msg );
-        }
-    endif;
-    die();
+				foreach ( $upload_message as $msg ){       
+						printf( __('%s'), $msg );
+				}
+		endif;
+		die();
 }
 
 
@@ -1117,54 +1117,54 @@ function cvf_upload_backgroundfiles(){
 	}
 	$user_id = get_current_user_id();
 	global $wpdb;
-    $valid_formats = array("pdf", "jpg", "jpeg", "png","doc","docx");
-    $max_file_size = 3000000;
-    $wp_upload_dir = wp_upload_dir();
-    $path = $wp_upload_dir['basedir'].'/resume/';
-    // $path = $wp_upload_dir['basedir'].'/docs-background/';
-    if (!file_exists( $path.date('Y/m/d') ) ) {
-	    mkdir($path.date('Y/m/d'), 0777, true);
+		$valid_formats = array("pdf", "jpg", "jpeg", "png","doc","docx");
+		$max_file_size = 3000000;
+		$wp_upload_dir = wp_upload_dir();
+		$path = $wp_upload_dir['basedir'].'/resume/';
+		// $path = $wp_upload_dir['basedir'].'/docs-background/';
+		if (!file_exists( $path.date('Y/m/d') ) ) {
+			mkdir($path.date('Y/m/d'), 0777, true);
 	}
 	$path = $path.date('Y/m/d').'/';
 
-    if( $_SERVER['REQUEST_METHOD'] == "POST" ){
-    	foreach ( $_FILES['files']['name'] as $f => $name ) {
-    		$actual_name = pathinfo($name, PATHINFO_FILENAME);
+		if( $_SERVER['REQUEST_METHOD'] == "POST" ){
+			foreach ( $_FILES['files']['name'] as $f => $name ) {
+				$actual_name = pathinfo($name, PATHINFO_FILENAME);
 			$original_name = $actual_name;
 			$extension = pathinfo($name, PATHINFO_EXTENSION);
-		    if ( $_FILES['files']['error'][$f] == 0 ) {
-		        if ( $_FILES['files']['size'][$f] > $max_file_size ) {
-		            $upload_message[] = '<label class="error">File is too large!.</label>';
-		            continue;
-		        } elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
-		            $upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg, png, doc, and docx format.</label>';
-		            continue;
-		        } 
-		        else{
+				if ( $_FILES['files']['error'][$f] == 0 ) {
+						if ( $_FILES['files']['size'][$f] > $max_file_size ) {
+								$upload_message[] = '<label class="error">File is too large!.</label>';
+								continue;
+						} elseif( ! in_array( strtolower( $extension ), $valid_formats ) ){
+								$upload_message[] = '<label class="error">File is not a valid format. Allow only pdf, jpg, jpeg, png, doc, and docx format.</label>';
+								continue;
+						} 
+						else{
 					$i = 1;
 					while( file_exists($path.$actual_name.".".$extension) )
 					{           
-					    $actual_name = $original_name.$i;
-				    	$name = $actual_name.".".$extension;
-					    $i++;
+							$actual_name = $original_name.$i;
+							$name = $actual_name.".".$extension;
+							$i++;
 					}
-    				$basename = basename($name);
-			        if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
-			            $filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
-			            $file = '/resume/'.date('Y/m/d').'/'.$basename;
-			        	$wpdb->insert(
-			        		$wpdb->prefix.'jobseeker_resume',
-			        		array(
-			        			'user_id' => $user_id,
+						$basename = basename($name);
+							if( move_uploaded_file( $_FILES["files"]["tmp_name"][$f], $path.$basename ) ) {
+									$filefullpath = $wp_upload_dir['baseurl'].'/resume/'.date('Y/m/d').'/'.$basename;
+									$file = '/resume/'.date('Y/m/d').'/'.$basename;
+								$wpdb->insert(
+									$wpdb->prefix.'jobseeker_resume',
+									array(
+										'user_id' => $user_id,
 								'datetime' => time(),
 								'filefullpath' => $filefullpath,
 								'file' => $file,
 								'access' => 'Restrict Access',
 								'other' => $actual_name,
 								'docType' => 'background_doc'
-			        		),
-			        		array('%d','%s','%s','%s','%s', '%s', '%s')
-			        	);
+									),
+									array('%d','%s','%s','%s','%s', '%s', '%s')
+								);
 
 						$wpdb->insert(
 							$wpdb->prefix.'user_activity_log',
@@ -1172,24 +1172,24 @@ function cvf_upload_backgroundfiles(){
 								'user_id'  => $user_id,
 								'action'   => 'background_doc',
 								'datetime' => time(),
-								'meta' 	   => 'Navigation > Upload a background document ( '.$basename.' )'
+								'meta'     => 'Navigation > Upload a background document ( '.$basename.' )'
 							),
 							array( '%d', '%s', '%s', '%s' )
 						);
-			        	
-			        	$upload_message[] = '<p class="success">Successfully added.</p>';
-			        }
+								
+								$upload_message[] = '<p class="success">Successfully added.</p>';
+							}
 				}
 			}
 		}
 	}
 
 	if ( isset( $upload_message ) ) :
-        foreach ( $upload_message as $msg ){       
-            printf( __('%s'), $msg );
-        }
-    endif;
-    die();
+				foreach ( $upload_message as $msg ){       
+						printf( __('%s'), $msg );
+				}
+		endif;
+		die();
 }
 
 
@@ -1221,7 +1221,7 @@ function removeSavedJob() {
 						'meta'     => 'Remove applied job <a href="'.$posturl.'" target="_blank" >'.$postTitle.'</a>'
 					),
 					array( '%d', '%s', '%s', '%s' )
-		        );
+						);
 
 				$return['status'] = 'success';
 				die(json_encode($return));
@@ -1275,9 +1275,9 @@ function removeMyBookmrks() {
 						'meta'     => 'Remove saved job <a href="'.$posturl.'" target="_blank" >'.$postTitle.'</a>'
 					),
 					array( '%d', '%s', '%s', '%s' )
-		        );	
+						);  
 
-		        $return['status'] = 'success';
+						$return['status'] = 'success';
 				die(json_encode($return));
 			}
 			else{
@@ -1403,7 +1403,7 @@ function saveCustomBookmarks() {
 					'meta'     => 'Save a job <a href="'.$posturl.'" target="_blank" >'.$postTitle.'</a>'
 				),
 				array( '%d', '%s', '%s', '%s' )
-	        );	
+					);  
 
 			$return['msg'] = 'success';
 			die( json_encode($return) );
@@ -1428,24 +1428,24 @@ add_action( 'wp_ajax_nopriv_forwardThisJob', 'forwardThisJob' );
 function forwardThisJob(){
 	$return = array();
 	if ( isset($_POST) ) {
-		$to_fname	 	= $_POST['to_first_name'];
-		$to_lname 	= $_POST['to_last_name'];
-		$to_email 	= $_POST['to_email'];
-		$form_fname 	= $_POST['from_firstname'];
-		$form_lname	= $_POST['from_lastname'];
-		$from_email	= $_POST['from_email'];
-		$sharemessae	= $_POST['share_message'];
-		$jobid		= $_POST['jobid'];
+		$to_fname   = $_POST['to_first_name'];
+		$to_lname   = $_POST['to_last_name'];
+		$to_email   = $_POST['to_email'];
+		$form_fname   = $_POST['from_firstname'];
+		$form_lname = $_POST['from_lastname'];
+		$from_email = $_POST['from_email'];
+		$sharemessae  = $_POST['share_message'];
+		$jobid    = $_POST['jobid'];
 		$post_title = str_replace('Applied', '', get_the_title($jobid) );
 		$post_url = get_the_permalink($jobid);
 
-	 	$get_option_arr 			= get_option('forward_job');
-		$subject 					= str_replace('[from_name]', $form_fname.' '.$form_lname, $get_option_arr['forward_job_subject']);
-		$msg 					    = $get_option_arr['forward_job_template'];
+		$get_option_arr       = get_option('forward_job');
+		$subject          = str_replace('[from_name]', $form_fname.' '.$form_lname, $get_option_arr['forward_job_subject']);
+		$msg              = $get_option_arr['forward_job_template'];
 
-		$shordcode_to_rep 	= array('[to_name]', '[post_title]', '[post_url]', '[shareMsg]', '[from_name]');
-		$replace_with 		= array($to_fname.' '.$to_lname, $post_title, $post_url, $sharemessae, $form_fname.' '.$form_lname );
-		$message 			= str_replace($shordcode_to_rep, $replace_with, $msg);
+		$shordcode_to_rep   = array('[to_name]', '[post_title]', '[post_url]', '[shareMsg]', '[from_name]');
+		$replace_with     = array($to_fname.' '.$to_lname, $post_title, $post_url, $sharemessae, $form_fname.' '.$form_lname );
+		$message      = str_replace($shordcode_to_rep, $replace_with, $msg);
 				
 		$headers = "MIME-Version: 1.0" . "\r\n";
 		$headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
@@ -1467,7 +1467,7 @@ function forwardThisJob(){
 					'meta'     => 'Share a job <a href="'.$posturl.'" target="_blank" >'.$postTitle.'</a> With '.$to_fname.' '.$to_lname.'( '.$to_email.' )'
 				),
 				array( '%d', '%s', '%s', '%s' )
-	        );
+					);
 
 			$return['msg'] = 'success';
 			die( json_encode($return) );
@@ -1476,7 +1476,7 @@ function forwardThisJob(){
 			$return['msg'] = 'fail';
 			die( json_encode($return) );
 		}
-    	
+			
 	}
 	$return['msg'] = 'fail';
 	die( json_encode($return) );
@@ -1490,7 +1490,7 @@ add_action( 'wp_ajax_nopriv_saveactivityaftersendreport', 'saveactivityaftersend
 function saveactivityaftersendreport(){
 	if ( isset($_POST) ) {
 		global $wpdb;
-		$jobid		= $_POST['postid'];
+		$jobid    = $_POST['postid'];
 		$getpost = get_post($jobid);
 		$postTitle = $getpost->post_title;
 		$posturl = get_the_permalink($jobid);
@@ -1505,7 +1505,7 @@ function saveactivityaftersendreport(){
 				'meta'     => 'Report for job <a href="'.$posturl.'" target="_blank" >'.$postTitle.'</a>'
 			),
 			array( '%d', '%s', '%s', '%s' )
-        );
+				);
 		die();
 	}
 	else{
@@ -1569,7 +1569,7 @@ function setjobapplyresumeAction(){
 					'user_id'  => $user_id,
 					'action'   => 'updateResume',
 					'datetime' => time(),
-					'meta' 	   => 'Navigation > Update reume for job apply ( '.$basename.' )'
+					'meta'     => 'Navigation > Update reume for job apply ( '.$basename.' )'
 				),
 				array( '%d', '%s', '%s', '%s' )
 			);
@@ -1613,7 +1613,7 @@ function editCustomCurrency(){
 				'user_id'  => $user_id,
 				'action'   => 'changeCurrency',
 				'datetime' => time(),
-				'meta' 	   => 'Changed Currency '.$currmsg,
+				'meta'     => 'Changed Currency '.$currmsg,
 			),
 			array( '%d', '%s', '%s', '%s' )
 		);
@@ -1635,11 +1635,11 @@ add_action('wp_ajax_nopriv_saveCreditAndBillingInfo','saveCreditAndBillingInfo')
 
 function saveCreditAndBillingInfo(){
 	$return = array();
- 	if ( isset($_POST) ) {
-	 	$user_id = get_current_user_id();
-	 	$name_on_card = $_POST['name_on_card'];
-	 	$card_number  =	$_POST['card_number'];
-	 	$verifi_code  = $_POST['verifi_code']; 
+	if ( isset($_POST) ) {
+		$user_id = get_current_user_id();
+		$name_on_card = $_POST['name_on_card'];
+		$card_number  = $_POST['card_number'];
+		$verifi_code  = $_POST['verifi_code']; 
 		$billing_address  = $_POST['billing_address'];
 		$billing_city  = $_POST['billing_city'];
 		$billing_zip  = $_POST['billing_zip'];
@@ -1650,35 +1650,35 @@ function saveCreditAndBillingInfo(){
 			'ccbi_cardname' => $name_on_card,
 			'ccbi_cardnumber' => $card_number,
 			'ccbi_verifycode' => $verifi_code,
-			'ccbi_address'	=>	$billing_address,
-			'ccbi_city'	=> $billing_city,
-			'ccbi_zip'	=>	$billing_zip,
+			'ccbi_address'  =>  $billing_address,
+			'ccbi_city' => $billing_city,
+			'ccbi_zip'  =>  $billing_zip,
 			'ccbi_state' => $billing_state,
-			'ccbi_country' => $billing_country		
+			'ccbi_country' => $billing_country    
 		);
 		foreach($meta as $key => $value) {
-	    	update_user_meta( $user_id, $key, $value );
+				update_user_meta( $user_id, $key, $value );
 		}
 
 		global $wpdb;
-        $wpdb->insert(
-          $wpdb->prefix.'user_activity_log',
-          array(
-            'user_id'  => $user_id,
-            'action'   => 'updateCraditcardinfo',
-            'datetime' => time(),
-            'meta'     => 'Renewals & Billing  > update credit card & billing information'
-          ),
-          array( '%d', '%s', '%s', '%s' )
-        );
+				$wpdb->insert(
+					$wpdb->prefix.'user_activity_log',
+					array(
+						'user_id'  => $user_id,
+						'action'   => 'updateCraditcardinfo',
+						'datetime' => time(),
+						'meta'     => 'Renewals & Billing  > update credit card & billing information'
+					),
+					array( '%d', '%s', '%s', '%s' )
+				);
 
 		$return['msg'] = 'success';
- 		die( json_encode($return) );
+		die( json_encode($return) );
 	}
 	else{
 		$return['msg'] = 'error';
- 		die( json_encode($return) );
-	}	
+		die( json_encode($return) );
+	} 
 }
 
 
@@ -1689,13 +1689,13 @@ add_action('wp_ajax_nopriv_cancelMembershipAjaxAction','cancelMembershipAjaxActi
 
 function cancelMembershipAjaxAction(){
 	$return = array();
- 	if ( isset($_POST['pass']) && is_user_logged_in() ) {
-	 	global $wpdb, $current_user;
-	 	$user_id = get_current_user_id();
-	 	$pass = $_POST['pass'];
-	 	$userpass = $current_user->user_pass;
+	if ( isset($_POST['pass']) && is_user_logged_in() ) {
+		global $wpdb, $current_user;
+		$user_id = get_current_user_id();
+		$pass = $_POST['pass'];
+		$userpass = $current_user->user_pass;
 
-	 	if( wp_check_password( $pass, $userpass, $user_id ) ){
+		if( wp_check_password( $pass, $userpass, $user_id ) ){
 
 			$current_user->membership_level = pmpro_getMembershipLevelForUser($current_user->ID);
 			$memID = $current_user->membership_level->ID;
@@ -1712,10 +1712,10 @@ function cancelMembershipAjaxAction(){
 			$wpdb->insert(
 							$tablename,
 				array(
-					'user_id'   		=> $user_id,
+					'user_id'       => $user_id,
 					'membership_id'     => '1',
 					'initial_payment'   => '0.00',
-					'status'  			=> 'active',
+					'status'        => 'active',
 					'cycle_number'      => '',
 					'startdate'         => $startdate
 				),
@@ -1732,18 +1732,18 @@ function cancelMembershipAjaxAction(){
 			$myemail->sendCancelAdminEmail($current_user, $memID);
 
 			$return['msg'] = 'success';
-	 		die( json_encode($return) );
-	 	}
-	 	else{
-	 		$return['msg'] = "<label class='error'>Password doesn't match</label>";
-	 		die( json_encode($return) );
-	 	}
-	 	
+			die( json_encode($return) );
+		}
+		else{
+			$return['msg'] = "<label class='error'>Password doesn't match</label>";
+			die( json_encode($return) );
+		}
+		
 	}
 	else{
 		$return['msg'] = '<label class="error">Something wrong please try again.</label>';
- 		die( json_encode($return) );
-	}	
+		die( json_encode($return) );
+	} 
 }
 
 
@@ -1754,11 +1754,11 @@ add_action('wp_ajax_nopriv_delete_reach_referral','delete_reach_referral');
 
 function delete_reach_referral(){
 	$return = array();
- 	if ( isset($_POST['reflid']) && is_user_logged_in() ) {
-	 	global $wpdb, $current_user;
-	 	$user_id = get_current_user_id();
-	 	$reflid = $_POST['reflid'];
-	 	$tablename = $wpdb->prefix.'reach_out_and_ask_for_referral';
+	if ( isset($_POST['reflid']) && is_user_logged_in() ) {
+		global $wpdb, $current_user;
+		$user_id = get_current_user_id();
+		$reflid = $_POST['reflid'];
+		$tablename = $wpdb->prefix.'reach_out_and_ask_for_referral';
 		
 		$select = $wpdb->get_row("SELECT * FROM $tablename WHERE id = '".$reflid."' AND user_id = '".$user_id."' ");
 		if ( !empty($select->id) ) {
@@ -1772,27 +1772,27 @@ function delete_reach_referral(){
 			global $wpdb;
 			$name = $select->first_name.' '.$select->last_name;
 			$remail = (($select->user_email)) ? '( '.$select->user_email.' )' : '';
-	        $wpdb->insert(
-	          $wpdb->prefix.'user_activity_log',
-	          array(
-	            'user_id'  => $user_id,
-	            'action'   => 'deleteReachReferral',
-	            'datetime' => time(),
-	            'meta'     => 'Remove referral '.$name.$remail
-	          ),
-	          array( '%d', '%s', '%s', '%s' )
-	        );
+					$wpdb->insert(
+						$wpdb->prefix.'user_activity_log',
+						array(
+							'user_id'  => $user_id,
+							'action'   => 'deleteReachReferral',
+							'datetime' => time(),
+							'meta'     => 'Remove referral '.$name.$remail
+						),
+						array( '%d', '%s', '%s', '%s' )
+					);
 
 			$return['msg'] = 'success';
-			die(json_encode($return));		
+			die(json_encode($return));    
 		}else{
 			$return['msg'] = 'error';
-			die(json_encode($return));		
+			die(json_encode($return));    
 		}
 	}
 	else{
 		$return['msg'] = 'error';
-		die(json_encode($return));	
+		die(json_encode($return));  
 	}
 }
 
@@ -1810,18 +1810,18 @@ function seekerPricingPlanType(){
 		foreach ($getPmproLevels as $level) {
 			
 			$payment_level =  $level->initial_payment;
-		  $current_plan_payment =   $current_user->membership_level->initial_payment;
-		  
-		  /*
-		  	Monthly pricing: Note: this is done to display yearly as a monthly payment which makes numbers look lower
-		  */
-		  if($level->cycle_period=='Year'){
-		  	$displayMonthlyPricing = $level->initial_payment/12;
+			$current_plan_payment =   $current_user->membership_level->initial_payment;
+			
+			/*
+				Monthly pricing: Note: this is done to display yearly as a monthly payment which makes numbers look lower
+			*/
+			if($level->cycle_period=='Year'){
+				$displayMonthlyPricing = $level->initial_payment/12;
 
-		  }else{
-		  	$displayMonthlyPricing = $level->initial_payment;
-		  }
-		  $displayMonthlyPricing = number_format((float)$displayMonthlyPricing, 2, '.', '');
+			}else{
+				$displayMonthlyPricing = $level->initial_payment;
+			}
+			$displayMonthlyPricing = number_format((float)$displayMonthlyPricing, 2, '.', '');
 
 			$levelmeta = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'selectusertype' AND meta_value = 'candidate' " );
 			$levelOtherDesc = $wpdb->get_row( "SELECT * FROM $levelmeta_prefix WHERE pmpro_membership_level_id = '".$level->id."' AND meta_key = 'other_desc'" );
@@ -1848,7 +1848,7 @@ function seekerPricingPlanType(){
 							<?php echo $other_text_after_price->meta_value;  ?>
 						</div>
 						<?php echo $levelOtherDesc->meta_value; ?>
-						<?php if ( (is_user_logged_in()) && ( $current_user->membership_level->ID == $level->id ) ) { ?>									 	
+						<?php if ( (is_user_logged_in()) && ( $current_user->membership_level->ID == $level->id ) ) { ?>                    
 							<a href="javascript:void(0);" class="btn btn-success current-plan">Current Plan</a>
 						<?php } else{ 
 							$user_id = get_current_user_id();
