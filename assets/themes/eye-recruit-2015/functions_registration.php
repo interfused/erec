@@ -105,8 +105,8 @@ function ey_employers_user(){
 		    	wp_set_password( $user_password, $user_id);
 				$subject 			= get_option('founder_options_employer')['employer_subject'];
 				$setting_options 	= get_option('xtreem_options_smtp');
-				//$to  				= $setting_options['tomail'];
-				$to='jeremy@interfused-inc.com';
+				$to  				= $setting_options['tomail'];
+				//$to='jeremy@interfused-inc.com';
 				$enco_id = multi_base64_encode($user_id);
 				$get_started = site_url('/employer-profile-bulider/?rec='.$enco_id) ;
 
@@ -116,13 +116,16 @@ function ey_employers_user(){
 				$replace_with_employer 		=	array(site_url(),ucfirst($_POST['fname']),ucfirst($_POST['lname']),$get_started,$user_password,$_POST['email']);
 				$thanks_employer_message	= 	str_replace($shordcode_to_rep_employer,$replace_with_employer,do_shortcode(get_option('eyerecruit_thanks_employes__options')['eyerecruit_thanks_message']));
 				
-				// Shortcode replace for emplyer mail template
+				// Shortcode replace for employer mail template
 				
 				$shordcode_to_rep 	=	array('[site-url]','[employer_first_name]','[employer_last_name]','[employer_email_shortcode]','[employer_company_shortcode]','[employer_office_phone_shortcode]','[employer_ext_shortcode]','[employer_phone]');
 				$replace_with 		= 	array(site_url(),ucfirst($_POST['fname']),ucfirst($_POST['lname']),$_POST['email'],$_POST['company'],$_POST['office_phone'],$_POST['ext'],$_POST['cell_phone']);
 				$message 			= 	str_replace($shordcode_to_rep, $replace_with, do_shortcode(get_option('founder_options_employer')['employer_mail_template']));
+				
 				$headers = "MIME-Version: 1.0" . "\r\n";
-                $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= "From: noreply@eyerecruit.com". "\r\n"; 
+
 				if(mail($to,$subject,$message,$headers)){
 					mail($_POST['email'],$thanks_employer_subject,$thanks_employer_message,$headers);
 				}

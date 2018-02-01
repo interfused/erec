@@ -29,8 +29,7 @@ get_header(); ?>
 						Please fill out the following basic questions to get started.
 
 						<section class="opform_wrapper"><!-- START FORM -->
-						<div class="moonray-form-p2c21625f48 ussr">
-							<form name="registerform" class="form" id="employersform" action="" method="post">
+						<form name="registerform" class="form" id="employersform" action="" method="post">
 								<div class="form-group">
 									<label  for="firstname">First Name</label>
 									<input id="firstname" class="input form-control" name="firstname" type="text" value="" placeholder="" />
@@ -74,10 +73,10 @@ get_header(); ?>
 									<input type="hidden" name="role" value="employer" />
 								</p>
 							</form>
-						</div>
 						<!-- END FORM -->
+						<div class="login_cta">
 						already have an acccount? <a style="text-decoration: underline;" href="<?php echo site_url(); ?>/login/">Login Here</a>
-
+					</div>
 						</section>
 					</div>
 				</div>
