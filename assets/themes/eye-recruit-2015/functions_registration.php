@@ -128,6 +128,17 @@ function ey_employers_user(){
 
 				if(mail($to,$subject,$message,$headers)){
 					mail($_POST['email'],$thanks_employer_subject,$thanks_employer_message,$headers);
+					
+					//mail secondary temporary letter
+					$fromEmail2 = 'chris.bauer@eyerecruit.com';
+					$headers2 = "From: " . $fromEmail2 . "\r\n";
+					$headers2 .= "Reply-To: ". $fromEmail2 . "\r\n";
+					//$headers .= "CC: susan@example.com\r\n";
+					$headers2 .= "MIME-Version: 1.0\r\n";
+					$headers2 .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+					include( $_SERVER['DOCUMENT_ROOT']. '/__lists/emails/employer-free-pricing-temporary.php');
+					mail($_POST['email'], 'A bit more about EyeRecruit', $message2, $headers2);
+					//
 				}
 		       $data =  json_encode(array('createuser'=>true, 'message'=>__('Thank you for connecting us we will contact to you soon')));
 		   	}
@@ -241,8 +252,8 @@ function ey_seeker_user(){
 				$replace_with_jobseeker 	=	array(site_url(),ucfirst($_POST['fname']),ucfirst($_POST['lname']),$get_started,$user_password,$_POST['email']);
 				$thanks_jobseeker_message	= 	str_replace($shordcode_to_rep_jobseeker,$replace_with_jobseeker,do_shortcode(get_option('founder_options')['thanks_jobseeker_mail_template']));
 				
-				//$to 				= $setting_options['tomail'];
-				$to = 'jeremy@interfused-inc.com';
+				$to 				= $setting_options['tomail'];
+				//$to = 'jeremy@interfused-inc.com';
 				// Replace shortcode for jobseeker admin mail template
 				$shordcode_to_rep 	= array('[site-url]','[jobseeker_first_name]','[jobseeker_last_name]','[jobseeker_email_shortcode]','[jobseeker_phone]');
 				$replace_with 		= array(site_url(),ucfirst($_POST['fname']),ucfirst($_POST['lname']),$_POST['email'],$_POST['cell_phone'] );
@@ -253,6 +264,16 @@ function ey_seeker_user(){
 				//$is_request = false;
 				if(wp_mail($to,$subject,$message,$headers)){
 					wp_mail($_POST['email'],$thanks_jobseeker_subject,$thanks_jobseeker_message,$headers);
+					//mail secondary temporary letter
+					$fromEmail2 = 'chris.bauer@eyerecruit.com';
+					$headers2 = "From: " . $fromEmail2 . "\r\n";
+					$headers2 .= "Reply-To: ". $fromEmail2 . "\r\n";
+					//$headers .= "CC: susan@example.com\r\n";
+					$headers2 .= "MIME-Version: 1.0\r\n";
+					$headers2 .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+					include( $_SERVER['DOCUMENT_ROOT']. '/__lists/emails/seeker-free-pricing-temporary.php');
+					mail($_POST['email'], 'A bit more about EyeRecruit', $message2, $headers2);
+					//
 				}
 		       $data = json_encode(array('createuser'=>true, 'message'=>__('Thank you for connecting us we will contact to you soon')));
 		    }

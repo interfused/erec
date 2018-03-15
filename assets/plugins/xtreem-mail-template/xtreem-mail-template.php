@@ -9,8 +9,13 @@ Description: This plugin is customized to create mail templates for eyerecruit.
 function cusotme_menu_pages() {
 
     add_menu_page('Mail Templates','Email Templates','manage_options','eyerecruit-mail-templates','xtreem_mail_setting_callback');
+	
 	add_submenu_page('eyerecruit-mail-templates','jobseeker','Jobseeker template','manage_options','eyerecruit-jobseeker-mail','eyerecruit_thank_mail_templates_callback');
+	add_submenu_page('eyerecruit-mail-templates','jobseeker','Jobseeker template BACKUP','manage_options','eyerecruit-jobseeker-mail-backup','eyerecruit_thank_mail_templates_callback_backup');
+	
 	add_submenu_page('eyerecruit-mail-templates','Employers','Employers template','manage_options','eyerecruit-employer-mail','eyerecruit_employer_mail');
+	add_submenu_page('eyerecruit-mail-templates','Employers','Employers template BACKUP','manage_options','eyerecruit-employer-mail-backup','eyerecruit_employer_mail_backup');
+  
    	add_submenu_page('eyerecruit-mail-templates','Employer Admin','Employer Admin template','manage_options','employer-admin-mail','eyerecruit_mail_templates_callback');
    	add_submenu_page('eyerecruit-mail-templates','Jobseeker Admin','Jobseeker Admin template','manage_options','jobseeker-admin-mail','eyerecruit_jobseeker_mail_templates_callback');
    	
@@ -41,10 +46,12 @@ function cusotme_menu_pages() {
 add_action( 'admin_init', 'register_founder_options' );
 function register_founder_options() {
 	register_setting( 'founder_options', 'founder_options', 'founder_options_callback' ); 
-	register_setting( 'eyerecruit_thanks_employes__options', 'eyerecruit_thanks_employes__options', 'founder_options_callback' ); 
+	register_setting( 'eyerecruit_thanks_employes__options', 'eyerecruit_thanks_employes__options', 'founder_options_callback' );
+	register_setting( 'eyerecruit_thanks_employes_backup__options', 'eyerecruit_thanks_employes_backup__options', 'founder_options_callback' ); 
 	register_setting( 'xtreem_options_smtp', 'xtreem_options_smtp', 'setting_options_callback' ); 
 	register_setting( 'founder_options_employer','founder_options_employer','founder_options_employer_callback');
 	register_setting( 'founder_options_jobseeker','founder_options_jobseeker','founder_options_jobseeker_callback');
+	register_setting( 'founder_options_jobseeker_backup','founder_options_jobseeker_backup','founder_options_jobseeker_callback');
 	
 	register_setting( 'cpr_password_reset','cpr_password_reset','cpr_password_reset_callback');
 	register_setting( 'cpr_after_password_reset','cpr_after_password_reset','cpr_after_password_reset_callback');
@@ -72,6 +79,8 @@ function register_founder_options() {
 function founder_options_callback($array){
 	return $array;
 }
+
+//backups to be removed later post launch
 function eyerecruit_thank_mail_templates_callback() {
 	?>
 		<div class="wrap">
@@ -113,6 +122,108 @@ function eyerecruit_thank_mail_templates_callback() {
 						<tr>
 							<th><label>Activation mail Editor</label></th>
 							<td><?php wp_editor( $contents, 'thanks_jobseeker_mail_template', $argss); ?></td>
+						</tr>
+					</table><?php 
+					submit_button();
+				?>
+			</form>
+		</div>
+
+	<?php 
+}
+
+function eyerecruit_thank_mail_templates_callback_backup() {
+  ?>
+    <div class="wrap">
+    
+      <p><h3>Thank you email template for jobseeker</h3></p> 
+      
+      <?php 
+        if(isset($_GET['settings-updated'])){
+          ?>
+            <div class="updated settings-error notice is-dismissible" id="setting-error-settings_updated"> 
+              <p>
+                <strong>Settings saved.</strong>
+              </p>
+              <button class="notice-dismiss" type="button">
+                <span class="screen-reader-text">Dismiss this notice.</span>
+              </button>
+            </div>
+          <?php 
+        }
+      ?>
+
+      <form method="post" action="options.php">
+
+        <?php 
+          settings_fields('founder_options_jobseeker_backup');
+          $founder_options_jobseeker_backup = get_option('founder_options_jobseeker_backup');
+
+          $argss = array(
+              'textarea_name' => 'founder_options_jobseeker_backup[thanks_jobseeker_mail_template_backup]',
+            );
+          $contents = isset($founder_options_jobseeker_backup['thanks_jobseeker_mail_template_backup']) ? $founder_options_jobseeker_backup['thanks_jobseeker_mail_template_backup'] : '';
+          
+          ?>
+          <table class="form-table">
+            <tr>
+              <th><label for="subject">Subject</label></th>
+              <td><textarea style="width:100%" name="founder_options_jobseeker_backup[subject]" id="subject"><?php echo $founder_options_jobseeker_backup['subject']; ?></textarea></td>
+            </tr>
+            <tr>
+              <th><label>Activation mail Editor</label></th>
+              <td><?php wp_editor( $contents, 'thanks_jobseeker_mail_template_backup', $argss); ?></td>
+            </tr>
+          </table><?php 
+          submit_button();
+        ?>
+      </form>
+    </div>
+
+  <?php 
+}
+
+function eyerecruit_employer_mail_backup() {
+	?>
+		<p><h3>Thank you email template for employers</h3></p> 
+		<div class="wrap">
+			<?php 
+				if(isset($_GET['settings-updated'])){
+					?>
+						<div class="updated settings-error notice is-dismissible" id="setting-error-settings_updated"> 
+							<p>
+								<strong>Settings saved.</strong>
+							</p>
+							<button class="notice-dismiss" type="button">
+								<span class="screen-reader-text">Dismiss this notice.</span>
+							</button>
+						</div>
+					<?php 
+				}
+			?>
+
+			<form method="post" action="options.php">
+
+				<?php 
+					settings_fields('eyerecruit_thanks_employes_backup__options');
+					$apply_job__options = get_option('eyerecruit_thanks_employes_backup__options');
+
+					$argss = array(
+							'textarea_name' => 'eyerecruit_thanks_employes_backup__options[eyerecruit_thanks_message_backup]',
+						);
+					$contents = isset($apply_job__options['eyerecruit_thanks_message_backup']) ? $apply_job__options['eyerecruit_thanks_message_backup'] : '';
+					
+					?>
+					<table class="form-table">
+							
+							
+						<tr>
+							<th><label for="subject">Subject</label></th>
+							<td><textarea style="width:100%" name="eyerecruit_thanks_employes_backup__options[subject]" id="apply_job_subject"><?php echo $apply_job__options['subject']; ?></textarea></td>
+						</tr>
+						<tr>
+							<th><label>Job apply mail Editor</label></th>
+							<td><?php wp_editor( $contents, 'eyerecruit_thanks_message_backup', $argss); ?></td>
 						</tr>
 					</table><?php 
 					submit_button();

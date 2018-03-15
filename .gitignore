@@ -1,6 +1,7 @@
 ftp-config.json
 .DS_Store
-.log
+*.log
 dwsync.xml
+wp-config.php
 
 sftp-config.json
