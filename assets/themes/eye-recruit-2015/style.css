@@ -537,12 +537,7 @@ a:focus {outline: none;}
 	background-color: #fefefe;
 	padding-bottom:1em;
 }
-.woocommerce ul.products li.product h3 {
-	padding: .5em;
-	margin: 0;
-	font-size: 2em;
-	text-align: center;
-}
+
 .woocommerce ul.products li.product, .woocommerce-page ul.products li.product {
   width: 100%;
   margin-bottom:2em;
@@ -556,19 +551,10 @@ a:focus {outline: none;}
 	font-size: 24px;
 	height: 120px;
 	border-radius: 1000px;
+  position: relative;
 }
 
-.woocommerce ul.products li.product .woocommerce-Price-amount {
-	top: 50%;
-	position: relative;
-	transform: translateY(-50%);
-	display: block;
-}
-.woocommerce ul.products li.product .timeVal {
-	margin-top: -45px;
-	color: #ccc;
-	margin-bottom: 30px;
-}
+
 
 .woocommerce ul.products li.product .shortDesc{
 	padding:1em;

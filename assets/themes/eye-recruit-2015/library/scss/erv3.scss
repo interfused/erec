@@ -302,3 +302,112 @@ input:checked + .slider:before {
 .page-id-2666 .small-block-grid-1 li#meiyo{background-image:url(../../images/icon-meiyo.png);}
 .page-id-2666 .small-block-grid-1 li#rei{background-image:url(../../images/icon-rei.png);}
 .page-id-2666 .small-block-grid-1 li#yu{background-image:url(../../images/icon-yu.png);}
+
+/* WOOCOMMERCE */
+.woocommerce {
+  
+  div.product, #container{
+    max-width: 1170px;
+    margin: 0 auto;
+    padding-top: 2em;
+  }
+  
+  div.product .woocommerce-tabs ul.tabs{
+    margin-bottom: 0;
+  }
+  
+  div.product .woocommerce-tabs .panel{
+    padding: 2em;
+    border: 1px solid #d3ced2;
+  }
+  
+  .woocommerce-message{
+    margin-top: 2em !important;
+  }
+  
+  
+  .entry-content p.woocommerce-thankyou-order-received{
+    font-family: 'Rokkitt', serif !important;
+    text-transform: uppercase;
+    color: #a12641;
+    font-size: 24px;
+  }
+  
+  ul.products li.product {
+  
+    h3 {
+      padding: .5em;
+      margin: 0;
+      font-size: 2em;
+      text-align: center;
+    }
+    
+    .price del {
+      color: inherit;
+      opacity: .5;
+      display: block;
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: .7em;
+      
+      .woocommerce-Price-amount {
+        text-decoration: line-through;
+      }
+    }
+    
+    a img {
+        width: 100%;
+        height: auto;
+        display: block;
+        margin: 0;
+        margin-bottom: 0;
+        box-shadow: none;
+    }
+    .woocommerce-Price-amount {
+      top: 50%;
+      left: 50%;
+      position: absolute;
+      transform: translate(-50%, -50%);
+      display: block;
+    }
+    .timeVal {
+      margin-top: -45px;
+      color: #ccc;
+      margin-bottom: 30px;
+      position: relative;
+    }
+  }
+
+  
+}
+
+.woocommerce .col2-set .col-1, .woocommerce-page .col2-set .col-1,
+  .woocommerce-checkout.woocommerce-page .col2-set .col-1,
+  .woocommerce .col2-set .col-2, .woocommerce-page .col2-set .col-2,
+  .woocommerce-checkout.woocommerce-page .col2-set .col-2 {
+    float: none !important;
+    width: 100% !important;
+}
+
+/* DEV TEMPORARY HIDE CREATE ACCOUNT FROM CHECKOUT */
+.woocommerce form .form-row .input-checkbox#createaccount,
+createaccount, .woocommerce label[for=createaccount]{
+  display: none !important;
+}
+
+/* WOOCOMMERCE CATEGORY PAGE */
+.tax-product_cat{
+  
+  #content .page-title{
+    display: none;
+  }
+  
+  .blog_sidebar{
+    display: none;
+  }
+  
+}
+
+
