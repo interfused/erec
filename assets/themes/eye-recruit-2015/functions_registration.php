@@ -1,4 +1,15 @@
 <?php
+function temp_er_add_leads($url, $myvars){
+	
+	$ch = curl_init( $url );
+	curl_setopt( $ch, CURLOPT_POST, 1);
+	curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
+	curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
+	curl_setopt( $ch, CURLOPT_HEADER, 0);
+	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
+
+	$response = curl_exec( $ch );
+}
 /*login user */
 function ey_login__user(){
 
@@ -102,7 +113,26 @@ function ey_employers_user(){
 				update_user_meta( $user_id, 'cell_phone', $_POST['cell_phone'] );
 				set_cimyFieldValue($user_id,'PROFILE_VISIBILITY', 'Private');
 				$user_password = random_password(6);  
-		    	wp_set_password( $user_password, $user_id);
+		    wp_set_password( $user_password, $user_id);
+				
+				//SEND IN BLUE temporary hard code v2 api key.  NEED TO REMOVE
+		    //list id 6 (EyeRecruit Employers (Initial Beta Registration))
+		    include('inc/sendinblue/Mailin.php');
+		    $mailin = new Mailin("https://api.sendinblue.com/v2.0","rpdvxIaN6UA9why4");
+		    $data = array( "email" => $_POST['email'],
+												"attributes" => array("FIRSTNAME"=>$_POST['fname'], 
+												                      "LASTNAME"=>$_POST['lname'],
+												                      "SMS"=>'+1'.$_POST['cell_phone'],
+												                    	"COMPANY"=>$_POST['company'],
+												                    	"OFFICEPHONE"=>$_POST['office_phone'],
+												                    	"EXT"=>$_POST['ext']),
+												"listid" => array(7)
+		    );
+				//ADD TO SENDINBLUE LIST
+		    $mailin->create_update_user($data);
+		    
+		    //ADMIN NOTIFICATION
+
 				$subject 			= get_option('founder_options_employer')['employer_subject'];
 				$setting_options 	= get_option('xtreem_options_smtp');
 				$to  				= $setting_options['tomail'];
@@ -111,10 +141,8 @@ function ey_employers_user(){
 				$get_started = site_url('/employer-profile-bulider/?rec='.$enco_id) ;
 
 				// Replace shortcode for jobseeker thank you template
-				$thanks_employer_subject	= 	get_option('eyerecruit_thanks_employes__options')['subject'];
 				$shordcode_to_rep_employer	= 	array('[site-url]','[employer_first_name]','[employer_last_name]','[get_start]','[tmp_pass]','[user_email]');
 				$replace_with_employer 		=	array(site_url(),ucfirst($_POST['fname']),ucfirst($_POST['lname']),$get_started,$user_password,$_POST['email']);
-				$thanks_employer_message	= 	str_replace($shordcode_to_rep_employer,$replace_with_employer,do_shortcode(get_option('eyerecruit_thanks_employes__options')['eyerecruit_thanks_message']));
 				
 				// Shortcode replace for employer mail template
 				
@@ -125,21 +153,10 @@ function ey_employers_user(){
 				$headers = "MIME-Version: 1.0" . "\r\n";
         $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
         $headers .= "From: noreply@eyerecruit.com". "\r\n"; 
-
-				if(mail($to,$subject,$message,$headers)){
-					mail($_POST['email'],$thanks_employer_subject,$thanks_employer_message,$headers);
-					
-					//mail secondary temporary letter
-					$fromEmail2 = 'chris.bauer@eyerecruit.com';
-					$headers2 = "From: " . $fromEmail2 . "\r\n";
-					$headers2 .= "Reply-To: ". $fromEmail2 . "\r\n";
-					//$headers .= "CC: susan@example.com\r\n";
-					$headers2 .= "MIME-Version: 1.0\r\n";
-					$headers2 .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-					include( $_SERVER['DOCUMENT_ROOT']. '/__lists/emails/employer-free-pricing-temporary.php');
-					mail($_POST['email'], 'A bit more about EyeRecruit', $message2, $headers2);
-					//
-				}
+        //ADMIN NOTIFICATION
+				mail($to,$subject,$message,$headers);
+				
+				
 		       $data =  json_encode(array('createuser'=>true, 'message'=>__('Thank you for connecting us we will contact to you soon')));
 		   	}
 
@@ -172,7 +189,7 @@ function ey_seeker_user(){
 	    $info['display_name']		= $_POST['fname'] .''.$_POST['lname'];
 		$info['nickname']			= $_POST['fname'];
 	    $info['role']				= 'candidate';
-
+	    
 	   if(email_exists( $_POST['email'] )){
 	    	$data = json_encode(array('createuser'=>false, 'message'=>__('It seems like your request is already in process. We are reviewing your details and will respond you shortly.')));
 
@@ -182,7 +199,7 @@ function ey_seeker_user(){
 		        $data = json_encode(array('createuser'=>false, 'message'=>'A data has ocurred'));
 		    } else {
 		    	update_user_meta( $user_id, 'first_name', $_POST['fname']);
-				update_user_meta( $user_id, 'last_name', $_POST['lname']);
+					update_user_meta( $user_id, 'last_name', $_POST['lname']);
 		    	update_user_meta( $user_id, 'cell_phone', $_POST['cell_phone'] );
 		    	$user_password = random_password(6);  
 		    	wp_set_password( $user_password, $user_id);
@@ -239,9 +256,33 @@ function ey_seeker_user(){
 				set_cimyFieldValue($user_id, 'PNAR_CELL_PHONE_NO', 'Yes');
 				set_cimyFieldValue($user_id, 'PROFILE_VISIBILITY', 'Private');
 
-		    	$subject 					= get_option('founder_options_jobseeker')['jobseeker_subject'];
+		    //SEND IN BLUE temporary hard code v2 api key.  NEED TO REMOVE
+		    //list id 6 (EyeRecruit Job Seeker (Initial Beta Registration))
+		    include('inc/sendinblue/Mailin.php');
+		    $mailin = new Mailin("https://api.sendinblue.com/v2.0","rpdvxIaN6UA9why4");
+		    $data = array( "email" => $_POST['email'],
+												"attributes" => array("FIRSTNAME"=>$_POST['fname'], 
+												                      "LASTNAME"=>$_POST['lname'],
+												                      "SMS"=>'+1'.$_POST['cell_phone']),
+												"listid" => array(6)
+		    );
+				//ADD TO SENDINBLUE LIST
+		    $mailin->create_update_user($data);
+		    
+		    //TEMPORARY ADD TO SEEKERS LEADS LIST
+		    $url = 'http://eyerecruit.com/__lists/seeker-leads/add2.php';
+				$myvars = 'first_name=' . $_POST['fname'] 
+									. '&last_name=' . $_POST['lname']
+									. '&email=' . $_POST['email']
+									. '&phone=' . $_POST['cell_phone']
+									. '&contact_source=EyeRecruit+Seeker+PreLaunch' ;
+				
+				temp_er_add_leads($url, $myvars);
+		    
+		    //EMAIL NOTIFICATIONS
+
+		    $subject 					= get_option('founder_options_jobseeker')['jobseeker_subject'];
 				$setting_options 			= get_option('xtreem_options_smtp');
-				$thanks_jobseeker_subject	= get_option('founder_options')['subject'];
 				
 				$enco_id = multi_base64_encode($user_id);
 
@@ -250,31 +291,21 @@ function ey_seeker_user(){
 				// Replace shortcode for jobseeker thank you template
 				$shordcode_to_rep_jobseeker	= 	array('[site-url]','[jobseeker_first_name]','[jobseeker_last_name]','[get_start]','[tmp_pass]','[user_email]');
 				$replace_with_jobseeker 	=	array(site_url(),ucfirst($_POST['fname']),ucfirst($_POST['lname']),$get_started,$user_password,$_POST['email']);
-				$thanks_jobseeker_message	= 	str_replace($shordcode_to_rep_jobseeker,$replace_with_jobseeker,do_shortcode(get_option('founder_options')['thanks_jobseeker_mail_template']));
+				
 				
 				$to 				= $setting_options['tomail'];
-				//$to = 'jeremy@interfused-inc.com';
 				// Replace shortcode for jobseeker admin mail template
 				$shordcode_to_rep 	= array('[site-url]','[jobseeker_first_name]','[jobseeker_last_name]','[jobseeker_email_shortcode]','[jobseeker_phone]');
 				$replace_with 		= array(site_url(),ucfirst($_POST['fname']),ucfirst($_POST['lname']),$_POST['email'],$_POST['cell_phone'] );
 				$message 			= str_replace($shordcode_to_rep, $replace_with, do_shortcode(get_option('founder_options_jobseeker')['jobseeker_mail_template']));
 				
 				$headers = "MIME-Version: 1.0" . "\r\n";
-                $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+        $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
 				//$is_request = false;
-				if(wp_mail($to,$subject,$message,$headers)){
-					wp_mail($_POST['email'],$thanks_jobseeker_subject,$thanks_jobseeker_message,$headers);
-					//mail secondary temporary letter
-					$fromEmail2 = 'chris.bauer@eyerecruit.com';
-					$headers2 = "From: " . $fromEmail2 . "\r\n";
-					$headers2 .= "Reply-To: ". $fromEmail2 . "\r\n";
-					//$headers .= "CC: susan@example.com\r\n";
-					$headers2 .= "MIME-Version: 1.0\r\n";
-					$headers2 .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-					include( $_SERVER['DOCUMENT_ROOT']. '/__lists/emails/seeker-free-pricing-temporary.php');
-					mail($_POST['email'], 'A bit more about EyeRecruit', $message2, $headers2);
-					//
-				}
+				//ADMIN NOTIFICATION
+        wp_mail($to,$subject,$message,$headers);
+        
+				
 		       $data = json_encode(array('createuser'=>true, 'message'=>__('Thank you for connecting us we will contact to you soon')));
 		    }
 	   }

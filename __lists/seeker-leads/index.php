@@ -18,7 +18,7 @@
 <body>
 
 <h1 class="wrapper">EyeRecruit Seeker Leads
-<div class="fineprint">Use to manage seekers who ARE NOT in the wordpress system</div>
+<!-- <div class="fineprint">Use to manage seekers who ARE NOT in the wordpress system</div> -->
 
 </h1>
   <div id="main_wrapper" class="wrapper">
@@ -83,6 +83,8 @@ $('.user_selector').click(function(){
   $("#main_wrapper").addClass('detail_view');
   $("#right_col").show();
   var userid = $(this).data('userid');
+  $("#editUserBtn").attr('href','update.php?id='+userid);
+  
   $('#user_detail, #add_user_note_form').show();
   $("#add_new_user_form").hide();
     
@@ -157,6 +159,15 @@ function get_user_notes(){
   });
 
 </script>
+
+<?php
+if($_GET['id']){ ?>
+<script>
+  $(document).ready(function(){
+    $(".user_list a[data-userid=<?php echo $_GET['id'];?>]").trigger('click');
+  });
+</script>
+<?php } ?>
 
 </body>
 </html>

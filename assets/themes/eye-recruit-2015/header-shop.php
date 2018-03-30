@@ -1,7 +1,15 @@
-<?php 
+<?php
+/*
+//temporary remove required membership
 if( !is_user_logged_in() ){
 		wp_redirect('/members-only');
 		exit;
+	}
+	*/
+	//do not allow main shop link
+	$actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+	if(strpos($actual_link, '/shop')){
+		wp_redirect('/');
 	}
 ?>
 <?php

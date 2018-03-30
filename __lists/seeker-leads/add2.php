@@ -8,7 +8,9 @@ $allowed_cross_domains = array(
     'http://investigationjobsnearme.com',
     'http://www.investigationjobsnearme.com',
     'http://securityjobsnearme.com',
-    'http://www.securityjobsnearme.com'
+    'http://www.securityjobsnearme.com',
+    'http://eyerecruit.com',
+    'http://www.eyerecruit.com'
     );
 if(in_array($http_origin, $allowed_cross_domains)){
     header("Access-Control-Allow-Origin: $http_origin");

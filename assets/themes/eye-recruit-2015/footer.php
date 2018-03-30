@@ -227,6 +227,8 @@ $ignore_arr=array(1882,2685);
 <script type="text/javascript" src="<?php echo get_stylesheet_directory_uri(); ?>/js/sweetalert.js"></script>
 <script type="text/javascript">
 	jQuery(document).ready( function() {
+    
+    jQuery('.tax-product-cat ul.products li.product .price').wrap('<div class="price_background_wrapper"></div>');
 		/*jQuery('#checkwithoulogin').on('click', function() {
 			jQuery('#applyModalWrap').modal('hide');
 			jQuery('#UploadResume').modal('show');

@@ -17,6 +17,9 @@ if ($result->num_rows > 0) {
     echo '<div class="user_list">';
     ?>
     <p>Choose user below for detail</p>
+    <form>
+      <input name="filterText" placeholder="Search by name...">
+    </form>
     <hr>
     <ul>
     <?php
@@ -38,8 +41,13 @@ if ($result->num_rows > 0) {
           <p class="zip">Zip: <?php echo $row['zip'];?></p>
 
           <p class="desired_salary_range">Desired Salary Range: <?php echo $row['desired_salary_range'];?></p>
-
-          <p class="email"><a href="<?php echo $row["resume_location"]; ?>" class="download"><i class="fa fa-download"></i> download resume</a></p>
+          
+          <?php if($row["resume_location"]){ ?>
+            <p class="res"><a href="<?php echo $row["resume_location"]; ?>" class="download"><i class="fa fa-download"></i> download resume</a></p>
+          <?php }else{ ?>
+            <p class="res not_available"><em>Resume not uploaded</em></p>
+          <?php }//endif ?>
+          
           
       </div>
     </li>
@@ -57,4 +65,33 @@ $conn->close();
 
 ?>
 
-
+<script>
+  $('input[name=filterText]').on('input',function(){
+    var filterVal = $(this).val().toLowerCase(); 
+    if(filterVal != ''){
+      console.log(filterVal);  
+      $('.user_list li').each(function(){
+        //$(this).hide();
+        $(this).hide(); 
+        
+        var lnameCheck = $(this).find('span.last_name').text().toLowerCase();
+        if(lnameCheck.indexOf(filterVal) >= 0 ){
+            $(this).show();
+        }
+        var fnameCheck = $(this).find('span.first_name').text().toLowerCase();
+        if(fnameCheck.indexOf(filterVal) >= 0 ){
+            $(this).show();
+        }
+        
+      });
+      
+    }else{
+      console.log('empty');
+      $('.user_list li').show();
+    }
+    
+    
+    
+    
+  })
+</script>

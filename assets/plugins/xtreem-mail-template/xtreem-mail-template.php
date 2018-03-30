@@ -5,7 +5,9 @@ Author:      Xtreem Solution
 Description: This plugin is customized to create mail templates for eyerecruit.
 */
  // error_reporting(E_ALL);
- add_action( 'admin_menu', 'cusotme_menu_pages' );
+include('includes/api-mailchimp.php');
+
+add_action( 'admin_menu', 'cusotme_menu_pages' );
 function cusotme_menu_pages() {
 
     add_menu_page('Mail Templates','Email Templates','manage_options','eyerecruit-mail-templates','xtreem_mail_setting_callback');
