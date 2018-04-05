@@ -125,6 +125,9 @@ button:disabled{
   font-family: 'FontAwesome';
   content: '\f06e';
 }
+#left_col .user_delete{
+  padding-top: 5px;
+}
 
 .user_list .contact_info{
   width: 35%;
@@ -196,4 +199,42 @@ textarea, input[type="text"]{
 }
 h1 div.fineprint{
   font-size: .4em;
+}
+
+#q_and_a p{
+  font-size: 16px;
+  min-height: 16px;
+}
+#q_and_a .question{
+  border-top: 1px solid #ccc;
+  padding-top: 1em;
+  font-weight: bold;
+}
+
+#q_and_a .question, #q_and_a .answer{
+  position: relative;
+  padding-left: 24px;
+}
+#q_and_a .question:before, #q_and_a .answer:before{
+  position: absolute;
+  left: 0;
+  top: 18px;
+  color: #f00;
+  font-family: serif;
+  font-style: italic;
+  content: 'Q';
+}
+#q_and_a .answer:before{
+  content: 'A';
+  top: 3px;
+  font-weight: bold;
+}
+
+#left_col #q_and_a{
+  display: none;
+}
+
+#right_col #editUserBtn{
+  margin-bottom: 2em;
+  margin-top: 2em;
 }

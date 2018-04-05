@@ -19,8 +19,9 @@ if(in_array($http_origin, $allowed_cross_domains)){
 
 require_once('config.php');
 require_once('api.php');
+require_once('../inc/sendinblue/Mailin.php');
 
-$data = array();
+$data_sib = array();
 $uploadfile_url = '';
 //create folder based on base64 encoded email address
 $uploaddir = 'uploads/'. base64_encode($_POST['email']) .'/'  ;
@@ -31,7 +32,7 @@ if (!file_exists($uploaddir)) {
 if($_FILES['file']){
     if ( 0 < $_FILES['file']['error'] ) {
     //echo 'Error: ' . $_FILES['file']['error'] . '<br>';
-        $data = array('error' => 'There was an error uploading your files');
+        $data_sib = array('error' => 'There was an error uploading your files');
     }
     else {
 
@@ -40,11 +41,11 @@ if($_FILES['file']){
 
         if( move_uploaded_file($_FILES['file']['tmp_name'], $uploadfile) ){
         //echo 'moved file to '.$uploadfile_url;
-            $data = array('success' => 'Form was submitted', 'formData' => $_POST, 'res_location' => $uploadfile_url);
+            $data_sib = array('success' => 'Form was submitted', 'formData' => $_POST, 'res_location' => $uploadfile_url);
 
         }else{
         //echo 'could not move file';
-            $data = array('error' => 'Could not move files');
+            $data_sib = array('error' => 'Could not move files');
         }
 
     }
@@ -56,7 +57,7 @@ $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD,DB_NAME);
 // Check connection
 if ($conn->connect_error) {
     //die("Connection failed: " . $conn->connect_error);
-    $data = array('error' => 'DB connection failed');
+    $data_sib = array('error' => 'DB connection failed');
 //    throw new Exception('DB connection!');
 }else{
     //insert record
@@ -64,7 +65,26 @@ if ($conn->connect_error) {
     $last_name = addslashes($_POST['last_name']);
     $first_name = addslashes($_POST['first_name']);
 
-    $sql = "INSERT INTO `__leads-seeker` (`last_name`, `first_name`, `resume_location`, `email`,`phone`,`industry`, `contact_source`,`zip`,`desired_salary_range`) VALUES ( 
+
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD,DB_NAME);
+                $charset = 'utf8mb4';
+                $dsn = "mysql:host=".DB_HOST.";dbname=".DB_NAME.";charset=$charset";
+                $opt = [
+                    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_EMULATE_PREPARES   => false,
+                ];
+                $pdo = new PDO($dsn, DB_USER, DB_PASSWORD, $opt);
+                
+                $sql = "INSERT INTO `__leads-seeker` ( first_name, last_name, resume_location, email, phone, industry, contact_source, zip, desired_salary_range, any_changes, daily_duties, industry_history,looking_for,how_last_job_found,any_other_recruiters,current_applications_results,ideal_career,why_left_last_job,desired_companies,who_met_with,most_important_career_factor,industry_observations,biggest_complaint,biggest_job_hurdles,continuing_education
+                     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                     
+                     
+                    
+/*
+//old
+    $sql = "INSERT INTO `__leads-seeker` (`last_name`, `first_name`, `resume_location`, `email`,`phone`,`industry`, `contact_source`,`zip`,`desired_salary_range`,`any_changes`,`daily_duties`,`industry_history`,`looking_for`,`how_last_job_found`,`any_other_recruiters`,`current_applications_results`,`ideal_career`,`why_left_last_job`,`desired_companies`,`who_met_with`,`most_important_career_factor`,`industry_observations`,`biggest_complaint`,`biggest_job_hurdles`,`continuing_education`) 
+        VALUES ( 
         '$last_name',
         '$first_name',
         '$uploadfile_url',
@@ -73,42 +93,57 @@ if ($conn->connect_error) {
         '$industry',
         '$contact_source',
         '$zip',
-        '$salary_range'
+        '$SALARY_REQ',
+        '$any_changes','$daily_duties','$industry_history','$looking_for','$how_last_job_found','$any_other_recruiters','$current_applications_results','$ideal_career','$why_left_last_job','$desired_companies','$who_met_with','$most_important_career_factor','$industry_observations','$biggest_complaint','$biggest_job_hurdles','$continuing_education'
         )";
-
-if ($conn->query($sql) === TRUE) {
+*/
+//old condition : $conn->query($sql) === TRUE
+        
+if (
+    $pdo->prepare($sql)->execute([$first_name, $last_name, $uploadfile_url, $email, $phone, $industry, $contact_source, $zip, $SALARY_REQ,$any_changes,$daily_duties,$industry_history,$looking_for,$how_last_job_found,$any_other_recruiters,$current_applications_results,$ideal_career,$why_left_last_job,$desired_companies,$who_met_with,$most_important_career_factor,$industry_observations,$biggest_complaint,$biggest_job_hurdles,$continuing_education])
+) {
     $tmp = 'yes';
 
     //  echo "New record created successfully";
 } else {
       //die( "Error: " . $sql . "<br>" . $conn->error);
-  $data = array('error' => "SQL Error: " . $sql . "<br>" . $conn->error );
+  //$data_sib = array('error' => "SQL Error: " . $sql . "<br>" . $conn->error );
+    $data_sib = array('error' => "WTRF Error: " . $sql . "<br>"  );
 }
 
 }
 
 $conn->close();
 
+//SEND IN BLUE
+$mailin = new Mailin("https://api.sendinblue.com/v2.0",APIKEY_SENDINBLUE);
+
+
 /* TEST/ADD TO MAILCHIMP */
 $listid = '0';
+$listid_sib = '0';
 
 switch($contact_source){
     case "securityjobsnearme.com":
     $listid = 'a77f35c589';
+    $listid_sib = 8;
     break;
     case "infosecjobsnearme.com":
     $listid = '2705feafe9';
+    $listid_sib = 10;
     break;
 
     case "investigationjobsnearme.com":
     $listid = '8c598b5282';
+    $listid_sib = 9;
     break;
     case "cybersecurityjobsnearme.com":
     $listid = '9bdeecb79d';
+    $listid_sib = 11;
     break;
 }
 
-if($listid != '0'){
+if($listid_sib != '0'){
     $merge_fields = new stdClass();
     $merge_fields->FNAME = $first_name;
     $merge_fields->LNAME = $last_name;
@@ -116,29 +151,40 @@ if($listid != '0'){
     $merge_fields->PHONE  = $phone;
     $merge_fields->SALARY_REQ  = $salary_range;
     $merge_fields->INDUSTRY  = $industry;
-
+    /*
     $data = array(
       'fields' => 'lists',
       'email_address' => $email,
       'merge_fields' => $merge_fields,
       'status' => 'subscribed'
       );
+    */
+    $data_sib = array( "email" => $email,
+                      "attributes" => array("FIRSTNAME"=>$first_name, 
+                                            "LASTNAME"=>$last_name,
+                                            "SMS"=>'+1'.$phone,
+                                            "ZIP"=>$zip,
+                                            "SALARY_REQ"=>$salary_range,
+                                            "INDUSTRY"=>$industry),
+                      "listid" => array($listid_sib)
+                  );
+    //ADD TO SENDINBLUE LIST
+    $mailin->create_update_user($data_sib);
 
-    $endpoint = '/lists/'.$listid.'/members/';
-
-    $result = json_decode( er_mailchimp_curl_connect( $endpoint, 'POST', $apikey_mailchimp, $data) );
+//    $endpoint = '/lists/'.$listid.'/members/';
+ //   $result = json_decode( er_mailchimp_curl_connect( $endpoint, 'POST', $apikey_mailchimp, $data) );
 
     //notify chris
     $msg = 'check http://eyerecruit.com/__lists/seeker-leads/ for details on '.$first_name.' '.$last_name.' who subscribed from '.$contact_source;
     $headers[] = 'From: noreply@eyerecruit.com';
-    //$to_email = 'jeremy@interfusedcreative.com';
-    $to_email = 'chris.bauer@eyerecruit.com';
+    $to_email = 'jeremy@interfusedcreative.com';
+    //\$to_email = 'chris.bauer@eyerecruit.com';
     mail ( $to_email , 'new subscriber from secondary domain' , $msg, implode("\r\n", $headers) );
 }
 
 
 
 //
-echo json_encode($data);
+echo json_encode($data_sib);
 
 ?>

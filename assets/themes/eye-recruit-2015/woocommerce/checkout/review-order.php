@@ -38,7 +38,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 					<tr class="<?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
 						<td class="product-name">
-							<?php echo apply_filters( 'woocommerce_cart_item_name', $_product->get_title(), $cart_item, $cart_item_key ) . '&nbsp;'; ?>
+							<?php 
+							//$newName = $_product->get_title();
+							$newName = str_replace('-', ' ', $_product->post->post_name); 
+							
+							echo apply_filters( 'woocommerce_cart_item_name', strtoupper($newName) , $cart_item, $cart_item_key ) . '&nbsp;'; ?>
+							
 							<?php echo apply_filters( 'woocommerce_checkout_cart_item_quantity', ' <strong class="product-quantity">' . sprintf( '&times; %s', $cart_item['quantity'] ) . '</strong>', $cart_item, $cart_item_key ); ?>
 							<?php echo WC()->cart->get_item_data( $cart_item ); ?>
 						</td>
@@ -111,3 +116,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	</tfoot>
 </table>
+<?php
+global $woocommerce;
+?>
+<div class="erModCart">
+	<a href="<?php echo $woocommerce->cart->get_cart_url();?>"><i class="fa fa-pencil"></i> View/Edit Package</a>
+</div>

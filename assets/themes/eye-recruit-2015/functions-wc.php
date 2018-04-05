@@ -122,3 +122,15 @@ function custom_woocommerce_product_add_to_cart_text() {
 	}
 	
 }
+
+//REMOVE FIELDS FROM CHECKOUT (https://docs.woocommerce.com/document/tutorial-customising-checkout-fields-using-actions-and-filters/)
+add_filter( 'woocommerce_checkout_fields' , 'custom_override_checkout_fields' );
+ 
+function custom_override_checkout_fields( $fields ) {
+	unset($fields['billing']['billing_company']);
+	//unset($fields['order']['order_comments']);
+	$fields['order']['order_comments']['placeholder'] = 'Notes about your order package, e.g. special notes for delivery (if applicable).';
+	$fields['billing']['billing_city']['label'] = 'City';
+ 
+	return $fields;
+}

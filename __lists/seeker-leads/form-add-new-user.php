@@ -1,3 +1,14 @@
+<?php
+function setup_question_textarea($question, $field_name){
+  return '
+  <div class="form-group">
+          <label>'.$question.'</label>
+          <textarea name="'.$field_name.'"  ></textarea>
+        </div>
+  ';
+}
+?>
+
 <div id="wrapper-add_user">
       <form id="add_new_user_form" enctype="multipart/form-data">
         <p class="required">* required</p>
@@ -74,10 +85,32 @@
 
   </select>
 </div>
+<?php
+/*
 
+*/
+echo setup_question_textarea('Has anything changed since our last conversation?', 'any_changes');
+echo setup_question_textarea('Let’s start with what your doing now.  Can you give me a better understanding of your daily duties and responsibilities?', 'daily_duties');
+echo setup_question_textarea('How long have you been in the industry?', 'industry_history');
+echo setup_question_textarea('So tell me what you are looking for right now.','looking_for');
+echo setup_question_textarea('How did you find your last Job (with the company you are with now)?', 'how_last_job_found');
+echo setup_question_textarea('Have you ever worked with any other Recruiter or Agency? If so, whom?', 'any_other_recruiters');
+echo setup_question_textarea('Whom have you reached out to or applied with recently & when? What was the result?', 'current_applications_results');
+echo setup_question_textarea('What does the ideal career look like for you?', 'ideal_career');
+echo setup_question_textarea('Why did you leave your last Employer? (Who was the Employer?)', 'why_left_last_job');
+echo setup_question_textarea('Give me the list of 5 companies currently in the market that you would like to work with and why.', 'desired_companies');
+echo setup_question_textarea('Whom have you met with so far in your job search?', 'who_met_with');
+echo setup_question_textarea('What is most important factor to you at this point in your career?', 'most_important_career_factor');
+echo setup_question_textarea('What do you see going on in the industry right now?', 'industry_observations');
+echo setup_question_textarea('What\'s you biggest complaint about the process of career advancement you have right now?', 'biggest_complaint');
+echo setup_question_textarea('What do you think is keeping you from finding the job you want?', 'biggest_job_hurdles');
+echo setup_question_textarea('Tell me a little about what you are doing for continuing education. Where are you going for this learning or what is available to achieve your learning goals?', 'continuing_education');
+//echo setup_question_textarea($question, $field_name);
+
+?>
         
 
-        <button id="submit_new_user" disabled ><i class="fa fa-plus"></i> Add User</button>
+        <p style="text-align: center;"><button id="submit_new_user" disabled ><i class="fa fa-plus"></i> Save User</button></p>
 
       </form>
     </div>
