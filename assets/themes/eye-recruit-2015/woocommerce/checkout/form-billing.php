@@ -78,3 +78,37 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php endif; ?>
 </div>
+<script type="text/javascript">
+	
+	jQuery(function() {
+		function fixDiv() {
+			
+			var fixedEl = jQuery('.col-md-4 .special_box');
+			
+			var hdrHeight = jQuery('#masthead').height() + jQuery('header.page-header').height() + 32;
+			if (jQuery(window).scrollTop() > hdrHeight && jQuery(window).width() >= 992)
+				fixedEl.css({
+					'position': 'fixed',
+					'top': '10px',
+					'width': imgW+32,
+					'height': 'auto'
+				});
+			else
+				fixedEl.css({
+					'position': 'relative',
+					'top': 'auto',
+					'width': 'auto'
+				});
+		}
+		
+		jQuery(document).ready(function(){
+			imgW = jQuery('.woocommerce .row .col-md-4 .special_box').width();
+			console.log('imgW: '+imgW);
+			fixDiv();
+		});
+		
+		jQuery(window).scroll(fixDiv);
+		jQuery(window).resize(fixDiv);
+		
+	});
+</script>

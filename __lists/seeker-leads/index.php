@@ -1,13 +1,15 @@
 <?php 
 /*
-  $allowed_ips = array('76.108.131.107');
+  //$allowed_ips = array('76.108.131.107');
+  $allowed_ips = array('72.188.199.122');
   if (!in_array($_SERVER['REMOTE_ADDR'], $allowed_ips)) {
-    die('NOPE');
+    die('MAINTENANCE MODE');
 }
 */
 ?>
-<html>
+<html lang="en">
 <head>
+   <meta charset="UTF-8">
   <link href="https://fonts.googleapis.com/css?family=Jura:400,600,700|Open+Sans:400,600,700,800|Open+Sans+Condensed:300" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
   <link rel='stylesheet' type="text/css" href="style.css">
@@ -43,7 +45,10 @@
   </div>
 
   <script>
+    
   $("#show_add_form").click(function(){
+    clickedSave = false;
+    $('#left_col').hide();
     $("#right_col,#add_new_user_form").show();
     $("#user_detail, #add_user_note_form").hide();
   });
@@ -55,6 +60,7 @@
 
   $('#submit_new_user').on('click', function(e) {
     e.preventDefault();
+    clickedSave = true;
     var file_data = $('#resume').prop('files')[0];   
     var form_data = new FormData( $('#add_new_user_form')[0] );                  
     form_data.append('file', file_data);
@@ -69,6 +75,7 @@
                 data: form_data,                         
                 type: 'post',
                 success: function(php_script_response){
+                  $("#add_new_user_form").find("input[type=text], textarea").val("");
                     console.log('SUCCESS: '+php_script_response); // display response from the PHP script, if any
                     location.reload();
                   },
@@ -80,10 +87,13 @@
 
 /* USER SELECTOR */
 $('.user_selector').click(function(){
+  clickedSave = false;
   $("#main_wrapper").addClass('detail_view');
+  $('#left_col').hide();
   $("#right_col").show();
   var userid = $(this).data('userid');
   $("#editUserBtn").attr('href','update.php?id='+userid);
+  $(".user_delete").attr('data-userid',userid);
   
   $('#user_detail, #add_user_note_form').show();
   $("#add_new_user_form").hide();
@@ -100,9 +110,23 @@ $('.user_selector').click(function(){
   get_user_notes();
 });
 
-$("#back_to_list").click(function(){
+  function back_to_list(){
+    $('#left_col').show();
   $("#right_col").hide();
-  $("#main_wrapper").removeClass('detail_view');
+  $("#main_wrapper").removeClass('detail_view');  
+  }
+
+$("#back_to_list").click(function(){
+  back_to_list();
+  /*
+  if(clickedSave){
+    back_to_list();
+  }else{
+    if (confirm('Are you sure you want to go back to list without saving current user? Clicking "OK"  goes back to list without saving')){
+      back_to_list();  
+    }  
+  }
+  */
 });
 
 /* USER NOTES */
@@ -157,7 +181,39 @@ function get_user_notes(){
                   }
                 });
   });
-
+  
+  //ATTEMPT DELETE
+  function deleteUser(e){
+    var userName = $(this).closest('li').find('span.first_name').text() + ' '+$(this).closest('li').find('span.last_name').text();
+    var deleteID = $(this).attr('data-userid'); 
+    console.log('attempt delete');
+    var result = confirm('Are you sure you want to delete '+userName+'?');
+    if (result) {
+        //Logic to delete the item
+        console.log('delete user id: '+deleteID);
+        $.ajax({
+                url: 'delete.php?deleteID='+deleteID, // point to server-side PHP script 
+                dataType: 'text',  // what to expect back from the PHP script, if anything
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: {
+                  'deleteID':deleteID
+                  },                         
+                type: 'get',
+                success: function(php_script_response){
+                    console.log('SUCCESS: '+php_script_response); // display response from the PHP script, if any
+                    location.reload();
+                  },
+                  error: function(php_script_response){
+                    console.log('WTF: '+php_script_response); // display response from the PHP script, if any
+                  }
+                });
+      
+    }
+  }
+  $('.user_delete').on('click',deleteUser);
+  
 </script>
 
 <?php

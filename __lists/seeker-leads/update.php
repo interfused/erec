@@ -45,6 +45,7 @@ require_once('api.php');
             width: 50%;
             margin-right: -4px;
         }
+        textarea{height: 10em;}
     </style>
 </head>
 <body>
@@ -82,6 +83,15 @@ require_once('api.php');
         }
         if($recordFound){ 
         /////////DISPLAY UPDATE FORM
+            echo '<div id="tempVals">';
+            //echo ('<p id="desired_companies">Desired companies are: <span>'.$user['desired_companies'].'</span></p>');
+            
+            foreach ($user as $key => $value) {
+                # code...
+                echo ('<p id="'.$key.'">'.$key.': <span>'.$value.'</span></p>');
+
+            }
+            echo '</div>';
             include('form-add-new-user.php');
             ?>
             
@@ -113,7 +123,44 @@ require_once('api.php');
                     $('select[name=industry]').val("<?php echo $user['industry'];?>");
                     $('select[name=SALARY_REQ]').val("<?php echo $user['desired_salary_range'];?>");
                     
+                    questions_arr = ['any_changes','daily_duties','industry_history','looking_for','how_last_job_found','any_other_recruiters','current_applications_results','ideal_career','why_left_last_job','desired_companies','who_met_with','most_important_career_factor','industry_observations','biggest_complaint','biggest_job_hurdles','continuing_education'];
                     
+                    //$('textarea[name=any_changes]').val( $('p#any_changes span').text() );
+                    for(i=0;i<questions_arr.length;i++){
+                        $('textarea[name = '+questions_arr[i]+']').val( $('p#'+questions_arr[i]+' span').text() );    
+                    }
+                    $('#tempVals').remove();
+                    /*
+                    
+                    $('textarea[name=daily_duties]').val( $('p#daily_duties span').text() );
+                    $('textarea[name=industry_history]').val( $('p#industry_history span').text() );
+                    $('textarea[name=looking_for]').val( $('p#looking_for span').text() );
+                    $('textarea[name=how_last_job_found]').val( $('p#how_last_job_found span').text() );
+                    $('textarea[name=any_other_recruiters]').val( $('p#any_other_recruiters span').text() );
+                    $('textarea[name=current_applications_results]').val( $('p#current_applications_results span').text() );
+                    $('textarea[name=ideal_career]').val( $('p#ideal_career span').text() );
+                    $('textarea[name=why_left_last_job]').val( $('p#why_left_last_job span').text() );
+                    $('textarea[name=desired_companies]').val( $('p#desired_companies span').text() );
+                    $('textarea[name=who_met_with]').val( $('p#who_met_with span').text() );
+                    $('textarea[name=most_important_career_factor]').val( $('p#most_important_career_factor span').text() );
+                    
+                    $('textarea[name=industry_observations]').val( $('p#industry_observations span').text() );
+                    $('textarea[name=biggest_complaint]').val( $('p#biggest_complaint span').text() );
+                    $('textarea[name=biggest_job_hurdles]').val( $('p#biggest_job_hurdles span').text() );
+                    /*
+                    $('textarea[name=most_important_career_factor]').val( $('p#most_important_career_factor span').text() );
+                    $('textarea[name=most_important_career_factor]').val( $('p#most_important_career_factor span').text() );
+                    
+                    /* str_replace("<br />",chr(13),$des)
+                    //$('textarea[name=who_met_with]').val("<?php echo nl2br($user['who_met_with']);?>");
+                    $('textarea[name=most_important_career_factor]').val("<?php echo $user['most_important_career_factor'];?>");
+                    
+                    $('textarea[name=industry_observations]').val("<?php echo $user['industry_observations'];?>");
+                    $('textarea[name=biggest_complaint]').val("<?php echo $user['biggest_complaint'];?>");
+                    $('textarea[name=biggest_job_hurdles]').val("<?php echo $user['biggest_job_hurdles'];?>");
+                    $('textarea[name=continuing_education]').val("<?php echo $user['continuing_education'];?>");
+                   
+                    */
                 });
             </script>
             
@@ -174,16 +221,18 @@ require_once('api.php');
                 
                 
                 if($includeUploadinSql){
-                    $sql = "UPDATE `__leads-seeker` SET first_name = ?, last_name = ?, resume_location = ?, email = ?, phone = ?, industry = ?, contact_source = ?, zip = ?, desired_salary_range = ? WHERE id = ?";
-                    $pdo->prepare($sql)->execute([$first_name, $last_name, $uploadfile_url, $email, $phone, $industry, $contact_source, $zip, $SALARY_REQ, $id]);    
+                    $sql = "UPDATE `__leads-seeker` SET first_name = ?, last_name = ?, resume_location = ?, email = ?, phone = ?, industry = ?, contact_source = ?, zip = ?, desired_salary_range = ?,
+                    any_changes = ?, daily_duties = ?, industry_history = ?,looking_for = ?,how_last_job_found = ?,any_other_recruiters = ?,current_applications_results = ?,ideal_career = ?,why_left_last_job = ?,desired_companies = ?,who_met_with = ?,most_important_career_factor = ?,industry_observations = ?,biggest_complaint = ?,biggest_job_hurdles = ?,continuing_education = ?
+                     WHERE id = ?";
+                    $pdo->prepare($sql)->execute([$first_name, $last_name, $uploadfile_url, $email, $phone, $industry, $contact_source, $zip, $SALARY_REQ,$any_changes,$daily_duties,$industry_history,$looking_for,$how_last_job_found,$any_other_recruiters,$current_applications_results,$ideal_career,$why_left_last_job,$desired_companies,$who_met_with,$most_important_career_factor,$industry_observations,$biggest_complaint,$biggest_job_hurdles,$continuing_education, $id]);    
                 }else{
-                    $sql = "UPDATE `__leads-seeker` SET first_name = ?, last_name = ?, email = ?, phone = ?, industry = ?, contact_source = ?, zip = ?, desired_salary_range = ? WHERE id = ?";
-                    $pdo->prepare($sql)->execute([$first_name, $last_name, $email, $phone, $industry, $contact_source, $zip, $SALARY_REQ, $id]);
+                    $sql = "UPDATE `__leads-seeker` SET first_name = ?, last_name = ?, email = ?, phone = ?, industry = ?, contact_source = ?, zip = ?, desired_salary_range = ?, any_changes = ?, daily_duties = ?, industry_history = ?,looking_for = ?,how_last_job_found = ?,any_other_recruiters = ?,current_applications_results = ?,ideal_career = ?,why_left_last_job = ?,desired_companies = ?,who_met_with = ?,most_important_career_factor = ?,industry_observations = ?,biggest_complaint = ?,biggest_job_hurdles = ?,continuing_education = ? WHERE id = ?";
+                    $pdo->prepare($sql)->execute([$first_name, $last_name, $email, $phone, $industry, $contact_source, $zip, $SALARY_REQ,$any_changes,$daily_duties,$industry_history,$looking_for,$how_last_job_found,$any_other_recruiters,$current_applications_results,$ideal_career,$why_left_last_job,$desired_companies,$who_met_with,$most_important_career_factor,$industry_observations,$biggest_complaint,$biggest_job_hurdles,$continuing_education, $id]);
                 }
                 
             ////
                 ?>
-                <p>Redirecting... please wait</p>
+                <p>Updating... please wait</p>
                 <script>
                     setTimeout(function(){
                         window.location.href = "http://eyerecruit.com/__lists/seeker-leads/?id=<?php echo $id;?>";    
