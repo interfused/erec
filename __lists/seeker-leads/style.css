@@ -90,6 +90,12 @@ button:disabled{
   display: none;
 }
 
+#left_col .user_list ul{
+  max-height: calc(100vh - 280px);
+  overflow: auto;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
 .user_list .contact_info p{
   margin: 0;
 }

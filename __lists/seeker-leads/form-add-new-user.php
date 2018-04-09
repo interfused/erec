@@ -7,6 +7,17 @@ function setup_question_textarea($question, $field_name){
         </div>
   ';
 }
+function setup_question_select($question,$field_name,$options_arr){
+    $htmlStr = '<div class="form-group">';
+    $htmlStr .= '<label>'.$question.'</label>';
+    $htmlStr .= '<select name="'.$field_name.'">';
+    for($i=0; $i<count($options_arr); $i++){
+      $val = $options_arr[$i];
+      $htmlStr .= '<option value="'.$val.'">'.$val.'</option>';
+    }
+    $htmlStr .= '</select></div>';  
+  return $htmlStr;
+}
 ?>
 
 <div id="wrapper-add_user">
@@ -40,7 +51,7 @@ function setup_question_textarea($question, $field_name){
         <div class="form-group">
           <label>Industry</label>
           <select name="industry" >
-            <option val=""></option>
+            <option value=""></option>
               <option value="Security">Security</option>
 <option value="Investigations">Investigations</option>
 <option value="Surveillance">Surveillance</option>
@@ -91,7 +102,8 @@ function setup_question_textarea($question, $field_name){
 */
 echo setup_question_textarea('Has anything changed since our last conversation?', 'any_changes');
 echo setup_question_textarea('Let’s start with what your doing now.  Can you give me a better understanding of your daily duties and responsibilities?', 'daily_duties');
-echo setup_question_textarea('How long have you been in the industry?', 'industry_history');
+//echo setup_question_textarea('How long have you been in the industry?', 'industry_history');
+echo setup_question_select('How long have you been in the industry?', 'industry_history',array('under 1 year','1-2 years','2-5 years','5-7 years','7-10 years','10-15 years','15-20 years','over 20 years'));
 echo setup_question_textarea('So tell me what you are looking for right now.','looking_for');
 echo setup_question_textarea('How did you find your last Job (with the company you are with now)?', 'how_last_job_found');
 echo setup_question_textarea('Have you ever worked with any other Recruiter or Agency? If so, whom?', 'any_other_recruiters');
