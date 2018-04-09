@@ -3,7 +3,7 @@
 Plugin Name: SAM Pro (Free Edition)
 Plugin URI: http://uncle-sam.info/
 Description: Flexible advertisements management system of the WordPress blog. Visit <a href="http://uncle-sam.info/">plugin Home Site</a> for more details.
-Version: 2.4.1.92
+Version: 2.5.0
 Author: minimus
 Author URI: http://blogcoding.ru
 Text Domain: sam-pro-free
@@ -30,14 +30,22 @@ else {
 }
 
 include_once( 'sam-pro-widgets.php' );
-if(class_exists( 'sam_pro_place_widget' ))
-	add_action('widgets_init', create_function('', 'return register_widget("sam_pro_place_widget");'));
-if(class_exists( 'sam_pro_ad_widget' ))
-	add_action('widgets_init', create_function('', 'return register_widget("sam_pro_ad_widget");'));
+if(class_exists('sam_pro_place_widget'))
+	add_action('widgets_init', function(){
+	  register_widget("sam_pro_place_widget");
+	});
+if(class_exists('sam_pro_ad_widget'))
+	add_action('widgets_init', function(){
+	  register_widget("sam_pro_ad_widget");
+	});
 if(class_exists( 'sam_pro_zone_widget' ))
-	add_action('widgets_init', create_function('', 'return register_widget("sam_pro_zone_widget");'));
+	add_action('widgets_init', function(){
+	  register_widget("sam_pro_zone_widget");
+	});
 if(class_exists( 'sam_pro_block_widget' ))
-	add_action('widgets_init', create_function('', 'return register_widget("sam_pro_block_widget");'));
+	add_action('widgets_init', function(){
+	  register_widget("sam_pro_block_widget");
+	});
 
 if( ! function_exists('samProDrawAd') ) {
 	function samProDrawAd( $id, $args, $useTags ) {

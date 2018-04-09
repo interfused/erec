@@ -9,8 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if(!class_exists( 'sam_pro_place_widget' ) && class_exists('WP_Widget')) {
-	include_once(apply_filters('sam_pro_place_module', 'sam-pro-place.php'));
+if(!class_exists('sam_pro_place_widget') && class_exists('WP_Widget')) {
+  $samProPlaceModule = apply_filters('sam_pro_place_module', 'sam-pro-place.php');
+	include_once($samProPlaceModule);
 	class sam_pro_place_widget extends WP_Widget {
 		protected $crawler = false;
 		protected $aTitle = '';
@@ -24,7 +25,7 @@ if(!class_exists( 'sam_pro_place_widget' ) && class_exists('WP_Widget')) {
 			$this->wTable = 'sampro_places';
 
 			$widget_ops = array( 'classname' => 'sam_pro_place_widget', 'description' => __('Ads Place rotator serviced by Simple Ads Manager (Pro Edition).', SAM_PRO_DOMAIN));
-			$control_ops = array( 'id_base' => 'sam_pro_place_widget' );
+			$control_ops = array( 'id_base' => 'sam_pro_place_widget');
 			parent::__construct( 'sam_pro_place_widget', __('SAM Pro Place', SAM_PRO_DOMAIN), $widget_ops, $control_ops );
 		}
 
@@ -189,7 +190,7 @@ if(!class_exists('sam_pro_ad_widget') && class_exists('WP_Widget')) {
 			$this->wTable = 'sampro_ads';
 
 			$widget_ops = array( 'classname' => 'sam_pro_ad_widget', 'description' => __('Non-rotating single ad serviced by Simple Ads Manager (Pro Edition).', SAM_PRO_DOMAIN));
-			$control_ops = array( 'id_base' => 'sam_pro_ad_widget' );
+			$control_ops = array( 'id_base' => 'sam_pro_ad_widget');
 			parent::__construct( 'sam_pro_ad_widget', __('SAM Pro Single Ad', SAM_PRO_DOMAIN), $widget_ops, $control_ops );
 		}
 
