@@ -68,14 +68,6 @@ class WP_Job_Manager_Post_Types {
 
 		add_action( 'parse_query', array( $this, 'add_feed_query_args' ) );
 
-		// WP ALL Import
-		add_action( 'pmxi_saved_post', array( $this, 'pmxi_saved_post' ), 10, 1 );
-
-		// RP4WP
-		add_filter( 'rp4wp_get_template', array( $this, 'rp4wp_template' ), 10, 3 );
-		add_filter( 'rp4wp_related_meta_fields', array( $this, 'rp4wp_related_meta_fields' ), 10, 3 );
-		add_filter( 'rp4wp_related_meta_fields_weight', array( $this, 'rp4wp_related_meta_fields_weight' ), 10, 3 );
-
 		// Single job content
 		$this->job_content_filter( true );
 	}
@@ -197,7 +189,14 @@ class WP_Job_Manager_Post_Types {
 		$singular  = __( 'Job', 'wp-job-manager' );
 		$plural    = __( 'Jobs', 'wp-job-manager' );
 
-		if ( current_theme_supports( 'job-manager-templates' ) ) {
+		/**
+		 * Set whether to add archive page support when registering the job listing post type.
+		 *
+		 * @since 1.30.0
+		 *
+		 * @param bool $enable_job_archive_page
+		 */
+		if ( apply_filters( 'job_manager_enable_job_archive_page', current_theme_supports( 'job-manager-templates' ) ) ) {
 			$has_archive = _x( 'jobs', 'Post type archive slug - resave permalinks after changing this', 'wp-job-manager' );
 		} else {
 			$has_archive = false;
@@ -353,6 +352,7 @@ class WP_Job_Manager_Post_Types {
 			'post_status'         => 'publish',
 			'ignore_sticky_posts' => 1,
 			'posts_per_page'      => isset( $_GET['posts_per_page'] ) ? absint( $_GET['posts_per_page'] ) : 10,
+			'paged'               => absint( get_query_var( 'paged', 1 ) ),
 			'tax_query'           => array(),
 			'meta_query'          => array()
 		);
@@ -777,67 +777,8 @@ class WP_Job_Manager_Post_Types {
 
 		$structured_data = wpjm_get_job_listing_structured_data();
 		if ( ! empty( $structured_data ) ) {
+			echo '<!-- WP Job Manager Structured Data -->' . "\r\n";
 			echo '<script type="application/ld+json">' . wp_json_encode( $structured_data ) . '</script>';
 		}
-	}
-
-	/**
-	 * After importing via WP All Import, adds default meta data.
-	 *
-	 * @param  int $post_id
-	 */
-	public function pmxi_saved_post( $post_id ) {
-		if ( 'job_listing' === get_post_type( $post_id ) ) {
-			$this->maybe_add_default_meta_data( $post_id );
-			if ( ! WP_Job_Manager_Geocode::has_location_data( $post_id ) && ( $location = get_post_meta( $post_id, '_job_location', true ) ) ) {
-				WP_Job_Manager_Geocode::generate_location_data( $post_id, $location );
-			}
-		}
-	}
-
-	/**
-	 * Replaces RP4WP template with the template from Job Manager.
-	 *
-	 * @param  string $located
-	 * @param  string $template_name
-	 * @param  array  $args
-	 * @return string
-	 */
-	public function rp4wp_template( $located, $template_name, $args ) {
-		if ( 'related-post-default.php' === $template_name && 'job_listing' === $args['related_post']->post_type ) {
-			return JOB_MANAGER_PLUGIN_DIR . '/templates/content-job_listing.php';
-		}
-		return $located;
-	}
-
-	/**
-	 * Adds meta fields for RP4WP to relate jobs by.
-	 *
-	 * @param  array   $meta_fields
-	 * @param  int     $post_id
-	 * @param  WP_Post $post
-	 * @return array
-	 */
-	public function rp4wp_related_meta_fields( $meta_fields, $post_id, $post ) {
-		if ( 'job_listing' === $post->post_type ) {
-			$meta_fields[] = '_company_name';
-			$meta_fields[] = '_job_location';
-		}
-		return $meta_fields;
-	}
-
-	/**
-	 * Adds meta fields for RP4WP to relate jobs by.
-	 *
-	 * @param  int     $weight
-	 * @param  WP_Post $post
-	 * @param  string  $meta_field
-	 * @return int
-	 */
-	public function rp4wp_related_meta_fields_weight( $weight, $post, $meta_field ) {
-		if ( 'job_listing' === $post->post_type ) {
-			$weight = 100;
-		}
-		return $weight;
 	}
 }

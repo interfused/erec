@@ -108,7 +108,7 @@
 	</p>
 	<h4>More Help</h4>
 	<p>If you require any more help with this plugin, you can always go to
-		<a href="https://paymentsplugin.com/forums">the WP Full Stripe Support Forums</a> to ask your question, or email us
+		<a target="_blank" href="https://paymentsplugin.com/support/?utm_source=plugin-wpfsf&utm_medium=help-page&utm_campaign=v1.6.1&utm_content=support-url">the Support page</a> to ask your question, or email us
 		directly at
 		<a href="mailto:support@paymentsplugin.com">support@paymentsplugin.com</a></p>
 	<div style="padding-top: 30px;">

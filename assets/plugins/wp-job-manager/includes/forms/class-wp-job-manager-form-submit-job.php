@@ -57,6 +57,10 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 	 */
 	public function __construct() {
 		add_action( 'wp', array( $this, 'process' ) );
+		if ( $this->use_recaptcha_field() ) {
+			add_action( 'submit_job_form_end', array( $this, 'display_recaptcha_field' ) );
+			add_action( 'submit_job_form_validate_fields', array( $this, 'validate_recaptcha_field' ) );
+		}
 
 		$this->steps  = (array) apply_filters( 'submit_job_steps', array(
 			'submit' => array(
@@ -142,14 +146,17 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 			case 'email' :
 				$application_method_label       = __( 'Application email', 'wp-job-manager' );
 				$application_method_placeholder = __( 'you@yourdomain.com', 'wp-job-manager' );
+				$application_method_sanitizer   = 'email';
 			break;
 			case 'url' :
 				$application_method_label       = __( 'Application URL', 'wp-job-manager' );
 				$application_method_placeholder = __( 'http://', 'wp-job-manager' );
+				$application_method_sanitizer   = 'url';
 			break;
 			default :
 				$application_method_label       = __( 'Application email/URL', 'wp-job-manager' );
 				$application_method_placeholder = __( 'Enter an email address or website URL', 'wp-job-manager' );
+				$application_method_sanitizer   = 'url_or_email';
 			break;
 		}
 
@@ -202,6 +209,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 				'application' => array(
 					'label'       => $application_method_label,
 					'type'        => 'text',
+					'sanitizer'   => $application_method_sanitizer,
 					'required'    => true,
 					'placeholder' => $application_method_placeholder,
 					'priority'    => 6
@@ -218,6 +226,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 				'company_website' => array(
 					'label'       => __( 'Website', 'wp-job-manager' ),
 					'type'        => 'text',
+					'sanitizer'   => 'url',
 					'required'    => false,
 					'placeholder' => __( 'http://', 'wp-job-manager' ),
 					'priority'    => 2
@@ -233,6 +242,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 				'company_video' => array(
 					'label'       => __( 'Video', 'wp-job-manager' ),
 					'type'        => 'text',
+					'sanitizer'   => 'url',
 					'required'    => false,
 					'placeholder' => __( 'A link to a video about your company', 'wp-job-manager' ),
 					'priority'    => 4
@@ -268,6 +278,18 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 		if ( ! get_option( 'job_manager_enable_types' ) || wp_count_terms( 'job_listing_type' ) == 0 ) {
 			unset( $this->fields['job']['job_type'] );
 		}
+	}
+
+	/**
+	 * Use reCAPTCHA field on the form?
+	 *
+	 * @return bool
+	 */
+	public function use_recaptcha_field() {
+		if ( ! $this->is_recaptcha_available() ) {
+			return false;
+		}
+		return 1 === absint( get_option( 'job_manager_enable_recaptcha_job_submission' ) );
 	}
 
 	/**
@@ -324,7 +346,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 					if ( ! is_email( $values['job']['application'] ) ) {
 						throw new Exception( __( 'Please enter a valid application email address', 'wp-job-manager' ) );
 					}
-				break;
+					break;
 				case 'url' :
 					// Prefix http if needed
 					if ( ! strstr( $values['job']['application'], 'http:' ) && ! strstr( $values['job']['application'], 'https:' ) ) {
@@ -333,7 +355,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 					if ( ! filter_var( $values['job']['application'], FILTER_VALIDATE_URL ) ) {
 						throw new Exception( __( 'Please enter a valid application URL', 'wp-job-manager' ) );
 					}
-				break;
+					break;
 				default :
 					if ( ! is_email( $values['job']['application'] ) ) {
 						// Prefix http if needed
@@ -344,11 +366,41 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 							throw new Exception( __( 'Please enter a valid application email address or URL', 'wp-job-manager' ) );
 						}
 					}
-				break;
+					break;
 			}
 		}
 
 		return apply_filters( 'submit_job_form_validate_fields', true, $this->fields, $values );
+	}
+
+	/**
+	 * Enqueues scripts and styles for editing and posting a job listing.
+	 */
+	protected function enqueue_job_form_assets() {
+		wp_enqueue_script( 'wp-job-manager-job-submission' );
+		wp_enqueue_style( 'wp-job-manager-job-submission', JOB_MANAGER_PLUGIN_URL . '/assets/css/job-submission.css', array(), JOB_MANAGER_VERSION );
+
+		// Register datepicker JS. It will be enqueued if needed when a date
+		// field is rendered.
+		wp_register_script( 'wp-job-manager-datepicker', JOB_MANAGER_PLUGIN_URL. '/assets/js/datepicker.min.js', array( 'jquery', 'jquery-ui-datepicker' ), JOB_MANAGER_VERSION, true );
+
+		// Localize scripts after the fields are rendered.
+		add_action( 'submit_job_form_end', array( $this, 'localize_job_form_scripts' ) );
+	}
+
+	/**
+	 * Localize frontend scripts that have been enqueued. This should be called
+	 * after the fields are rendered, in case some of them enqueue new scripts.
+	 */
+	public function localize_job_form_scripts() {
+		if ( function_exists( 'wp_localize_jquery_ui_datepicker' ) ) {
+			wp_localize_jquery_ui_datepicker();
+		} else {
+			wp_localize_script( 'wp-job-manager-datepicker', 'job_manager_datepicker', array(
+				/* translators: jQuery date format, see http://api.jqueryui.com/datepicker/#utility-formatDate */
+				'date_format' => _x( 'yy-mm-dd', 'Date format for jQuery datepicker.', 'wp-job-manager' )
+			) );
+		}
 	}
 
 	/**
@@ -421,8 +473,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 			$this->fields = apply_filters( 'submit_job_form_fields_get_user_data', $this->fields, get_current_user_id() );
 		}
 
-		wp_enqueue_script( 'wp-job-manager-job-submission' );
-
+		$this->enqueue_job_form_assets();
 		get_job_manager_template( 'job-submit.php', array(
 			'form'               => $this->form_name,
 			'job_id'             => $this->get_job_id(),
@@ -689,7 +740,7 @@ class WP_Job_Manager_Form_Submit_Job extends WP_Job_Manager_Form {
 		// Handle attachments
 		if ( sizeof( $maybe_attach ) && apply_filters( 'job_manager_attach_uploaded_files', true ) ) {
 			// Get attachments
-			$attachments     = get_posts( 'post_parent=' . $this->job_id . '&post_type=attachment&fields=ids&post_mime_type=image&numberposts=-1' );
+			$attachments     = get_posts( 'post_parent=' . $this->job_id . '&post_type=attachment&fields=ids&numberposts=-1' );
 			$attachment_urls = array();
 
 			// Loop attachments already attached to the job

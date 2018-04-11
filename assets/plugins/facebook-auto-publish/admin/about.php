@@ -1,12 +1,12 @@
 <?php
 if( !defined('ABSPATH') ){ exit();}
 ?>
-<h1 style="visibility: visible;">Facebook Auto Publish (V <?php echo xyz_fbap_plugin_get_version(); ?>)</h1>
+<h1 style="visibility: visible;">WP Facebook Auto Publish (V <?php echo xyz_fbap_plugin_get_version(); ?>)</h1>
 
 <div style="width: 99%">
 <p style="text-align: justify">
-Facebook Auto Publish automatically publishes posts from your blog to your  Facebook pages. It allows you to filter posts based on post-types and categories.
- Facebook Auto Publish is developed and maintained by <a href="https://xyzscripts.com">xyzscripts</a>.</p>
+WP Facebook Auto Publish automatically publishes posts from your blog to your  Facebook pages. It allows you to filter posts based on post-types and categories.
+WP Facebook Auto Publish is developed and maintained by <a href="https://xyzscripts.com">xyzscripts</a>.</p>
 
  
 

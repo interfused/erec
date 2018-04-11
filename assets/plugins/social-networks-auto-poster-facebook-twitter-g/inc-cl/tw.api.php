@@ -37,7 +37,7 @@ if (!class_exists("nxs_class_SNAP_TW")) { class nxs_class_SNAP_TW {
       
       require_once ('apis/tmhOAuth.php'); if ($nxs_urlLen>0) { $msg = nsTrnc($msg, $twLim-22+$nxs_urlLen); } else $msg = nsTrnc($msg, $twLim); //prr($msg); die('TTWWW');
       if (substr($msg, 0, 1)=='@') $msg = ' '.$msg; //prr(urlencode($msg));  $msg = html_entity_decode($msg);  prr(urlencode($msg));   die();  
-      $tmhOAuth = new NXS_tmhOAuth(array( 'consumer_key' => $options['appKey'], 'consumer_secret' => $options['appSec'], 'user_token' => $options['accessToken'], 'user_secret' => $options['accessTokenSec']));      
+      $tmhOAuth = new NXS_tmhOAuth(array( 'consumer_key' => nxs_gak($options['appKey']), 'consumer_secret' => nxs_gas($options['appSec']), 'user_token' => $options['accessToken'], 'user_secret' => $options['accessTokenSec']));      
       $params_array = array('status' =>$msg); if (!empty($options['in_reply_to_id'])) $params_array['in_reply_to_status_id'] = $options['in_reply_to_id']; $mid = '';
       if ($options['attchImg']!=false && $img!='') {                                                            
           $pa = array( 'media_data' => base64_encode($img)); //$pa =array( 'media' => $img); //## Check this one day.... 

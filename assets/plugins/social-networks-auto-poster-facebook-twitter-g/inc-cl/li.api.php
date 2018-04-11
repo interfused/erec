@@ -77,7 +77,7 @@ if (!class_exists("nxs_class_SNAP_LI")) { class nxs_class_SNAP_LI {
         if (!empty($options['apiToUse']) && $options['apiToUse']=='liv2') { if (empty($options['pgID'])||$options['pgID']=='p') $options['pgID'] = ''; //## V2          
           if($options['postType'] == 'A') $ret = $this->postShare($options['accessToken'], $msg, $options['pgID'], nsTrnc($msgAT, 200), str_replace('&', '&amp;', $urlToGo), $imgURL, $msgA); else $ret = $this->postShare($options['accessToken'], $msg, $options['pgID']);            
         } else {  //## V1
-          require_once ('apis/liOAuth.php'); $linkedin = new nsx_LinkedIn($options['appKey'], $options['appSec']);  $linkedin->oauth_verifier = $options['oAuthVerifier'];
+          require_once ('apis/liOAuth.php'); $linkedin = new nsx_LinkedIn(nxs_gak($options['appKey']), nxs_gas($options['appSec']));  $linkedin->oauth_verifier = $options['oAuthVerifier'];
           $linkedin->request_token = new nsx_trOAuthConsumer($options['oAuthToken'], $options['oAuthTokenSecret'], 1);     
           $linkedin->access_token = new nsx_trOAuthConsumer($options['accessToken'], $options['accessTokenSec'], 1);  
           $msg = nsTrnc($msg, 700); //prr($urlToGo);  $urlToGo = urlencode($urlToGo);   prr($urlToGo); die();

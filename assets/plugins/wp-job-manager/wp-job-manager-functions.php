@@ -114,7 +114,15 @@ function get_job_listings( $args = array() ) {
 	if ( 'featured' === $args['orderby'] ) {
 		$query_args['orderby'] = array(
 			'menu_order' => 'ASC',
-			'date'       => 'DESC'
+			'date'       => 'DESC',
+			'ID'         => 'DESC',
+		);
+	}
+
+	if ( 'rand_featured' === $args['orderby'] ) {
+		$query_args['orderby'] = array(
+			'menu_order' => 'ASC',
+			'rand'       => 'ASC'
 		);
 	}
 
@@ -141,27 +149,55 @@ function get_job_listings( $args = array() ) {
 	// Filter args
 	$query_args = apply_filters( 'get_job_listings_query_args', $query_args, $args );
 
-	// Generate hash
-	$to_hash         = json_encode( $query_args );
-	$query_args_hash = 'jm_' . md5( $to_hash ) . WP_Job_Manager_Cache_Helper::get_transient_version( 'get_job_listings' );
 
 	do_action( 'before_get_job_listings', $query_args, $args );
 
 	// Cache results
 	if ( apply_filters( 'get_job_listings_cache_results', true ) ) {
+		$to_hash = json_encode( $query_args );
+		$query_args_hash =  'jm_' . md5( $to_hash . JOB_MANAGER_VERSION ) . WP_Job_Manager_Cache_Helper::get_transient_version( 'get_job_listings' );
+		$result = false;
+		$cached_query_results = true;
+		$cached_query_posts = get_transient( $query_args_hash );
+		if ( is_string( $cached_query_posts ) ) {
+			$cached_query_posts = json_decode( $cached_query_posts, false );
+			if ( $cached_query_posts
+				 && is_object( $cached_query_posts )
+				 && isset( $cached_query_posts->max_num_pages )
+				 && isset( $cached_query_posts->found_posts )
+				 && isset( $cached_query_posts->posts )
+				 && is_array( $cached_query_posts->posts )
+			) {
+				$posts = array_map( 'get_post', $cached_query_posts->posts );
+				$result = new WP_Query();
+				$result->parse_query( $query_args );
+				$result->posts = $posts;
+				$result->found_posts = intval( $cached_query_posts->found_posts );
+				$result->max_num_pages = intval( $cached_query_posts->max_num_pages );
+				$result->post_count = count( $posts );
+			}
+		}
 
-		if ( false === ( $result = get_transient( $query_args_hash ) ) ) {
+		if ( false === $result ) {
 			$result = new WP_Query( $query_args );
-			set_transient( $query_args_hash, $result, DAY_IN_SECONDS );
+			$cached_query_results = false;
+
+			$cacheable_result = array();
+			$cacheable_result['posts'] = array_values( $result->posts );
+			$cacheable_result['found_posts'] = $result->found_posts;
+			$cacheable_result['max_num_pages'] = $result->max_num_pages;
+			set_transient( $query_args_hash, json_encode( $cacheable_result ), DAY_IN_SECONDS );
 		}
 
-		// random order is cached so shuffle them
-		if ( $query_args[ 'orderby' ] == 'rand' ) {
-			shuffle( $result->posts );
+		if ( $cached_query_results ) {
+			// random order is cached so shuffle them
+			if ( 'rand_featured' === $args['orderby'] ) {
+				usort( $result->posts, '_wpjm_shuffle_featured_post_results_helper' );
+			} elseif ( 'rand' === $args['orderby'] ) {
+				shuffle( $result->posts );
+			}
 		}
-
-	}
-	else {
+	} else {
 		$result = new WP_Query( $query_args );
 	}
 
@@ -171,6 +207,30 @@ function get_job_listings( $args = array() ) {
 
 	return $result;
 }
+endif;
+
+if ( ! function_exists( '_wpjm_shuffle_featured_post_results_helper' ) ) :
+	/**
+	 * Helper function to maintain featured status when shuffling results.
+	 *
+	 * @param WP_Post $a
+	 * @param WP_Post $b
+	 *
+	 * @return bool
+	 */
+	function _wpjm_shuffle_featured_post_results_helper( $a, $b ) {
+		if ( -1 === $a->menu_order || -1 === $b->menu_order ) {
+			// Left is featured
+			if ( 0 === $b->menu_order ) {
+				return -1;
+			}
+			// Right is featured
+			if ( 0 === $a->menu_order ) {
+				return 1;
+			}
+		}
+		return rand( -1, 1 );
+	}
 endif;
 
 if ( ! function_exists( 'get_job_listings_keyword_search' ) ) :
@@ -372,7 +432,12 @@ function job_manager_get_filtered_links( $args = array() ) {
 		)
 	), $args );
 
-	if ( sizeof( $args['filter_job_types'] ) === sizeof( $types ) && ! $args['search_keywords'] && ! $args['search_location'] && ! $args['search_categories'] && ! apply_filters( 'job_manager_get_listings_custom_filter', false ) ) {
+	if ( count( (array) $args['filter_job_types'] ) === count( $types )
+		 && empty( $args['search_keywords'] )
+		 && empty( $args['search_location'] )
+		 && empty( $args['search_categories'] )
+		 && ! apply_filters( 'job_manager_get_listings_custom_filter', false )
+	) {
 		unset( $links['reset'] );
 	}
 
@@ -545,6 +610,11 @@ endif;
 function job_manager_user_can_upload_file_via_ajax() {
 	$can_upload = is_user_logged_in() && job_manager_user_can_post_job();
 
+	if ( has_filter( 'job_manager_ajax_file_upload_enabled' ) ) {
+		_deprecated_hook( 'job_manager_ajax_file_upload_enabled', '1.30.0', 'job_manager_user_can_upload_file_via_ajax' );
+		$can_upload = apply_filters( 'job_manager_ajax_file_upload_enabled', $can_upload );
+	}
+
 	/**
 	 * Override ability of a user to upload a file via Ajax.
 	 *
@@ -593,6 +663,138 @@ function job_manager_user_can_edit_job( $job_id ) {
 	}
 
 	return apply_filters( 'job_manager_user_can_edit_job', $can_edit, $job_id );
+}
+
+/**
+ * Checks if the visitor is currently on a WPJM page, job listing, or taxonomy.
+ *
+ * @since 1.30.0
+ *
+ * @return bool
+ */
+function is_wpjm() {
+	/**
+	 * Filter the result of is_wpjm()
+	 *
+	 * @since 1.30.0
+	 *
+	 * @param bool $is_wpjm
+	 */
+	return apply_filters( 'is_wpjm', ( is_wpjm_page() || has_wpjm_shortcode() || is_wpjm_job_listing() || is_wpjm_taxonomy() ) ? true : false );
+}
+
+/**
+ * Checks if the visitor is currently on a WPJM page.
+ *
+ * @since 1.30.0
+ *
+ * @return bool
+ */
+function is_wpjm_page() {
+	$is_wpjm_page = is_post_type_archive( 'job_listing' );
+
+	if ( ! $is_wpjm_page ) {
+		$wpjm_page_ids = array_filter( array(
+			get_option( 'job_manager_submit_job_form_page_id', false ),
+			get_option( 'job_manager_job_dashboard_page_id', false ),
+			get_option( 'job_manager_jobs_page_id', false ),
+		) );
+
+		/**
+		 * Filters a list of all page IDs related to WPJM.
+		 *
+		 * @since 1.30.0
+		 *
+		 * @param int[] $wpjm_page_ids
+		 */
+		$wpjm_page_ids = array_unique( apply_filters( 'job_manager_page_ids', $wpjm_page_ids ) );
+
+		$is_wpjm_page  = is_page( $wpjm_page_ids );
+	}
+
+	/**
+	 * Filter the result of is_wpjm_page()
+	 *
+	 * @since 1.30.0
+	 *
+	 * @param bool $is_wpjm_page
+	 */
+	return apply_filters( 'is_wpjm_page', $is_wpjm_page );
+}
+
+/**
+ * Checks if the provided content or the current single page or post has a WPJM shortcode.
+ *
+ * @param string|null       $content   Content to check. If not provided, it uses the current post content.
+ * @param string|array|null $tag Check specifically for one or more shortcodes. If not provided, checks for any WPJM shortcode.
+ *
+ * @return bool
+ */
+function has_wpjm_shortcode( $content = null, $tag = null ) {
+	global $post;
+
+	$has_wpjm_shortcode = false;
+
+	if ( null === $content && is_singular() && is_a( $post, 'WP_Post' ) ) {
+		$content = $post->post_content;
+	}
+
+	if ( ! empty( $content ) ) {
+		$wpjm_shortcodes = array( 'submit_job_form', 'job_dashboard', 'jobs', 'job', 'job_summary', 'job_apply' );
+		/**
+		 * Filters a list of all shortcodes associated with WPJM.
+		 *
+		 * @since 1.30.0
+		 *
+		 * @param string[] $wpjm_shortcodes
+		 */
+		$wpjm_shortcodes = array_unique( apply_filters( 'job_manager_shortcodes', $wpjm_shortcodes ) );
+
+		if ( null !== $tag ) {
+			if ( ! is_array( $tag ) ) {
+				$tag = array( $tag );
+			}
+			$wpjm_shortcodes = array_intersect( $wpjm_shortcodes, $tag );
+		}
+
+		foreach ( $wpjm_shortcodes as $shortcode ) {
+			if ( has_shortcode( $content, $shortcode ) ) {
+				$has_wpjm_shortcode = true;
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Filter the result of has_wpjm_shortcode()
+	 *
+	 * @since 1.30.0
+	 *
+	 * @param bool $has_wpjm_shortcode
+	 */
+	return apply_filters( 'has_wpjm_shortcode', $has_wpjm_shortcode );
+}
+
+/**
+ * Checks if the current page is a job listing.
+ *
+ * @since 1.30.0
+ *
+ * @return bool
+ */
+function is_wpjm_job_listing() {
+	return is_singular( array( 'job_listing' ) );
+}
+
+/**
+ * Checks if the visitor is on a page for a WPJM taxonomy.
+ *
+ * @since 1.30.0
+ *
+ * @return bool
+ */
+function is_wpjm_taxonomy() {
+	return is_tax( get_object_taxonomies( 'job_listing' ) );
 }
 
 /**
@@ -758,6 +960,42 @@ function job_manager_user_can_edit_pending_submissions() {
 }
 
 /**
+ * Checks if users are allowed to edit published submissions.
+ *
+ * @since 1.29.0
+ * @return bool
+ */
+function wpjm_user_can_edit_published_submissions() {
+	/**
+	 * Override the setting for allowing a user to edit published job listings.
+	 *
+	 * @since 1.29.0
+	 *
+	 * @param bool $can_edit_published_submissions
+	 */
+	return apply_filters( 'job_manager_user_can_edit_published_submissions', in_array( get_option( 'job_manager_user_edit_published_submissions' ), array( 'yes', 'yes_moderated' ) ) );
+}
+
+/**
+ * Checks if moderation is required when users edit published submissions.
+ *
+ * @since 1.29.0
+ * @return bool
+ */
+function wpjm_published_submission_edits_require_moderation() {
+	$require_moderation = 'yes_moderated' === get_option( 'job_manager_user_edit_published_submissions' );
+
+	/**
+	 * Override the setting for user edits to job listings requiring moderation.
+	 *
+	 * @since 1.29.0
+	 *
+	 * @param bool $require_moderation
+	 */
+	return apply_filters( 'job_manager_published_submission_edits_require_moderation', $require_moderation );
+}
+
+/**
  * Displays category select dropdown.
  *
  * Based on wp_dropdown_categories, with the exception of supporting multiple selected categories.
@@ -773,6 +1011,7 @@ function job_manager_dropdown_categories( $args = '' ) {
 		'order'           => 'ASC',
 		'show_count'      => 0,
 		'hide_empty'      => 1,
+		'parent'          => '',
 		'child_of'        => 0,
 		'exclude'         => '',
 		'echo'            => 1,
@@ -811,6 +1050,7 @@ function job_manager_dropdown_categories( $args = '' ) {
 			'orderby'         => $r['orderby'],
 			'order'           => $r['order'],
 			'hide_empty'      => $r['hide_empty'],
+			'parent'          => $r['parent'],
 			'child_of'        => $r['child_of'],
 			'exclude'         => $r['exclude'],
 			'hierarchical'    => $r['hierarchical']

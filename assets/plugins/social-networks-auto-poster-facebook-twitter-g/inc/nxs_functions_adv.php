@@ -86,14 +86,19 @@ if (!function_exists("nxs_snapAjax")) { function nxs_snapAjax() { check_ajax_ref
     $savedMeta = maybe_unserialize(get_post_meta($id, 'snap'.$ntU, true));  $savedMeta[$ii][$fname] = $_POST['cval'];  prr($savedMeta);
     delete_post_meta($id, 'snap'.$ntU); add_post_meta($id, 'snap'.$ntU, str_replace('\\','\\\\',serialize($savedMeta)));   
   }
-  
   if ($_POST['nxsact']=='tknzsrch') { $termsOut = array();
-     if (($_POST['nxtype']=='post')) { $posts = get_posts( array('orderby'=>'title', 'post_status' => array( 'pending', 'publish', 'future' ), 'posts_per_page'=>100, 's'=> $_POST['srch'] ) );  
-       foreach ($posts as $post) $termsOut[] = array('value'=>$post->ID, 'text'=>$post->post_title); echo json_encode($termsOut);
+     if (($_POST['nxtype']=='post')) { $posts = get_posts( array('orderby'=>'title', 'post_status' => array( 'pending', 'publish', 'future' ), 'post_type' =>  'any', 'posts_per_page'=>100, 's'=> $_POST['srch'] ) );  
+       foreach ($posts as $post) $termsOut[] = array('value'=>$post->ID, 'text'=>$post->post_title); 
+       
+       if (!empty($_POST['srch']) && intval($_POST['srch'])>0) {
+           $posts = get_posts( array('orderby'=>'title', 'post_status' => array( 'pending', 'publish', 'future' ), 'post_type' =>  'any', 'posts_per_page'=>100, 'post__in' => array(intval($_POST['srch']) )) );  
+           foreach ($posts as $post) $termsOut[] = array('value'=>$post->ID, 'text'=>$post->post_title);
+       }  echo json_encode($termsOut);
+       
      } else  { $terms = get_terms($_POST['nxtype'], array('orderby'=>'name', 'hide_empty' => 0, 'number'=>10, 'name__like'=> $_POST['srch'] ) ); //$termsOut[] = array('value'=>'-', 'text'=>$_POST['srch'].' [Add]');
        foreach ($terms as $term) $termsOut[] = array('value'=>$term->term_id, 'text'=>$term->name); echo json_encode($termsOut);
      }
-  }  
+  } 
   //### Evil Buttons
   if ($_POST['nxsact']=='resetSNAPInfoPosts') { global $wpdb; $wpdb->query( "DELETE FROM ". $wpdb->postmeta ." WHERE meta_key LIKE 'snap%'" );
       _e('Done. All SNAP data has been removed from posts.', 'social-networks-auto-poster-facebook-twitter-g');
@@ -138,7 +143,7 @@ if (!function_exists("nxs_contCron_js")){ function nxs_contCron_js() {
     $contCron = get_option('nxs_contCron'); $output='<script type="text/javascript">jQuery.get( "'.home_url('?nxs-cronrun='.$contCron).'");</script>'; echo $output;
 }}
 //## Format Message (WP)
-if (!function_exists("nsFormatMessage")) { function nsFormatMessage($msg, $postID, $addURLParams='', $lng='', $ntOpts=''){ global $ShownAds, $nxs_SNAP, $nxs_urlLen; 
+if (!function_exists("nsFormatMessage")) { function nsFormatMessage($msg, $postID, $addURLParams='', $lng='', $ntOpts=''){ global $ShownAds, $nxs_SNAP, $nxs_urlLen;
   if (defined('DOING_CRON') && empty($GLOBALS['nxswpdone'])) { $GLOBALS['nxswpdone'] = 1; do_action( 'wp' ); }
   $post = get_post($postID); $options = $nxs_SNAP->nxs_options; if (empty($ntOpts)) $ntOpts = array();
   if (!empty($options['brokenCntFilters'])) { $msg = str_replace('%FULLTITLE%','%TITLE%',$msg); $msg = str_replace('%PANNOUNCE%','%ANNOUNCE%',$msg); $msg = str_replace('%PANNOUNCER%','%ANNOUNCER%',$msg); 
@@ -153,7 +158,7 @@ if (!function_exists("nsFormatMessage")) { function nsFormatMessage($msg, $postI
     $nxs_urlLen = nxs_strLen($url); $msg = str_ireplace("%URL%", $url, $msg);
   }
   if (stripos($msg, '%SLUG%')!==false) { $msg = str_ireplace("%SLUG%", $post->post_name, $msg); }
-  if (stripos($msg, '%MYURL%')!==false) { $url =  get_post_meta($postID, 'snap_MYURL', true); if($addURLParams!='') $url .= (strpos($url,'?')!==false?'&':'?').$addURLParams;  $nxs_urlLen = nxs_strLen($url); $msg = str_ireplace("%MYURL%", $url, $msg);}// prr($msg);
+  if (stripos($msg, '%MYURL%')!==false) { $url =  get_post_meta($postID, 'snap_MYURL', true); if($addURLParams!='') $url .= (strpos($url,'?')!==false?'&':'?').$addURLParams;  $nxs_urlLen = nxs_strLen($url); $msg = str_ireplace("%MYURL%", $url, $msg);} 
   if (stripos($msg, '%SURL%')!==false) { if (!empty($ntOpts) && !empty($ntOpts['surlToUse'])) $url = $ntOpts['surlToUse']; else {    
       if (!empty($ntOpts) && !empty($ntOpts['urlToUse'])) $url = $ntOpts['urlToUse']; else { $oo=array(); $oo = nxs_getURL($oo, $postID, $addURLParams); $url = $oo['urlToUse']; } $url = nxs_mkShortURL($url, $postID); 
     } $nxs_urlLen = nxs_strLen($url); $msg = str_ireplace("%SURL%", $url, $msg);  
@@ -198,19 +203,20 @@ if (!function_exists("nsFormatMessage")) { function nsFormatMessage($msg, $postI
       if (!empty($exc)) $excerpt = strip_shortcodes(nxs_doQTrans($exc, $lng)); else $excerpt= nsTrnc(strip_tags(strip_shortcodes(nxs_doQTrans($post->post_content, $lng))), 300, " ", "..."); 
        $msg = str_ireplace("%RAWEXCERPTHTML%", $excerpt, $msg);
   }
+  $tagsExclFrmHT = $options['tagsExclFrmHT']; $tagsExclFrmHT = explode(',',$tagsExclFrmHT); foreach ($tagsExclFrmHT as $i=>$et) $tagsExclFrmHT[$i] = trim(strtolower($et));  
   if (stripos($msg, '%TAGS%')!==false) { $t = wp_get_object_terms($postID, 'product_tag'); if ( empty($t) || is_wp_error($t) || !is_array($t) ) $t = wp_get_post_tags($postID);
-    $tggs = array(); foreach ($t as $tagA) {$tggs[] = $tagA->name;} $tags = implode(', ',$tggs); $msg = str_ireplace("%TAGS%", $tags, $msg);
+    $tggs = array(); foreach ($t as $tagA) { $tg = $tagA->name;  if (!in_array(strtolower($tg), $tagsExclFrmHT)) $tggs[] = $tg; }     
+    $tags = implode(', ',$tggs); $msg = str_ireplace("%TAGS%", $tags, $msg);
   }
-  if (stripos($msg, '%CATS%')!==false) { $t = wp_get_post_categories($postID); $cats = array();  foreach($t as $c){ $cat = get_category($c); $cats[] = str_ireplace('&','&amp;',$cat->name); } 
+  if (stripos($msg, '%CATS%')!==false) { $t = wp_get_post_categories($postID); $cats = array();  foreach($t as $c){ $cat = get_category($c); $tg = str_ireplace('&','&amp;',$cat->name);  if (!in_array(strtolower($tg), $tagsExclFrmHT)) $cats[] = $tg; } 
           $ctts = implode(', ',$cats); $msg = str_ireplace("%CATS%", $ctts, $msg);
   }
   if (stripos($msg, '%HCATS%')!==false) { $t = wp_get_post_categories($postID); $cats = array();  
-    foreach($t as $c){ $cat = get_category($c);  $cats[] = "#".trim(str_replace(' ',$htS, str_replace('  ', ' ', trim(str_ireplace('&','',str_ireplace('&amp;','',$cat->name)))))); } 
+    foreach($t as $c){ $cat = get_category($c);  $tg = trim(str_replace(' ',$htS, str_replace('  ', ' ', trim(str_ireplace('&','',str_ireplace('&amp;','',$cat->name)))))); if (!in_array(strtolower($tg), $tagsExclFrmHT)) $cats[] = '#'.$tg; } 
     $ctts = implode($htSep,$cats); $msg = str_ireplace("%HCATS%", $ctts, $msg);
   }  
-  if (stripos($msg, '%HTAGS%')!==false) { $t = wp_get_object_terms($postID, 'product_tag'); if ( empty($t) || is_wp_error($t) || !is_array($t) ) $t = wp_get_post_tags($postID);
-    //$tggs = array(); foreach ($t as $tagA){$tggs[] = "#".trim(str_replace(' ', $htS, preg_replace('/[^a-zA-Z0-9\p{L}\p{N}\s]/u', '', trim(nxs_ucwords(str_ireplace('&','',str_ireplace('&amp;','',$tagA->name)))))));} 
-    $tggs = array(); foreach ($t as $tagA){$tggs[] = "#".trim(str_replace(' ', $htS, nxs_clean_string(trim(nxs_ucwords(str_ireplace('&','',str_ireplace('&amp;','',$tagA->name)))))));} 
+  if (stripos($msg, '%HTAGS%')!==false) { $t = wp_get_object_terms($postID, 'product_tag'); if ( empty($t) || is_wp_error($t) || !is_array($t) ) $t = wp_get_post_tags($postID);    
+    $tggs = array(); foreach ($t as $tagA) { $tg = trim(str_replace(' ', $htS, nxs_clean_string(trim(nxs_ucwords(str_ireplace('&','',str_ireplace('&amp;','',$tagA->name))))))); if (!in_array(strtolower($tg), $tagsExclFrmHT)) $tggs[] = '#'.$tg; }
     $tags = implode($htSep,$tggs); $msg = str_ireplace("%HTAGS%", $tags, $msg);
   } 
   if (preg_match('/%+CF-[a-zA-Z0-9-_]+%/', $msg)) { $msgA = explode('%CF', $msg); $mout = '';

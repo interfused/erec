@@ -1,7 +1,7 @@
 <?php
 
 class MM_WPFSF {
-	const VERSION = '1.5.1';
+	const VERSION = '1.6.1';
 	/**
 	 * @var MM_WPFSF
 	 */
@@ -173,17 +173,19 @@ class MM_WPFSF {
 		$this->fullstripe_load_css();
 		$this->fullstripe_load_js();
 		//load form data into scope
-		list( $formData, $currencySymbol, $creditCardImage ) = $this->load_payment_form_data( $form );
+		/** @noinspection PhpUnusedLocalVariableInspection */
+		list( $paymentForm, $currencySymbol, $creditCardImage ) = $this->load_payment_form_data( $form );
 
 		//get the form style
 		$style = 0;
-		if ( ! $formData ) {
+		if ( ! $paymentForm ) {
 			$style = - 1;
 		} else {
-			$style = $formData->formStyle;
+			$style = $paymentForm->formStyle;
 		}
 
 		ob_start();
+		/** @noinspection PhpIncludeInspection */
 		include $this->get_payment_form_by_style( $style );
 		$content = ob_get_clean();
 
@@ -957,16 +959,16 @@ class MM_WPFSF {
 	function get_payment_form_by_style( $styleID ) {
 		switch ( $styleID ) {
 			case - 1:
-				return WP_FULL_STRIPE_DIR . '/pages/forms/invalid_shortcode.php';
+				return WP_FULL_STRIPE_DIR . '/pages/forms/fullstripe_invalid_shortcode.php';
 
 			case 0:
-				return WP_FULL_STRIPE_DIR . '/pages/fullstripe_payment_form.php';
+				return WP_FULL_STRIPE_DIR . '/pages/forms/fullstripe_payment_form.php';
 
 			case 1:
-				return WP_FULL_STRIPE_DIR . '/pages/forms/payment_form_compact.php';
+				return WP_FULL_STRIPE_DIR . '/pages/forms/fullstripe_payment_form_compact.php';
 
 			default:
-				return WP_FULL_STRIPE_DIR . '/pages/fullstripe_payment_form.php';
+				return WP_FULL_STRIPE_DIR . '/pages/forms/fullstripe_payment_form.php';
 		}
 	}
 

@@ -19,12 +19,12 @@ if (!class_exists("nxs_snapClassWB")) { class nxs_snapClassWB extends nxs_snapCl
       prr($tum_oauth); prr($options);               
       */
       global $nxs_snapSetPgURL; $state = $ntInfo['lcode'].'a-'.$_GET['acc'];
-      $url = 'https://api.weibo.com/oauth2/authorize?client_id='.$options['appKey'].'&redirect_uri='.urlencode($nxs_snapSetPgURL).'&scope=all&response_type=code&state='.$state;
+      $url = 'https://api.weibo.com/oauth2/authorize?client_id='.nxs_gak($options['appKey']).'&redirect_uri='.urlencode($nxs_snapSetPgURL).'&scope=all&response_type=code&state='.$state;
       echo '<br/><br/>All good?! Redirecting ..... <script type="text/javascript">window.location = "'.$url.'"</script>'; 
       die();
     }
     if ( isset($_GET['code']) && isset($_GET['state']) && stripos($_GET['state'],$ntInfo['lcode'].'a-')!==false){ $ii = explode('-',$_GET['state']); $ii = $ii[1]; $options = $this->nt[$ii]; 
-      $appkey = $options['appKey']; $appSecret = $options['appSec']; $url = 'https://api.weibo.com/oauth2/access_token?client_id='.$appkey.'&client_secret='.$appSecret.'&grant_type=authorization_code&redirect_uri='.urlencode($nxs_snapSetPgURL).'&code='.$_GET['code'];
+      $appkey = nxs_gak($options['appKey']); $appSecret = nxs_gas($options['appSec']); $url = 'https://api.weibo.com/oauth2/access_token?client_id='.$appkey.'&client_secret='.$appSecret.'&grant_type=authorization_code&redirect_uri='.urlencode($nxs_snapSetPgURL).'&code='.$_GET['code'];
       $rep = nxs_remote_post($url); $cont = json_decode($rep['body'], true); if (empty($cont) || empty($cont['access_token'])) {prr($cont); prr($rep); die();}      
       $options['accessToken'] = $cont['access_token']; $options['appAppUserID'] = $cont['uid']; $options['appAppUserName'] = $cont['uid'];  nxs_save_glbNtwrks($ntInfo['lcode'],$ii,$options,'*');  //prr($options); die();
       if (!empty($options['appAppUserID'])) {  echo '<br/><br/>All good?! Redirecting ..... <script type="text/javascript">window.location = "'.$nxs_snapSetPgURL.'"</script>';  die();}

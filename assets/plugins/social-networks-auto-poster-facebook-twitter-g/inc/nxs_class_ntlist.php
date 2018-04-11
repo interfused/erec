@@ -1,7 +1,7 @@
 <?php
 
 if (!class_exists('nxs_snapClassNT')) { class nxs_snapClassNT {    
-    var $nt = array(); var $ntInfo = array(); var $noFuncMsg = ''; var $isMobile = false; var $isRepost = false;
+    var $nt = array(); var $ntInfo = array(); var $noFuncMsg = ''; var $isMobile = false; var $isRepost = false; var $hideUnchecked = true;
     
     function __construct() { $this->isMobile = nxs_isMobile(); }    
     public function checkIfSetupFinished($options) { return 1; }
@@ -97,7 +97,7 @@ if (!class_exists('nxs_snapClassNT')) { class nxs_snapClassNT {
           <?php /* ######################## Advanced Tab ####################### */ ?>
           <?php if (!$isNew && function_exists('_make_url_clickable_cb') ) { ?>   
             <div id="nsx<?php echo $nt.$ii ?>_tab2" class="nsx_tab_content"> 
-               <?php $this->showNTFilters($nt, $ii, $options); $this->showImgSizeChoice($nt, $ii, !empty($options['wpImgSize'])?$options['wpImgSize']:'full'); $this->addPostingDelaySelV4($nt, $ii, $options); $this->advTab($ii, $options); ?>
+               <?php $this->showNTPosTypes($nt, $ii, $options); $this->showNTFilters($nt, $ii, $options); $this->showImgSizeChoice($nt, $ii, !empty($options['wpImgSize'])?$options['wpImgSize']:'full'); $this->addPostingDelaySelV4($nt, $ii, $options); $this->advTab($ii, $options); ?>
             </div> <?php } ?> <?php /* #### End of Tab #### */ ?>
         </div><br/> <?php /* #### End of Tabs #### */ ?>
         
@@ -133,6 +133,18 @@ if (!class_exists('nxs_snapClassNT')) { class nxs_snapClassNT {
       <?php  _e('Shorten URL', 'social-networks-auto-poster-facebook-twitter-g'); ?> </h3><?php
     }    
     //## Filters
+    public function showNTPosTypes($nt, $ii, $options){ return; //## Maybe show this instead of part of Filters
+      $builtin_types = get_post_types( array( 'public' => true, '_builtin' => true ) ); $custom_types = get_post_types( array( 'public' => true, '_builtin' => false ) );            
+      $posts_types = array_merge( $builtin_types, $custom_types ); $posts_types[] = 'nxs_qp'; natsort( $posts_types ); 
+      ?><div class="nxs_tls_cpt"><?php  _e('Post Types', 'social-networks-auto-poster-facebook-twitter-g'); ?>&nbsp;&nbsp;<span class="nxsInstrSpan"><a href="https://www.nextscripts.com/snap-features/filters" target="_blank"><?php _e('[Instructions]', 'social-networks-auto-poster-facebook-twitter-g'); ?></a></span></div> <div style="padding-left: 15px;font-size: 16px;"><?php
+      //prr($posts_types); //prr($options);
+      
+      foreach ($posts_types as $pt) { $isFOn = !empty($options['fltrs']) && is_array($options['fltrs']) && !empty($options['fltrs']['nxs_post_type']) && in_array($pt, $options['fltrs']['nxs_post_type']); ?>
+         <input value="1" name="<?php echo $nt ?>[<?php echo $ii; ?>][pts][<?php echo $pt; ?>]" type="checkbox" class="nxs_acctcb" <?php if ($isFOn) echo "checked"; ?> /><?php echo $pt; ?><br/>          
+         
+      <?php } ?></div> <?php
+    
+    }
     public function showNTFilters($nt, $ii, $options){ if (empty($options['fltrs'])) $options['fltrs'] = array(); $isFOn = !empty($options['fltrsOn']) && (int)$options['fltrsOn'] == 1; ?> 
       <div class="nxs_tls_cpt"><?php  _e('Filters', 'social-networks-auto-poster-facebook-twitter-g'); ?>&nbsp;&nbsp;<span class="nxsInstrSpan"><a href="https://www.nextscripts.com/snap-features/filters" target="_blank"><?php _e('[Instructions]', 'social-networks-auto-poster-facebook-twitter-g'); ?></a></span></div> <h3 style="padding-left: 15px;font-size: 16px;"> 
       <input value="1" name="<?php echo $nt ?>[<?php echo $ii; ?>][fltrsOn]" type="checkbox" onchange="if (jQuery(this).is(':checked')) jQuery('#nxs_flrts<?php echo $nt.$ii; ?>').show(); else jQuery('#nxs_flrts<?php echo $nt.$ii; ?>').hide();" class="nxs_acctcb" <?php if ($isFOn) echo "checked"; ?> /> 
@@ -160,7 +172,8 @@ if (!class_exists('nxs_snapClassNT')) { class nxs_snapClassNT {
       <div style="width:100%;"><strong><?php echo $this->ntInfo['name']; ?>&nbsp;<?php _e('Login', 'social-networks-auto-poster-facebook-twitter-g'); if ($t=='e') { echo " "; _e('Email', 'social-networks-auto-poster-facebook-twitter-g'); } ?>:</strong> </div><input name="<?php echo $nt; ?>[<?php echo $ii; ?>][uName]" id="ap<?php echo $ntU; ?>UName<?php echo $ii; ?>" class="nxAccEdElem" value="<?php echo htmlentities($u, ENT_COMPAT, "UTF-8"); ?>"  onchange="if (jQuery(this).val()!='' && jQuery('#ap<?php echo $ntU; ?>Pass<?php echo $ii; ?>').val()!=''){jQuery('#<?php echo $nt.$ii; ?>getPgs').val(1);nxs_svSetAdv('<?php echo $nt; ?>', '<?php echo $ii; ?>','nxsAllAccntsDiv','<?php echo $nt.$ii; ?>pgsList','','');} return false;"/>
       <div style="width:100%;"><strong><?php echo $this->ntInfo['name']; ?>&nbsp;<?php _e('Password', 'social-networks-auto-poster-facebook-twitter-g'); ?>:</strong> </div><input autocomplete="false" readonly onfocus="this.removeAttribute('readonly');"  name="<?php echo $nt; ?>[<?php echo $ii; ?>][uPass]" id="ap<?php echo $ntU; ?>Pass<?php echo $ii; ?>" type="password" class="nxAccEdElem" value="<?php echo htmlentities((substr($p, 0, 5)=='n5g9a'||substr($p, 0, 5)=='g9c1a'||substr($p, 0, 5)=='b4d7s')?nsx_doDecode(substr($p, 5)):$p, ENT_COMPAT, "UTF-8"); ?>" <?php echo !empty($onchange)?'onchange="'.$onchange.'"':''; ?> /><br/><?php
     }
-    public function elemKeySecret($ii,$lKey,$lSec,$key,$sec,$fnKey='appKey',$fnSec='appSec', $aurl='') { $nt = $this->ntInfo['lcode']; $ntU = $this->ntInfo['code']; $aurl = !empty($aurl)?' (<a style="font-size: 12px;" href="'.$aurl.'" target="_blank">'.$aurl.'</a>)':''; ?>
+    public function elemKeySecret($ii,$lKey,$lSec,$key,$sec,$fnKey='appKey',$fnSec='appSec', $aurl='') { $nt = $this->ntInfo['lcode']; $ntU = $this->ntInfo['code']; $aurl = !empty($aurl)?' (<a style="font-size: 12px;" href="'.$aurl.'" target="_blank">'.$aurl.'</a>)':'';     
+     if (!empty($key)) $key = (substr($key, 0, 5)=='x5g9a')?nsx_doDecode(substr($key, 5)):$key; if (!empty($sec)) $sec = (substr($sec, 0, 5)=='d3h0a')?nsx_doDecode(substr($sec, 5)):$sec; ?>
      <div style="width:100%;"><b style="font-size: 14px;"><?php echo $lKey; echo $aurl; ?> </b></div><input name="<?php echo $nt; ?>[<?php echo $ii; ?>][<?php echo $fnKey; ?>]" id="<?php echo $nt.$fnKey.$ii; ?>" class="nxAccEdElem" value="<?php echo htmlentities($key, ENT_COMPAT, "UTF-8"); ?>" /> 
      <div style="width:100%;"><b style="font-size: 14px;"><?php echo $lSec; ?>:</b></div><input name="<?php echo $nt; ?>[<?php echo $ii; ?>][<?php echo $fnSec; ?>]" id="<?php echo $fnSec.$ii; ?>" class="nxAccEdElem" value="<?php echo htmlentities($sec, ENT_COMPAT, "UTF-8"); ?>" /><?php               
     }
@@ -197,11 +210,6 @@ if (!class_exists('nxs_snapClassNT')) { class nxs_snapClassNT {
     
     public function saveCommonNTSettings($pval, $o) { if (isset($pval['do'])) $o['do'] = $pval['do']; else $o['do'] = 0;  if (isset($pval['nName'])) $o['nName'] = trim($pval['nName']); if (isset($pval['qTLng'])) $o['qTLng'] = trim($pval['qTLng']);
       if (isset($pval['delayDays'])) $o['nDays'] = trim($pval['delayDays']);  if (isset($pval['delayHrs']))  $o['nHrs'] = trim($pval['delayHrs']); if (isset($pval['delayMin'])) $o['nMin'] = trim($pval['delayMin']); 
-      
-      //$o['do'.$this->ntInfo['code']] = $o['do']; //V3 COMP CHANGE
-      
-      //$o = nxs_adjRpst($o, $pval);       
-      
       //## Common Items (Possible)
       if (isset($pval['uName']))   $o['uName'] = trim($pval['uName']); else if (isset($o['uName'])) unset($o['uName']);
       if (!empty($pval['uPass']))    $o['uPass'] = 'g9c1a'.nsx_doEncode($pval['uPass']); else if (isset($o['uPass'])) unset($o['uPass']);
@@ -209,8 +217,8 @@ if (!class_exists('nxs_snapClassNT')) { class nxs_snapClassNT {
       if (isset($pval['msgTFormat'])) $o['msgTFormat'] = trim($pval['msgTFormat']); else if (isset($o['msgTFormat'])) unset($o['msgTFormat']);
       if (isset($pval['msgAFormat'])) $o['msgAFormat'] = trim($pval['msgAFormat']); else if (isset($o['msgAFormat'])) unset($o['msgAFormat']);
       if (isset($pval['msgATFormat'])) $o['msgATFormat'] = trim($pval['msgATFormat']); else if (isset($o['msgATFormat'])) unset($o['msgATFormat']);
-      if (isset($pval['appKey'])) $o['appKey'] = trim($pval['appKey']); else if (isset($o['appKey'])) unset($o['appKey']);
-      if (isset($pval['appSec'])) $o['appSec'] = trim($pval['appSec']); else if (isset($o['appSec'])) unset($o['appSec']);
+      if (isset($pval['appKey'])) $o['appKey'] = 'x5g9a'.nsx_doEncode(trim($pval['appKey'])); else if (isset($o['appKey'])) unset($o['appKey']);
+      if (isset($pval['appSec'])) $o['appSec'] = 'd3h0a'.nsx_doEncode(trim($pval['appSec'])); else if (isset($o['appSec'])) unset($o['appSec']);
       if (isset($pval['postType'])) $o['postType'] = $pval['postType'];
       if (isset($pval['apiKey'])) $o['apiKey'] = trim($pval['apiKey']); else if (isset($o['apiKey'])) unset($o['apiKey']);
       if (isset($pval['inclTags'])) $o['inclTags'] = trim($pval['inclTags']); else if (isset($o['inclTags'])) $o['inclTags'] = 0;
@@ -244,6 +252,8 @@ if (!class_exists('nxs_snapClassNT')) { class nxs_snapClassNT {
       if (isset($pval['nxs_post_formats'])) $o['fltrs']['nxs_post_formats'] = $pval['nxs_post_formats'];
       if (isset($pval['nxs_user_names'])) $o['fltrs']['nxs_user_names'] = $pval['nxs_user_names']; 
       if (isset($pval['nxs_langs'])) $o['fltrs']['nxs_langs'] = $pval['nxs_langs']; 
+      
+      if (isset($pval['pts']) && is_array($pval['pts'])) { $o['fltrs']['nxs_post_type'] = array_keys($pval['pts']); }; 
       
       if (isset($pval['nxs_post_ids'])) $o['fltrs']['nxs_post_ids'] = $pval['nxs_post_ids'];
       if (!empty($pval['nxs_search_keywords'])) $o['fltrs']['nxs_search_keywords'] = $pval['nxs_search_keywords'];
@@ -302,7 +312,7 @@ if (!class_exists('nxs_snapClassNT')) { class nxs_snapClassNT {
       if (!isset($pbo['aName'])) $pbo['aName'] = ''; if (!isset($pbo['do']) && isset($pbo['do'.$this->ntInfo['code']])) $pbo['do'] = $pbo['do'.$this->ntInfo['code']]; $jj = $pbo['jj']; $cbo = $pbo['cbo']; 
       if (empty($pbo['nName'])) $pbo['nName'] = $this->makeUName($pbo, $ii);  $ntU = $this->ntInfo['code']; $nt = $this->ntInfo['lcode'];  $ntName = $this->ntInfo['name'];
       $pMeta = maybe_unserialize(get_post_meta( $post->ID, 'snap'.$this->ntInfo['code'], true)); if (is_array($pMeta) && !empty($pMeta[$ii])) $pbo = $this->adjMetaOpt($pbo, $pMeta[$ii]); $pbo['ii'] = $ii; ?>
-      <div id="dom<?php echo $this->ntInfo['code'].$ii; ?>Div" style=" padding-bottom: 3px;<?php echo ($cbo>7 && $jj>5)?'display:none;':'';?>" class="nxs_ntGroupWrapper<?php echo ($cbo>7 && $jj>5)?' showMore'.$this->ntInfo['code']:''; ?>"  onmouseover="if(!jQuery('#nxsNTSetDiv<?php echo $this->ntInfo['code'].$ii; ?>').is(':visible')) jQuery('.showInlineMenu<?php echo $this->ntInfo['code'].$ii; ?>').show();jQuery(this).addClass('nxsHiLightBorder');" onmouseout="jQuery('.showInlineMenu<?php echo $this->ntInfo['code'].$ii; ?>').hide();jQuery(this).removeClass('nxsHiLightBorder');">
+      <div id="dom<?php echo $this->ntInfo['code'].$ii; ?>Div" style=" padding-bottom: 3px;<?php echo ($pbo['hideMe'] || ($cbo>7 && $jj>5))?'display:none;':'';?>" class="nxs_ntGroupWrapper<?php echo ($cbo>7 && $jj>5)?' showMore'.$this->ntInfo['code']:''; ?>"  onmouseover="if(!jQuery('#nxsNTSetDiv<?php echo $this->ntInfo['code'].$ii; ?>').is(':visible')) jQuery('.showInlineMenu<?php echo $this->ntInfo['code'].$ii; ?>').show();jQuery(this).addClass('nxsHiLightBorder');" onmouseout="jQuery('.showInlineMenu<?php echo $this->ntInfo['code'].$ii; ?>').hide();jQuery(this).removeClass('nxsHiLightBorder');">
         <div <?php if (!$this->isMobile) {?>class="nxsEdWrapper"<?php } ?> style=" margin:0px;padding-left:0px; position: relative;"> <img id="<?php echo $this->ntInfo['code'].$ii;?>LoadingImg" style="display: none;" src='<?php echo NXS_PLURL; ?>img/ajax-loader-sm.gif' />
         <?php 
             //###################### LINE HEADER 

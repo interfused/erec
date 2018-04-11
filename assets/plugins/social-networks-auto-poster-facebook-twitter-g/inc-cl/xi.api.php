@@ -56,7 +56,7 @@ if (!class_exists("nxs_class_SNAP_XI")) { class nxs_class_SNAP_XI {
         
       } else {
         if (!isset($options['accessToken']) || trim($options['accessToken'])=='') { $badOut['Error'] = 'Not Authorized'; return $badOut; }         
-        $tum_oauth = new nxs_OAuthBaseCl($options['appKey'], $options['appSec'], $options['accessToken'], $options['accessTokenSec']);
+        $tum_oauth = new nxs_OAuthBaseCl(nxs_gak($options['appKey']), nxs_gas($options['appSec']), $options['accessToken'], $options['accessTokenSec']);
         $tum_oauth->baseURL = 'https://api.xing.com'; 
       
         $msg = str_replace('&amp;#039;', "'", $msg);  $msg = str_replace('&#039;', "'", $msg);  $msg = str_replace('#039;', "'", $msg);  $msg = str_replace('#039', "'", $msg);

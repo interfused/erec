@@ -8,7 +8,7 @@
  * @author      Automattic
  * @package     WP Job Manager
  * @category    Template
- * @version     1.27.0
+ * @version     1.30.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<tbody>
 			<?php if ( ! $jobs ) : ?>
 				<tr>
-					<td colspan="6"><?php _e( 'You do not have any active listings.', 'wp-job-manager' ); ?></td>
+					<td colspan="<?php echo count( $job_dashboard_columns ); ?>"><?php _e( 'You do not have any active listings.', 'wp-job-manager' ); ?></td>
 				</tr>
 			<?php else : ?>
 				<?php foreach ( $jobs as $job ) : ?>
@@ -41,14 +41,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<?php else : ?>
 										<?php wpjm_the_job_title( $job ); ?> <small>(<?php the_job_status( $job ); ?>)</small>
 									<?php endif; ?>
+									<?php echo is_position_featured( $job ) ? '<span class="featured-job-icon" title="' . esc_attr__( 'Featured Job', 'wp-job-manager' ) . '"></span>' : ''; ?>
 									<ul class="job-dashboard-actions">
 										<?php
 											$actions = array();
 
 											switch ( $job->post_status ) {
 												case 'publish' :
-													$actions['edit'] = array( 'label' => __( 'Edit', 'wp-job-manager' ), 'nonce' => false );
-
+													if ( wpjm_user_can_edit_published_submissions() ) {
+														$actions[ 'edit' ] = array( 'label' => __( 'Edit', 'wp-job-manager' ), 'nonce' => false );
+													}
 													if ( is_position_filled( $job ) ) {
 														$actions['mark_not_filled'] = array( 'label' => __( 'Mark not filled', 'wp-job-manager' ), 'nonce' => true );
 													} else {

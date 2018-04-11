@@ -1,14 +1,14 @@
-# Copyright (C) 2017 Mammothology
+# Copyright (C) 2018 Mammothology
 # This file is distributed under the same license as the WP Full Stripe Free package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Full Stripe Free 1.5.1\n"
+"Project-Id-Version: WP Full Stripe Free 1.6.1\n"
 "Report-Msgid-Bugs-To: https://paymentsplugin.com/support/\n"
-"POT-Creation-Date: 2017-01-23 10:48:16+00:00\n"
+"POT-Creation-Date: 2018-02-12 11:58:13+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2017-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2018-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "X-Generator: grunt-wp-i18n 0.5.3\n"
@@ -24,20 +24,32 @@ msgstr ""
 "X-Poedit-Bookmarks: \n"
 "X-Textdomain-Support: yes\n"
 
-#: include/wp-full-stripe-customer.php:40
+#: include/wp-full-stripe-customer.php:70
 msgid "The payment amount is invalid, please only use numbers and a decimal point."
 msgstr ""
 
-#: include/wp-full-stripe-customer.php:58
+#: include/wp-full-stripe-customer.php:79
 msgid "Please enter a valid billing address."
 msgstr ""
 
-#: include/wp-full-stripe-customer.php:70
+#: include/wp-full-stripe-customer.php:88
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: include/wp-full-stripe-customer.php:110
+#: include/wp-full-stripe-customer.php:127
 msgid "Payment Successful!"
+msgstr ""
+
+#: include/wp-full-stripe-customer.php:163
+msgid "Incorrect data submitted."
+msgstr ""
+
+#: include/wp-full-stripe-customer.php:172
+msgid "Invalid form name or form nonce or form not found"
+msgstr ""
+
+#: include/wp-full-stripe-customer.php:179
+msgid "Invalid form name or form nonce"
 msgstr ""
 
 #: include/wp-full-stripe-payments.php:70
@@ -127,134 +139,124 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:18
-#: pages/forms/payment_form_inline.php:13 pages/fullstripe_payment_form.php:30
-msgid "Email Address"
-msgstr ""
-
-#: pages/forms/payment_form_compact.php:30
-#: pages/forms/payment_form_inline.php:25 pages/fullstripe_payment_form.php:46
-msgid "Payment Amount"
-msgstr ""
-
-#: pages/forms/payment_form_compact.php:37
-#: pages/forms/payment_form_inline.php:32 pages/fullstripe_payment_form.php:54
-msgid "Billing Address Street"
-msgstr ""
-
-#: pages/forms/payment_form_compact.php:41
-#: pages/forms/payment_form_inline.php:36 pages/fullstripe_payment_form.php:60
-msgid "Billing Address Line 2"
-msgstr ""
-
-#: pages/forms/payment_form_compact.php:45
-#: pages/forms/payment_form_inline.php:40 pages/fullstripe_payment_form.php:66
-msgid "City"
-msgstr ""
-
-#: pages/forms/payment_form_compact.php:49
-#: pages/forms/payment_form_inline.php:44 pages/fullstripe_payment_form.php:72
-msgid "State"
-msgstr ""
-
-#: pages/forms/payment_form_compact.php:53
-#: pages/forms/payment_form_inline.php:48 pages/fullstripe_payment_form.php:78
-msgid "Zip"
-msgstr ""
-
-#: pages/forms/payment_form_compact.php:61
-msgid "Credit Cards"
-msgstr ""
-
-#: pages/forms/payment_form_compact.php:64
-#: pages/forms/payment_form_inline.php:57 pages/fullstripe_payment_form.php:23
+#: pages/forms/fullstripe_payment_form.php:22
+#: pages/forms/fullstripe_payment_form_compact.php:63
 msgid "Card Holder's Name"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:68
-#: pages/forms/payment_form_inline.php:61 pages/fullstripe_payment_form.php:86
+#: pages/forms/fullstripe_payment_form.php:29
+#: pages/forms/fullstripe_payment_form_compact.php:17
+msgid "Email Address"
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form.php:45
+#: pages/forms/fullstripe_payment_form_compact.php:29
+msgid "Payment Amount"
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form.php:53
+#: pages/forms/fullstripe_payment_form_compact.php:36
+msgid "Billing Address Street"
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form.php:59
+#: pages/forms/fullstripe_payment_form_compact.php:40
+msgid "Billing Address Line 2"
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form.php:65
+#: pages/forms/fullstripe_payment_form_compact.php:44
+msgid "City"
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form.php:71
+#: pages/forms/fullstripe_payment_form_compact.php:48
+msgid "State"
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form.php:77
+#: pages/forms/fullstripe_payment_form_compact.php:52
+msgid "Zip"
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form.php:85
+#: pages/forms/fullstripe_payment_form_compact.php:67
 msgid "Card Number"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:72
-#: pages/forms/payment_form_inline.php:65 pages/fullstripe_payment_form.php:102
+#: pages/forms/fullstripe_payment_form.php:92
+msgid "Card Expiry Date"
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form.php:101
+#: pages/forms/fullstripe_payment_form_compact.php:71
 msgid "Card CVV"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:76
-#: pages/forms/payment_form_inline.php:69
+#: pages/forms/fullstripe_payment_form.php:113
+#: pages/forms/fullstripe_payment_form.php:120
+#: pages/forms/fullstripe_payment_form_compact.php:115
+msgid "Loading..."
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form_compact.php:60
+msgid "Credit Cards"
+msgstr ""
+
+#: pages/forms/fullstripe_payment_form_compact.php:75
 msgid "Month"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:78
-#: pages/forms/payment_form_inline.php:71
+#: pages/forms/fullstripe_payment_form_compact.php:77
 msgid "January"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:79
-#: pages/forms/payment_form_inline.php:72
+#: pages/forms/fullstripe_payment_form_compact.php:78
 msgid "February"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:80
-#: pages/forms/payment_form_inline.php:73
+#: pages/forms/fullstripe_payment_form_compact.php:79
 msgid "March"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:81
-#: pages/forms/payment_form_inline.php:74
+#: pages/forms/fullstripe_payment_form_compact.php:80
 msgid "April"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:82
-#: pages/forms/payment_form_inline.php:75
+#: pages/forms/fullstripe_payment_form_compact.php:81
 msgid "May"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:83
-#: pages/forms/payment_form_inline.php:76
+#: pages/forms/fullstripe_payment_form_compact.php:82
 msgid "June"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:84
-#: pages/forms/payment_form_inline.php:77
+#: pages/forms/fullstripe_payment_form_compact.php:83
 msgid "July"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:85
-#: pages/forms/payment_form_inline.php:78
+#: pages/forms/fullstripe_payment_form_compact.php:84
 msgid "August"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:86
-#: pages/forms/payment_form_inline.php:79
+#: pages/forms/fullstripe_payment_form_compact.php:85
 msgid "September"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:87
-#: pages/forms/payment_form_inline.php:80
+#: pages/forms/fullstripe_payment_form_compact.php:86
 msgid "October"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:88
-#: pages/forms/payment_form_inline.php:81
+#: pages/forms/fullstripe_payment_form_compact.php:87
 msgid "November"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:89
-#: pages/forms/payment_form_inline.php:82
+#: pages/forms/fullstripe_payment_form_compact.php:88
 msgid "December"
 msgstr ""
 
-#: pages/forms/payment_form_compact.php:93
-#: pages/forms/payment_form_inline.php:86
+#: pages/forms/fullstripe_payment_form_compact.php:92
 msgid "Year"
-msgstr ""
-
-#: pages/forms/payment_form_compact.php:116
-#: pages/forms/payment_form_inline.php:109
-#: pages/fullstripe_payment_form.php:114 pages/fullstripe_payment_form.php:121
-msgid "Loading..."
 msgstr ""
 
 #: pages/fragments/redirect_to_for_create.php:28
@@ -321,10 +323,6 @@ msgstr ""
 
 #: pages/fullstripe_help_page.php:2
 msgid "Full Stripe Help"
-msgstr ""
-
-#: pages/fullstripe_payment_form.php:93
-msgid "Card Expiry Date"
 msgstr ""
 
 #: pages/fullstripe_payments_page.php:14

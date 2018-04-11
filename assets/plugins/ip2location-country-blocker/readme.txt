@@ -5,7 +5,7 @@ Donate link: https://www.ip2location.com
 Tags: ip2location, block country, block proxy, redirection, ip address, 403, ipv4, ipv6, detect proxy, ip2proxy
 Requires at least: 2.0
 Tested up to: 4.9
-Stable tag: 2.10.1
+Stable tag: 2.10.4
 
 Blocks unwanted visitors from accessing your frontend (blog pages) or backend (admin area) by countries or proxy servers.
 
@@ -84,6 +84,9 @@ Send us email at support@ip2location.com
 
 == Changelog ==
 
+* 2.10.4 Fixed custom blocking not working.
+* 2.10.3 Minor bug fixed.
+* 2.10.2 Fixed syntax issues when using on older version of PHP.
 * 2.10.1 Minor changes.
 * 2.10.0 IP2Location database update changed to use download token.
 * 2.9.2 Fix minor bugs.

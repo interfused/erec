@@ -25,7 +25,7 @@ if (!class_exists("nxs_snapClassSC")) { class nxs_snapClassSC extends nxs_snapCl
   public function doAuth() { $ntInfo = $this->ntInfo; global $nxs_snapSetPgURL;     
     if ( isset($_GET['auth']) && $_GET['auth']==$ntInfo['lcode']){ require_once('apis/scOAuth.php'); $options = $this->nt[$_GET['acc']];
               
-              $consumer_key = $options['appKey']; $consumer_secret = $options['appSec'];
+              $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']);
               $callback_url = $nxs_snapSetPgURL."&auth=".$ntInfo['lcode']."a&acc=".$_GET['acc'];
              
               $tum_oauth = new wpScoopITOAuth($consumer_key, $consumer_secret); 
@@ -43,7 +43,7 @@ if (!class_exists("nxs_snapClassSC")) { class nxs_snapClassSC extends nxs_snapCl
               die();
             }
     if ( isset($_GET['auth']) && $_GET['auth']==$ntInfo['lcode'].'a'){ require_once('apis/scOAuth.php'); $options = $this->nt[$_GET['acc']];
-              $consumer_key = $options['appKey']; $consumer_secret = $options['appSec'];
+              $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']);
             
               $tum_oauth = new wpScoopITOAuth($consumer_key, $consumer_secret, $options['oAuthToken'], $options['oAuthTokenSecret']); //prr($tum_oauth);
               $access_token = $tum_oauth->getAccToken($_GET['oauth_verifier']); prr($access_token);

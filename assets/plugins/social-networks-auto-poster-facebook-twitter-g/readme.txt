@@ -2,24 +2,23 @@
 
 Contributors: NextScripts
 Donate link: https://www.nextscripts.com/social-networks-auto-poster-for-wordpress
-Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, Flipboard, google, google+, Flickr, twitter, google plus, pinterest, 500px, tumblr, blogger, blogspot, linkedin, delicious, delicious.com, reddit, reddit.com, plugin, links, Post, posts, api, automatic, seo, scoop.it, integration, bookmark, bookmarks, admin, images, image, social, sharing, share, repost, re-post, wordpress.com, StumbleUpon, Diigo, vBulletin, Plurk, forums, vKontakte, open graph, LiveJournal, SETT, YouTube, Telegram, Instagram, xing, medium, yo, Weibo, mailchimp, line, Odnoklassniki, ok.ru
+Tags: automation, autopost, auto-post, auto post, socialnetworks, socialnetwork, social networks, social network, facebook, Flipboard, google, google+, Flickr, twitter, google plus, pinterest, 500px, tumblr, blogger, blogspot, linkedin, reddit, reddit.com, plugin, links, Post, posts, api, automatic, seo, scoop.it, integration, bookmark, bookmarks, admin, images, image, social, sharing, share, repost, re-post, wordpress.com, StumbleUpon, Diigo, vBulletin, Plurk, forums, vKontakte, open graph, LiveJournal, SETT, YouTube, Telegram, Instagram, xing, medium, yo, Weibo, mailchimp, line, Odnoklassniki, ok.ru
 Requires at least: 3.4
-Tested up to: 4.9.4
-Stable tag: 4.1.7
+Tested up to: 4.9.5
+Stable tag: 4.2.1
 License: GPLv2 or later
 
 Automatically publishes blogposts to profiles/pages/groups on Facebook, Twitter, Instagram, Google+, Pinterest, LinkedIn, Blogger, Tumblr ... 22 more
 
 == Description ==
 
-**This plugin automatically publishes posts from your blog to your Social Media accounts** such as Facebook, Twitter, Google+(Google Plus), Blogger, Tumblr, Flickr, LinkedIn, ok.ru, LiveJournal, DreamWidth, Flipboard, Instagram, Telegram, Line, Delicious, Diigo, Instapaper, Stumbleupon, Pinterest, Plurk, VK.com (VKontakte), YouTube, Scoop.It, Wordpress, XING etc. The whole process is completely automated. Just write a new post and either entire post or it's nicely formatted announcement with backlink will be published to all your configured social networks. You can reach the most audience and tell all your friends, readers and followers about your new post. Plugin works with profiles, business pages, community pages, groups, etc. Messages are 100% customizable and adopted for each network requirements.
+**This plugin automatically publishes posts from your blog to your Social Media accounts** such as Facebook, Twitter, Google+(Google Plus), Blogger, Tumblr, Flickr, LinkedIn, ok.ru, LiveJournal, DreamWidth, Flipboard, Instagram, Telegram, Line, Diigo, Instapaper, Stumbleupon, Pinterest, Plurk, VK.com (VKontakte), YouTube, Scoop.It, Wordpress, XING etc. The whole process is completely automated. Just write a new post and either entire post or it's nicely formatted announcement with backlink will be published to all your configured social networks. You can reach the most audience and tell all your friends, readers and followers about your new post. Plugin works with profiles, business pages, community pages, groups, etc. Messages are 100% customizable and adopted for each network requirements.
 
 * **Version 4.0** - 100% Re-written. New engine. New interface. Existing Posts Auto-Reposter.
 
 = Supported Networks =
 
 * **Blogger/Blogspot** - Autopost to your blog. HTML is supported.
-* **Delicious** - Auto-submit bookmark to your account. 
 * **Deviantart.com** - Autopost to your blog. HTML is supported.
 * **Diigo** - Auto-submit bookmark to your account. 
 * **Facebook** - Autopost to your profile, business page, community page, or Facebook group page. Ability to attach your blogpost to Facebook post. Ability to make "Image" posts.
@@ -100,9 +99,9 @@ Correctly working WP cron is required for some functionality (Scheduled posts, A
 
 == Installation ==
 
-You need to have account with either Facebook, Tumblr, Google+, LinkedIn, Pinterest, Blogger, Twitter, Delicious, Diigo, Plurk, LiveJournal, Stumbleupon, DreamWidth or all of them.
+You need to have account with either Facebook, Tumblr, Google+, LinkedIn, Pinterest, Blogger, Twitter, Diigo, Plurk, LiveJournal, Stumbleupon, DreamWidth or all of them.
 
-**Very detailed installation instructions with screenshots are located here:** https://www.nextscripts.com/installation-of-social-networks-auto-poster-for-wordpress 
+**Very detailed installation instructions with screenshots are located here:** <a href="https://www.nextscripts.com/installation-of-social-networks-auto-poster-for-wordpress">SNAP Installation</a> 
 
 How to setup each type of Social Network
 
@@ -113,12 +112,11 @@ How to setup each type of Social Network
 * <a href="https://www.nextscripts.com/setup-installation-tumblr-social-networks-auto-poster-wordpress/">Tumblr Configuration</a>
 * <a href="https://www.nextscripts.com/setup-installation-linkedin-social-networks-auto-poster-wordpress/">LinkedIn Configuration</a>
 * <a href="https://www.nextscripts.com/setup-installation-blogger-social-networks-auto-poster-wordpress/">Blogger Configuration</a>
-* <a href="https://www.nextscripts.com/setup-installation-delicious-social-networks-auto-poster-wordpress/">Delicious Configuration</a>
 * <a href="https://www.nextscripts.com/setup-installation-wp-based-social-networks-auto-poster-wordpress/">Blog.com/Wordpress.com Configuration</a>
 * <a href="https://www.nextscripts.com/setup-installation-diigo-social-networks-auto-poster-wordpress/">Diigo Configuration</a>
 * <a href="https://www.nextscripts.com/setup-installation-plurk-social-networks-auto-poster-wordpress/">Plurk Configuration</a>
 
-**More Networks/Instructions here:** https://www.nextscripts.com/instructions/
+**More Networks/Instructions here:** <a href="https://www.nextscripts.com/instructions/">www.nextscripts.com/instructions</a>
 
 Having problems? Please check out the <a href="https://www.nextscripts.com/support-faq/">Troubleshooting FAQ</a> page.
 
@@ -144,7 +142,7 @@ Please see the answer here: <a href="https://www.nextscripts.com/snap-networks-f
 *SNAP Free and SNAP Pro will work ONLY on one site in the WordPress Multisite Environment. You can chose which one in the network admin panel.
 *<a href="https://www.nextscripts.com/social-networks-autoposter-wordpress-plugin-pro-multiuser/">SNAP Pro Multiuser</a> is fully compatible with WordPress Multisite Environment. It comes with admin panel where you can decide what sites can run SNAP or not
 
-= Can I use it just for Twitter (Facebook, LinkedIn, Delicious) or it requires all networks to be set? =
+= Can I use it just for Twitter (Facebook, LinkedIn, Pinterest) or it requires all networks to be set? =
 
 Sure you can use it for just one or two networks.
 
@@ -185,6 +183,23 @@ Please see more <a href="https://www.nextscripts.com/faq/">Frequently asked ques
 = Details = 
 
 == Changelog ==
+
+= 4.2.1 [04/04/2018] =
+
+* Bug Fix - Compatibility fix for PHP versions earlier then 5.5.0 ("Can't use function return value in write context" error)
+
+= 4.2.0 [04/04/2018] =
+
+* New - BuddyPress Support - BuddyPress posts could be autoposted to configured networks.
+* New - [is.gd] New default URL shortener - is.gd
+* New - [Mailchimp] Support for list segments.
+* New - New setting - list of tags to be excluded from autoposting.
+* New - New setting - "Hide unused networks". Helps to remove clutter from "New post" page.
+* New - Improved security - some sensitive data is now encrypted.
+* Improvement - "Exact posts" filter will show all post types.
+* Removed [Delicious] Bookmarking service Delicious has been shut down.
+* Removed [Goog.gl] Googgle is shutting down its goo.gl URL shortener
+* Many code improvements, optimizations and some bug fixes. 
 
 = 4.1.7 [03/02/2018] =
 

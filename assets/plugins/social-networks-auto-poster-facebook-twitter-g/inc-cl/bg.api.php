@@ -43,7 +43,7 @@ if (!class_exists("nxs_class_SNAP_BG")) { class nxs_class_SNAP_BG {
         //## Refresh token
         if (function_exists('get_option')) $currTime = time() + ( get_option( 'gmt_offset' ) * HOUR_IN_SECONDS ); else  $currTime = time();
         if ($options['accessTokenExp']<$currTime){
-          $tknURL = 'https://www.googleapis.com/oauth2/v3/token?refresh_token='.$options['refreshToken'].'&client_id='.$options['appKey'].'&client_secret='.$options['appSec'].'&grant_type=refresh_token';
+          $tknURL = 'https://www.googleapis.com/oauth2/v3/token?refresh_token='.$options['refreshToken'].'&client_id='.nxs_gak($options['appKey']).'&client_secret='.nxs_gas($options['appSec']).'&grant_type=refresh_token';
           $response  = nxs_remote_post($tknURL); $resp = json_decode($response['body'], true); $options['accessToken'] = $resp['access_token']; $options['accessTokenExp'] = $currTime + $resp['expires_in'];
           nxs_save_glbNtwrks('bg', $options['ii'], $resp['access_token'], 'accessToken'); nxs_save_glbNtwrks('bg', $options['ii'], $options['accessTokenExp'], 'accessTokenExp');   
           //nxs_addToLogN('S', 'Test', $logNT, 'Token Refreshed '.date('Y-m-d H:i:s',$options['AccessTokenExp'])."|".$tknURL.$options['AccessToken'].print_r($response, true));

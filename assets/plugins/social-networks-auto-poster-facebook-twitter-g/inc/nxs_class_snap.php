@@ -383,6 +383,16 @@ if (!class_exists("nxs_SNAP")) { class nxs_SNAP {//## SNAP General Class
               &nbsp;&nbsp;&nbsp;<input type="radio" name="howToShowNTS" value="E" <?php if (!empty($options['howToShowNTS']) && $options['howToShowNTS']=='E') echo 'checked="checked"'; ?> /> <b><?php _e('Expanded', 'social-networks-auto-poster-facebook-twitter-g') ?>.</b><br/>
               &nbsp;&nbsp;&nbsp;<input type="radio" name="howToShowNTS" value="M" <?php if (empty($options['howToShowNTS']) || $options['howToShowNTS']=='M') echo 'checked="checked"'; ?> /> <b><?php _e('Show checked networks expanded and unchecked collapsed', 'social-networks-auto-poster-facebook-twitter-g') ?>.</b><br/>
               </div>
+              
+              
+               <div class="itemDiv">
+              
+             &nbsp;&nbsp;&nbsp;<input value="set" id="hideUnchecked" name="hideUnchecked"  type="checkbox" <?php if (!empty($options['hideUnchecked']) && (int)$options['hideUnchecked'] == 1) echo "checked"; ?> />  <b><?php _e('Hide unchecked and filtered out networks', 'social-networks-auto-poster-facebook-twitter-g') ?></b>     
+             <span style="font-size: 11px; margin-left: 1px;"><?php _e('Helps to remove clutter from "New post" page.', 'social-networks-auto-poster-facebook-twitter-g') ?></span>  
+              
+              
+              </div>
+              
             </div></div>  
             
             
@@ -426,8 +436,7 @@ if (!class_exists("nxs_SNAP")) { class nxs_SNAP {//## SNAP General Class
               
      <input type="checkbox" name="forceSURL" value="1" <?php if (isset($options['forceSURL']) && $options['forceSURL']=='1') echo 'checked="checked"'; ?> /> <b><?php _e('Force Shortened Links', 'social-networks-auto-poster-facebook-twitter-g') ?></b>
      <br/><br/>         
-              <input type="radio" name="nxsURLShrtnr" value="O" <?php if (!isset($options['nxsURLShrtnr']) || (isset($options['nxsURLShrtnr']) && ($options['nxsURLShrtnr']=='O' || $options['nxsURLShrtnr']=='G'))) echo 'checked="checked"'; ?> /> <b>goo.gl</b>  - <i> Enter goo.gl <a target="_blank" href="https://developers.google.com/url-shortener/v1/getting_started#APIKey">API Key</a> below [Optional]</i><br/>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;goo.gl&nbsp;&nbsp;API Key:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="gglAPIKey" style="width: 20%;" value="<?php if (isset($options['gglAPIKey'])) _e(apply_filters('format_to_edit',$options['gglAPIKey']), 'social-networks-auto-poster-facebook-twitter-g') ?>" />
+              <input type="radio" name="nxsURLShrtnr" value="O" <?php if (!isset($options['nxsURLShrtnr']) || (isset($options['nxsURLShrtnr']) && ($options['nxsURLShrtnr']=='O' || $options['nxsURLShrtnr']=='G'))) echo 'checked="checked"'; ?> /> <b>is.gd</b>&nbsp;[Default] <i>Simple, no additional configuration required.</i><br/>
               </div>
               
               <?php if (function_exists('wp_get_shortlink')) { ?><div class="itemDiv">
@@ -555,7 +564,12 @@ if (!class_exists("nxs_SNAP")) { class nxs_SNAP {//## SNAP General Class
               <option <?php if (empty($options['nxsHTSepar']) || $options['nxsHTSepar']=='c_') echo "selected" ?> value="c_">[, ] Comma and Space</option>
               <option <?php if (!empty($options['nxsHTSepar']) && $options['nxsHTSepar']=='c') echo "selected" ?> value ="c">[,] Comma</option>              
               </select>
-              </div>            
+              </div>   
+              
+              <div class="itemDiv">
+              <b><?php _e('Exclude tags from hashtags', 'social-networks-auto-poster-facebook-twitter-g') ?></b><input name="tagsExclFrmHT" style="width: 800px;" value="<?php if (isset($options['tagsExclFrmHT'])) _e(apply_filters('format_to_edit', $options['tagsExclFrmHT']), 'social-networks-auto-poster-facebook-twitter-g'); ?>" />
+              </div>   
+                       
            </div></div> 
            
             <!-- ##### ANOUNCE TAG ##### --> 
@@ -820,12 +834,12 @@ if (!class_exists("nxs_SNAP")) { class nxs_SNAP {//## SNAP General Class
         
         <?php  $nxsVer = NextScripts_SNAP_Version; if (defined('NXSAPIVER')) $nxsVer .= " (<span id='nxsAPIUpd'>API</span> Version: ".NXSAPIVER.")";
 
-_e('Plugin Version', 'social-networks-auto-poster-facebook-twitter-g'); ?>: <span style="color:#008000;font-weight: bold;"><?php echo $nxsVer; ?></span> <?php if($this->sMode['l']=='P') { ?> [Pro - Multiple Accounts Edition]&nbsp;&nbsp;<?php } 
-  elseif($this->sMode['l']=='M') { ?> [Multiuser Pro - Multiple Accounts Edition]&nbsp;&nbsp;<?php }else { ?>
-           <span style="color:#800000; font-weight: bold;">[Single Accounts Edition]</span> <?php } ?><br/>
+_e('Plugin Version', 'social-networks-auto-poster-facebook-twitter-g'); ?>: <span style="color:#008000;font-weight: bold;"><?php echo $nxsVer; ?></span> <?php if($this->sMode['l']=='P') { ?> [Pro Edition]&nbsp;&nbsp;<?php } 
+  elseif($this->sMode['l']=='M') { ?> [Pro Multiuser Edition]&nbsp;&nbsp;<?php }else { ?>
+           <span style="color:#800000; font-weight: bold;">[Free - One account per network edition]</span> <?php } ?><br/>
 <?php  global $nxs_apiLInfo; if (isset($nxs_apiLInfo) && !empty($nxs_apiLInfo)) {
-  if ($nxs_apiLInfo['1']==$nxs_apiLInfo['2']) echo "<b>API:</b> ".$nxs_apiLInfo['2']; else echo "<b>API:</b> (Google+, Pinterest, LinkedIn, Reddit, Flipboard): ".$nxs_apiLInfo['1']."<br/><b>API:</b> (Instragram): ".$nxs_apiLInfo['2']; echo "&nbsp;&nbsp;&nbsp;&nbsp;";   
-} if(defined('NXSAPIVER')){ ?>
+  if ($nxs_apiLInfo['1']==$nxs_apiLInfo['2'] || empty($nxs_apiLInfo['2'])) echo $nxs_apiLInfo['1']; else echo "<b>API:</b> (Google+, Pinterest, LinkedIn, Reddit, Flipboard): ".$nxs_apiLInfo['1']."<br/><b>API:</b> (Instragram): ".$nxs_apiLInfo['2']; echo "&nbsp;&nbsp;&nbsp;&nbsp;";   
+} if(defined('NXSAPIVER')){ ?><br/>
   <img id="checkAPI2xLoadingImg" style="display: none;" src='<?php echo NXS_PLURL; ?>img/ajax-loader-sm.gif' /><a href="" id="checkAPI2x">[Check for API Update]</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="" class="showLic">[Change Activation Key]</a> <br/><br/>
 <?php } elseif(defined('NextScripts_UPG_SNAP_Version')) { ?> <br/><span style="color:red;">You have "SNAP Upgrade helper" installed, now please&nbsp;<a href="#" class="showLic">[Enter Activation Key]</a></span><br/><br/> <?php } ?><br/>
         
@@ -892,10 +906,10 @@ _e('Plugin Version', 'social-networks-auto-poster-facebook-twitter-g'); ?>: <spa
     </div><?php 
   }
         
-  function NS_SNAP_AddPostMetaTags() { global $post, $nxs_snapAvNts, $nxs_SNAP; $post_id = $post; if (is_object($post_id))  $post_id = $post_id->ID; 
-          if (!is_object($post) || empty($post->post_status)) $post = get_post($post_id);  if (!isset($nxs_SNAP)) return;           
-          $accts = (!current_user_can( 'manage_options' ) && current_user_can( 'haveown_snap_accss' ) ) ? $nxs_SNAP->nxs_acctsU :  $nxs_SNAP->nxs_accts;          
-          $options = $nxs_SNAP->nxs_options; 
+  function NS_SNAP_AddPostMetaTags() { global $post, $nxs_snapAvNts; $post_id = $post; if (is_object($post_id))  $post_id = $post_id->ID; 
+          if (!is_object($post) || empty($post->post_status)) $post = get_post($post_id); 
+          $accts = (!current_user_can( 'manage_options' ) && current_user_can( 'haveown_snap_accss' ) ) ? $this->nxs_acctsU :  $this->nxs_accts;          
+          $options = $this->nxs_options;
           ?>
           <style type="text/css">div#popShAtt {display: none; position: absolute; width: 600px; padding: 10px; background: #eeeeee; color: #000000; border: 1px solid #1a1a1a; font-size: 90%; }
             .underdash {border-bottom: 1px #21759B dashed; text-decoration:none;} .underdash a:hover {border-bottom: 1px #21759B dashed}
@@ -914,7 +928,7 @@ _e('Plugin Version', 'social-networks-auto-poster-facebook-twitter-g'); ?>: <spa
           <?php } ?>
           
           <input type="checkbox" class="isAutoURL" <?php  $forceSURL = get_post_meta($post_id, '_snap_forceSURL', true); 
-            if (empty($forceSURL) && !empty($nxs_SNAP->nxs_options['forceSURL']) || $forceSURL=='1') { ?>checked="checked"<?php } ?>  id="useSURL" name="useSURL" value="1"/> <?php _e('Shorten URL', 'social-networks-auto-poster-facebook-twitter-g'); ?>
+            if (empty($forceSURL) && !empty($this->nxs_options['forceSURL']) || $forceSURL=='1') { ?>checked="checked"<?php } ?>  id="useSURL" name="useSURL" value="1"/> <?php _e('Shorten URL', 'social-networks-auto-poster-facebook-twitter-g'); ?>
           &nbsp;&nbsp;&nbsp;  
           <input type="checkbox" class="isAutoURL" <?php $urlToUse = get_post_meta($post_id, 'snap_MYURL', true); 
             if ($urlToUse=='') { ?>checked="checked"<?php } ?>  id="isAutoURL-" name="isAutoURL" value="A"/> <?php _e('Auto', 'social-networks-auto-poster-facebook-twitter-g'); ?> - <i><?php _e('Post URL will be used', 'social-networks-auto-poster-facebook-twitter-g'); ?></i>                  
@@ -955,13 +969,17 @@ _e('Plugin Version', 'social-networks-auto-poster-facebook-twitter-g'); ?>: <spa
           foreach ($nxs_snapAvNts as $avNt) { $clName = 'nxs_snapClass'.$avNt['code'];
              if ( isset($avNt['lcode']) && isset($accts[$avNt['lcode']]) && count($accts[$avNt['lcode']])>0) { $ntClInst = new $clName(); $ntClInst->nt = $accts[$avNt['lcode']];              
              //## Count only finsihed accounts. Get rid of unfinnished accounts...
-             $cbo = 0; $cboInx = 0; foreach ($ntClInst->nt as $indx=>$pbo){ //  prr($indx, 'IDX'); prr($pbo, 'PBO');
+             $cbo = 0; $cboInx = 0; $jXj = 0; foreach ($ntClInst->nt as $indx=>$pbo){ //  prr($indx, 'IDX'); prr($pbo, 'PBO');
                if (empty($pbo[$ntClInst->ntInfo['lcode'].'OK'])) $pbo[$ntClInst->ntInfo['lcode'].'OK'] = $ntClInst->checkIfSetupFinished($pbo); if (empty($pbo[$ntClInst->ntInfo['lcode'].'OK'])) continue; else { $cbo++; $cboInx = $indx; }
+               
+               $pbo['hideMe'] = $options['hideUnchecked'] && (empty($pbo['do']) || ($pbo['fltrsOn'] == '1' && !in_array($_GET['post_type'],$pbo['fltrs']['post_types'])) ); if (!$pbo['hideMe']) $jXj++;
+               
              } if ($cbo==0) continue; if (!$this->sMode['t']) $cbo = 1;
              if ($cbo==1) { ?>
-               <?php  $pbo = $ntClInst->nt[$cboInx]; $pbo['jj']=$cboInx; $pbo['cbo']=$cbo; $ntClInst->showEditNTLine($cboInx, $pbo, $post); ?>
-             <?php } else {  ?>
-             <div class="nxs_box" onmouseover="jQuery('.selAll<?php echo $avNt['code']; ?>').show();" onmouseout="jQuery('.selAll<?php echo $avNt['code']; ?>').hide();">
+               <?php  $pbo = $ntClInst->nt[$cboInx]; $pbo['jj']=$cboInx; $pbo['cbo']=$cbo; $pbo['hideMe'] = $options['hideUnchecked'] && (empty($pbo['do']) || ($pbo['fltrsOn'] == '1' && !in_array($_GET['post_type'],$pbo['fltrs']['post_types'])) ); 
+                      $ntClInst->showEditNTLine($cboInx, $pbo, $post); ?>
+             <?php } else { ?>
+             <div class="nxs_box" <?php if ($jXj==0) echo ' style="display:none;" '; ?> onmouseover="jQuery('.selAll<?php echo $avNt['code']; ?>').show();" onmouseout="jQuery('.selAll<?php echo $avNt['code']; ?>').hide();">
                <div class="nxs_box_header">
                  <div class="nsx_iconedTitle" style="margin-bottom:1px;background-image:url(<?php echo NXS_PLURL;?>img/<?php echo (!empty($avNt['imgcode']))?$avNt['imgcode']:$avNt['lcode']; ?>16.png);"><?php echo $avNt['name']; ?>
                    <?php if ($cbo>1){ ?><div class="nsBigText"><?php echo '(<span id="nxsNumOfAcc_'.$avNt['lcode'].'">'.$cbo."</span> "; _e('accounts', 'social-networks-auto-poster-facebook-twitter-g'); echo ")"; ?></div><?php } ?>
@@ -972,11 +990,13 @@ _e('Plugin Version', 'social-networks-auto-poster-facebook-twitter-g'); ?>: <spa
                </div>
                <div class="nxs_box_inside"><?php $jj = 0;  if(!$ntClInst->checkIfFunc()) echo $ntClInst->noFuncMsg; //### List of accountns
                  else { uasort($ntClInst->nt, 'nxsLstSort'); foreach ($ntClInst->nt as $indx=>$pbo){ 
-                     if (empty($pbo[$ntClInst->ntInfo['lcode'].'OK'])) $pbo[$ntClInst->ntInfo['lcode'].'OK'] = $ntClInst->checkIfSetupFinished($pbo); if (empty($pbo[$ntClInst->ntInfo['lcode'].'OK'])) continue;
-                     $jj++; $pbo['jj']=$jj; $pbo['cbo']=$cbo; $ntClInst->showEditNTLine($indx, $pbo, $post);
+                     if (empty($pbo[$ntClInst->ntInfo['lcode'].'OK'])) $pbo[$ntClInst->ntInfo['lcode'].'OK'] = $ntClInst->checkIfSetupFinished($pbo); if (empty($pbo[$ntClInst->ntInfo['lcode'].'OK'])) continue;                     
+                     $pbo['hideMe'] = $options['hideUnchecked'] && (empty($pbo['do']) || ($pbo['fltrsOn'] == '1' && !in_array($_GET['post_type'],$pbo['fltrs']['post_types'])) ); if (!$pbo['hideMe']) $jj++; //prr($jj); var_dump( $pbo['hideMe']);
+                     
+                     $pbo['jj']=$jj; $pbo['cbo']=$cbo; $ntClInst->showEditNTLine($indx, $pbo, $post);
                  }}
                  if ($jj>7) { ?> <div style="padding-left:5px;padding-top:5px;"><a href="#" onclick="jQuery('.showMore<?php echo $avNt['code']; ?>').show(); jQuery(this).parent().hide(); return false;">Show More[<?php echo ($cbo-5); ?>]</a></div>  <?php } 
-                 if ($jj==0) {?> <span>&nbsp;&nbsp;&nbsp;--&nbsp;<?php  _e('No completed accounts available', 'social-networks-auto-poster-facebook-twitter-g'); ?></span> <?php }
+                 if ($jj==0 && $jXj>0) {?> <span>&nbsp;&nbsp;&nbsp;--&nbsp;<?php  _e('No completed accounts available', 'social-networks-auto-poster-facebook-twitter-g'); ?></span> <?php }
                  ?>
                </div>
              </div><?php 
@@ -1110,6 +1130,10 @@ _e('Plugin Version', 'social-networks-auto-poster-facebook-twitter-g'); ?>: <spa
             
             if (isset($pvData['prxList'])) $options['prxList'] = $pvData['prxList']; 
             if (isset($pvData['addURLParams'])) $options['addURLParams'] = $pvData['addURLParams']; 
+            
+            if (isset($pvData['tagsExclFrmHT'])) $options['tagsExclFrmHT'] = $pvData['tagsExclFrmHT']; 
+            
+            
             if (isset($pvData['forcessl'])) $options['forcessl'] = $pvData['forcessl']; 
             
             if (isset($pvData['riActive']))   $options['riActive'] = 1;  else $options['riActive'] = 0;
@@ -1129,6 +1153,9 @@ _e('Plugin Version', 'social-networks-auto-poster-facebook-twitter-g'); ?>: <spa
             
             if (isset($pvData['skipSecurity'])) $options['skipSecurity'] = 1;  else $options['skipSecurity'] = 0;
             if (!empty($pvData['zeroUser'])) $options['zeroUser'] = 1; else $options['zeroUser'] = 0;        
+            
+            if (isset($pvData['hideUnchecked'])) $options['hideUnchecked'] = 1;  else $options['hideUnchecked'] = 0;
+            
             
             if (isset($pvData['quLimit'])) $options['quLimit'] = 1;  else $options['quLimit'] = 0; 
             

@@ -2,10 +2,10 @@
 Contributors: Mammothology
 Donate link: https://paymentsplugin.com
 Tags: payments, stripe, credit cards, payment gateway, payment plugin, commerce
-Requires at least: 3.5.2
-Tested up to: 4.7.1
-Stable tag: 1.5.1
-Version: 1.5.1
+Requires at least: 4.0.0
+Tested up to: 4.9.4
+Stable tag: 1.6.1
+Version: 1.6.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,7 +28,7 @@ The free edition of WP Full Stripe has the following features:
 1. Ajax style forms with no page redirects to take payments.
 1. Create multiple versions of payment forms to suit your needs.
 
-[Upgrading to the paid version of WP Full Stripe](https://paymentsplugin.com) will give you these extra features:
+[Upgrading to the paid version of WP Full Stripe](https://paymentsplugin.com/?utm_source=wordpress-org-wpfsf&utm_medium=upgrade-to-paid&utm_campaign=description-page&utm_content=upgrade-url#pricing) will give you these extra features:
 
 1. Sign up users to recurring subscriptions.
 1. Create subscription plans that run forever, or terminate after certain number of charges.
@@ -48,9 +48,9 @@ The free edition of WP Full Stripe has the following features:
 1. Regular updates and feature additions.
 1. Premium support.
 
-[Check out the paid version of WP Full Stripe](https://paymentsplugin.com)
+[Check out the paid version of WP Full Stripe](https://paymentsplugin.com/?utm_source=wordpress-org-wpfsf&utm_medium=upgrade-to-paid-2nd&utm_campaign=description-page&utm_content=upgrade-url#pricing)
 
-We have a demo at [paymentsplugin.com](https://paymentsplugin.com/demo) and you can see the latest changelog for the premium version on our [WP Full Stripe CodeCanyon page](http://codecanyon.net/item/wp-full-stripe/5266365?ref=mammothology)
+We have a demo at [https://paymentsplugin.com/demo](https://paymentsplugin.com/demo/?utm_source=wordpress-org-wpfsf&utm_medium=check-demo&utm_campaign=description-page&utm_content=demo-url) and you can see the latest changelog for the premium version on [our website](https://paymentsplugin.com/kb/wp-full-stripe-changelog/?utm_source=wordpress-org-wpfsf&utm_medium=check-changelog&utm_campaign=description-page&utm_content=changelog-url)
 
 == Installation ==
 
@@ -62,15 +62,21 @@ We have a demo at [paymentsplugin.com](https://paymentsplugin.com/demo) and you 
 
 == Support ==
 
-The free version of WP Full Stripe has limited support via our [Support Forms](https://paymentsplugin/forums/).
+The free version of WP Full Stripe has limited support via our [Support page](https://paymentsplugin.com/support/?utm_source=wordpress-org-wpfsf&utm_medium=visit-support&utm_campaign=description-page&utm_content=support-url).
 Our paid members receive fast turnaround email support as well.
 
 
 == Frequently Asked Questions ==
 
-We maintain a set of frequently asked questions on the [Support page](https://paymentsplugin.com/support).
+We maintain a set of frequently asked questions on the [Support page](https://paymentsplugin.com/support/?utm_source=wordpress-org-wpfsf&utm_medium=visit-faq&utm_campaign=description-page&utm_content=faq-url).
 
 == Changelog ==
+= 1.6.1 =
+* Removed nonce verification as it caused issues on cached websites.
+= 1.6.0 =
+* Stripe PHP client upgraded to v5.2.2 .
+* Fixed an issue related to unnecessarily sending form data to the web browser.
+* Fixed an issue related to requiring email address even if the email address field is hidden.
 = 1.5.1 =
 * Fixed an issue with the cardholder name not showing up in the card data in Stripe.
 = 1.5.0 =

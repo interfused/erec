@@ -51,15 +51,15 @@ if(isset($_GET['action']) && $_GET['action']=="edit" && !empty($_GET['post']))  
 	
 	
 	if(get_option('xyz_fbap_af')==0 && get_option('xyz_fbap_fb_token')!="" && get_option('xyz_fbap_post_permission')==1)
-	add_meta_box( "xyz_fbap", '<strong>Facebook Auto Publish </strong>', 'xyz_fbap_addpostmetatags') ;
+	add_meta_box( "xyz_fbap", '<strong>WP Facebook Auto Publish </strong>', 'xyz_fbap_addpostmetatags') ;
 }
 function xyz_fbap_addpostmetatags()
 {
 	$imgpath= plugins_url()."/facebook-auto-publish/images/";
 	$heimg=$imgpath."support.png";
 	$xyz_fbap_catlist=get_option('xyz_fbap_include_categories');
-	if (is_array($xyz_fbap_catlist))
-	$xyz_fbap_catlist=implode(',', $xyz_fbap_catlist);
+// 	if (is_array($xyz_fbap_catlist))
+// 	$xyz_fbap_catlist=implode(',', $xyz_fbap_catlist);
 	?>
 <script>
 
@@ -225,8 +225,8 @@ function inArray(needle, haystack) {
 	</tr>
 	<tr valign="top" id="fpabpmf">
 		<td class="xyz_fbap_pleft15">Message format for posting <img src="<?php echo $heimg?>"
-						onmouseover="detdisplay_fbap('xyz_fbap')" onmouseout="dethide_fbap('xyz_fbap')" style="width:13px;height:auto;">
-						<div id="xyz_fbap" class="fbap_informationdiv" style="display: none;">
+						onmouseover="detdisplay_fbap('xyz_fbap_informationdiv')" onmouseout="dethide_fbap('xyz_fbap_informationdiv')" style="width:13px;height:auto;">
+						<div id="xyz_fbap_informationdiv" class="fbap_informationdiv" style="display: none;">
 							{POST_TITLE} - Insert the title of your post.<br />{PERMALINK} -
 							Insert the URL where your post is displayed.<br />{POST_EXCERPT}
 							- Insert the excerpt of your post.<br />{POST_CONTENT} - Insert

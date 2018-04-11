@@ -108,8 +108,9 @@ if (!class_exists("nxs_snapClassTW")) { class nxs_snapClassTW extends nxs_snapCl
         if (stripos($twMsgFormat, '%TITLE%')!==false || stripos($twMsgFormat, '%TEXT%')!==false || stripos($twMsgFormat, '%EXCERPT%')!==false || stripos($twMsgFormat, '%ANNOUNCE%')!==false || stripos($twMsgFormat, '%RAWEXCERPT%')!==false || stripos($twMsgFormat, '%FULLTEXT%')!==false || stripos($twMsgFormat, '%RAWTEXT%')!==false) $whatToleave = 45; else $whatToleave = 0;
         if (stripos($twMsgFormat, '%XTAGS%')!==false || stripos($twMsgFormat, '%HTAGS%')!==false) {
           $t = wp_get_object_terms($postID, 'product_tag'); if ( empty($t) || !is_array($t) ) $t = wp_get_post_tags($postID); 
-          // $tggs = array(); foreach ($t as $tagA) { $frmTag =  trim(str_replace(' ', $htS, preg_replace('/xC2xA0/',$htS, preg_replace('/[^a-zA-Z0-9\p{L}\p{N}\s]/u', '', trim(ucwords(str_ireplace('&','',str_ireplace('&amp;','',$tagA->name))))))));
-          $tggs = array(); foreach ($t as $tagA) { $frmTag =  trim(str_replace(' ', $htS, preg_replace('/xC2xA0/',$htS, nxs_clean_string(trim(ucwords(str_ireplace('&','',str_ireplace('&amp;','',$tagA->name))))))));
+          $tagsExclFrmHT = $gOptions['tagsExclFrmHT']; $tagsExclFrmHT = explode(',',$tagsExclFrmHT); foreach ($tagsExclFrmHT as $i=>$et) $tagsExclFrmHT[$i] = trim(strtolower($et));
+          $tggs = array(); foreach ($t as $tagA) { $frmTag = trim(str_replace(' ', $htS, preg_replace('/xC2xA0/',$htS, nxs_clean_string(trim(ucwords(str_ireplace('&','',str_ireplace('&amp;','',$tagA->name)))))))); 
+            if (!in_array(strtolower($frmTag), $tagsExclFrmHT)) {
               if (preg_match('/\b'.$frmTag.'\b/iu', $pTitle)) $pTitle = trim(preg_replace('/\b'.$frmTag.'\b/iu', '#'.$frmTag, $pTitle)); 
               if (preg_match('/\b'.$frmTag.'\b/iu', $pFullText)) $pFullText = trim(preg_replace('/\b'.$frmTag.'\b/iu', '#'.$frmTag, $pFullText)); 
               if (preg_match('/\b'.$frmTag.'\b/iu', $pText)) $pText = trim(preg_replace('/\b'.$frmTag.'\b/iu', '#'.$frmTag, $pText)); 
@@ -121,6 +122,7 @@ if (!class_exists("nxs_snapClassTW")) { class nxs_snapClassTW extends nxs_snapCl
                    ((stripos($twMsgFormat, '%ANNOUNCE%')!==false) && preg_match('/\b'.$frmTag.'\b/i', $pText)) ||
                    ((stripos($twMsgFormat, '%FULLTEXT%')!==false) && preg_match('/\b'.$frmTag.'\b/i', $pFullText)) ||
                    ((stripos($twMsgFormat, '%RAWTEXT%')!==false) && preg_match('/\b'.$frmTag.'\b/i', $pRawText)) ) {} else $tggs[] = '#'.$frmTag;
+            }
           } 
           
           if (count($tggs)<2) $tags = implode(' ', $tggs); else { $tags = array_shift($tggs); //## Always keep the first. 
@@ -133,10 +135,13 @@ if (!class_exists("nxs_snapClassTW")) { class nxs_snapClassTW extends nxs_snapCl
           $twLim = $twLim - nxs_strLen($tags); 
         }  
         if (stripos($twMsgFormat, '%XCATS%')!==false || stripos($twMsgFormat, '%HCATS%')!==false) {
+          $tagsExclFrmHT = $gOptions['tagsExclFrmHT']; $tagsExclFrmHT = explode(',',$tagsExclFrmHT); foreach ($tagsExclFrmHT as $i=>$et) $tagsExclFrmHT[$i] = trim(strtolower($et));  
           $t = wp_get_post_categories($postID); $ctts = array();  foreach($t as $c){ $cat = get_category($c); //$frmTag =  trim(str_replace(' ','', str_replace('  ',' ',str_ireplace('&','&amp;',trim(ucwords($cat->name)))))); prr($frmTag);
           //$frmTag =  trim(str_replace(' ',$htS,preg_replace('/[^a-zA-Z0-9\p{L}\p{N}\s]/u', '', trim(ucwords(str_ireplace('&','',str_ireplace('&amp;','',$cat->name)))))));
           $frmTag =  trim(str_replace(' ', $htS, nxs_clean_string(trim(ucwords(str_ireplace('&','',str_ireplace('&amp;','',$cat->name)))))));          
-          if (stripos($pTitle, $cat->name)!==false) $pTitle = str_ireplace($cat->name, '#'.$frmTag, $pTitle); elseif (stripos($pTitle, $frmTag)!==false) $pTitle = str_ireplace($frmTag, '#'.$frmTag, $pTitle); 
+          
+          if (!in_array(strtolower($frmTag), $tagsExclFrmHT)) {
+            if (stripos($pTitle, $cat->name)!==false) $pTitle = str_ireplace($cat->name, '#'.$frmTag, $pTitle); elseif (stripos($pTitle, $frmTag)!==false) $pTitle = str_ireplace($frmTag, '#'.$frmTag, $pTitle); 
               if (stripos($pText, $cat->name)!==false) $pText = str_ireplace($cat->name, '#'.$frmTag, $pText); elseif (stripos($pText, $frmTag)!==false) $pText = str_ireplace($frmTag, '#'.$frmTag, $pText); 
               if (stripos($pFullText, $cat->name)!==false) $pFullText = str_ireplace($cat->name, '#'.$frmTag, $pFullText); elseif (stripos($pFullText, $frmTag)!==false) $pFullText = str_ireplace($frmTag, '#'.$frmTag, $pFullText); 
               if (stripos($pRawText, $cat->name)!==false) $pRawText = str_ireplace($cat->name, '#'.$frmTag, $pRawText); elseif (stripos($pRawText, $frmTag)!==false) $pRawText = str_ireplace($frmTag, '#'.$frmTag, $pRawText); 
@@ -147,6 +152,7 @@ if (!class_exists("nxs_snapClassTW")) { class nxs_snapClassTW extends nxs_snapCl
                    ((stripos($twMsgFormat, '%ANNOUNCE%')!==false) && (stripos($pText, $cat->name)!==false || stripos($pText, $frmTag)!==false)) ||
                    ((stripos($twMsgFormat, '%FULLTEXT%')!==false) && (stripos($pFullText, $cat->name)!==false || stripos($pFullText, $frmTag)!==false)) ||
                    ((stripos($twMsgFormat, '%RAWTEXT%')!==false) && (stripos($pRawText, $cat->name)!==false || stripos($pRawText, $frmTag)!==false)) ) {} else $ctts[] = '#'.$frmTag; 
+            }
           } 
           
           if (count($ctts)<2) $cats = implode(' ', $ctts); else { $cats = array_shift($ctts); //## Always keep the first. 
@@ -232,7 +238,7 @@ if (!class_exists("nxs_snapClassTW")) { class nxs_snapClassTW extends nxs_snapCl
     if (empty($po)) { $po =  maybe_unserialize(get_post_meta($postID, 'snap'.strtoupper($_POST['nt']), true)); $po = $po[$_POST['ii']]; }
     if (isset($_POST['ii'])) $options = $options[$_POST['nt']][$_POST['ii']];  
     
-    require_once ('apis/tmhOAuth.php'); $tmhOAuth = new NXS_tmhOAuth(array( 'consumer_key' => $options['appKey'], 'consumer_secret' => $options['appSec'], 'user_token' => $options['accessToken'], 'user_secret' => $options['accessTokenSec']));
+    require_once ('apis/tmhOAuth.php'); $tmhOAuth = new NXS_tmhOAuth(array( 'consumer_key' => nxs_gak($options['appKey']), 'consumer_secret' => nxs_gas($options['appSec']), 'user_token' => $options['accessToken'], 'user_secret' => $options['accessTokenSec']));
     $code = $tmhOAuth->request('GET', $tmhOAuth->url('1.1/statuses/mentions_timeline')); 
     if ($code=='200' && isset($tmhOAuth->response['response']) ) $twList = json_decode($tmhOAuth->response['response'], true); else $twList = ''; 
      
@@ -249,7 +255,7 @@ if (!class_exists("nxs_snapClassTW")) { class nxs_snapClassTW extends nxs_snapCl
       }     
      
     //## Do mentions.
-    require_once ('apis/tmhOAuth.php'); $tmhOAuth = new NXS_tmhOAuth(array( 'consumer_key' => $options['appKey'], 'consumer_secret' => $options['appSec'], 'user_token' => $options['accessToken'], 'user_secret' => $options['accessTokenSec']));    
+    require_once ('apis/tmhOAuth.php'); $tmhOAuth = new NXS_tmhOAuth(array( 'consumer_key' => nxs_gak($options['appKey']), 'consumer_secret' => nxs_gas($options['appSec']), 'user_token' => $options['accessToken'], 'user_secret' => $options['accessTokenSec']));    
     if (isset($options['urlToUse']) && trim($options['urlToUse'])!='') $urlToSrch = $options['urlToUse']; else $urlToSrch = get_permalink($postID);     
     $code = $tmhOAuth->request('GET', $tmhOAuth->url('1.1/search/tweets'), array('rpp'=>'100', 'since_id'=>$lastID, 'q'=> urlencode($urlToSrch)));       
     if ($code=='200' && isset($tmhOAuth->response['response']) ) { $tweets = json_decode($tmhOAuth->response['response'], true); //prr($tweets);

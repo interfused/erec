@@ -295,7 +295,7 @@ if (!class_exists('WP_Http_Cookie')) { class_alias('nxs_Http_Cookie', 'WP_Http_C
 
 
 //## Headers and Remote Options Array
-if (!function_exists("nxs_makeHeaders")) { function nxs_makeHeaders($ref, $org='', $type='GET', $aj=false){  $hdrsArr = array(); 
+if (!function_exists("nxs_makeHeaders")) { function nxs_makeHeaders($ref='', $org='', $type='GET', $aj=false){  $hdrsArr = array(); 
  $hdrsArr['Cache-Control']='max-age=0'; $hdrsArr['Connection']='keep-alive'; $hdrsArr['Referer']=$ref;
  $hdrsArr['User-Agent']='Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.67 Safari/537.36'; 
  if($type=='JSON') $hdrsArr['Content-Type']='application/json;charset=UTF-8'; elseif($type=='POST') $hdrsArr['Content-Type']='application/x-www-form-urlencoded'; 

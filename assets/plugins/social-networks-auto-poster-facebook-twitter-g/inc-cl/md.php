@@ -13,12 +13,12 @@ if (!class_exists("nxs_snapClassMD")) { class nxs_snapClassMD extends nxs_snapCl
   function doAuth() {  $ntInfo = $this->ntInfo; global $nxs_snapSetPgURL; if (isset($_GET['acc'])) $options = $this->nt[$_GET['acc']];
     if ( isset($_GET['auth']) && $_GET['auth']==$ntInfo['lcode']){
       //if(stripos($nxs_snapSetPgURL, 'page=NextScripts_SNAP.php')===false) { $newURL = explode('?', $nxs_snapSetPgURL); $nxs_snapSetPgURL = $newURL[0]; }
-      $url = 'https://medium.com/m/oauth/authorize?client_id='.$options['appKey'].'&scope=basicProfile,publishPost,listPublications&state=nxsmdauth-'. $_GET['auth'].'-'.$_GET['acc'].'&response_type=code&redirect_uri='.urlencode($nxs_snapSetPgURL);   
+      $url = 'https://medium.com/m/oauth/authorize?client_id='.nxs_gak($options['appKey']).'&scope=basicProfile,publishPost,listPublications&state=nxsmdauth-'. $_GET['auth'].'-'.$_GET['acc'].'&response_type=code&redirect_uri='.urlencode($nxs_snapSetPgURL);   
       echo '<br/><br/>All good?! Redirecting ..... <script type="text/javascript">window.location = "'.$url.'"</script>';
       die(); 
     }
     if ( isset($_GET['state']) && strlen($_GET['state'])>13 && substr($_GET['state'],0,12)=='nxsmdauth-md'){ $ii = explode('-',$_GET['state']); $ii = $ii[2]; $options = $this->nt[$ii];      
-      $data = array('code'=>$_GET['code'], 'client_id'=>$options['appKey'],'client_secret'=>$options['appSec'],'grant_type'=>'authorization_code','redirect_uri'=>$nxs_snapSetPgURL);            
+      $data = array('code'=>$_GET['code'], 'client_id'=>nxs_gak($options['appKey']),'client_secret'=>nxs_gas($options['appSec']),'grant_type'=>'authorization_code','redirect_uri'=>$nxs_snapSetPgURL);            
       $hdrsArr = array(); $hdrsArr['Content-Type']='application/x-www-form-urlencoded'; $hdrsArr['Accept']='application/json'; $hdrsArr['Accept-Charset']='utf-8';   
       $hdrsArr['Cache-Control']='max-age=0'; $hdrsArr['Connection']='keep-alive'; $hdrsArr['Referer']='';
       $hdrsArr['User-Agent']='Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.54 Safari/537.36'; 

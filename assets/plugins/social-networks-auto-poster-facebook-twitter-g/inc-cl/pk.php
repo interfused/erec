@@ -26,7 +26,7 @@ if (!class_exists("nxs_snapClassPK")) { class nxs_snapClassPK extends nxs_snapCl
   function checkIfSetupFinished($options) { return !empty($options['pgID']) && !empty($options['accessToken']); }
   public function doAuth() { $ntInfo = $this->ntInfo; global $nxs_snapSetPgURL;     
    if ( isset($_GET['auth']) && $_GET['auth']=='pk'){ require_once('apis/plurkOAuth.php'); $options = $this->nt[$_GET['acc']];  prr($options, 'OPTS:');  prr($this->nt, 'OPTS:');
-              $consumer_key = $options['appKey']; $consumer_secret = $options['appSec']; $callback_url = $nxs_snapSetPgURL."&auth=pka&acc=".$_GET['acc'];             
+              $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']); $callback_url = $nxs_snapSetPgURL."&auth=pka&acc=".$_GET['acc'];             
               $tum_oauth = new wpPlurkOAuth($consumer_key, $consumer_secret); $request_token = $tum_oauth->getReqToken($callback_url); 
               $options['oAuthToken'] = $request_token['oauth_token']; $options['oAuthTokenSecret'] = $request_token['oauth_token_secret']; //prr($tum_oauth); prr($options); //die();              
               switch ($tum_oauth->http_code) { case 200: $url = 'https://www.plurk.com/OAuth/authorize?oauth_token='.$options['oAuthToken']; nxs_save_glbNtwrks($ntInfo['lcode'],$_GET['acc'],$options,'*');
@@ -36,7 +36,7 @@ if (!class_exists("nxs_snapClassPK")) { class nxs_snapClassPK extends nxs_snapCl
               die();
             }
    if ( isset($_GET['auth']) && $_GET['auth']=='pka'){ require_once('apis/plurkOAuth.php'); $options = $this->nt[$_GET['acc']];
-              $consumer_key = $options['appKey']; $consumer_secret = $options['appSec']; prr($options, 'OPTS:');
+              $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']); prr($options, 'OPTS:');
               $tum_oauth = new wpPlurkOAuth($consumer_key, $consumer_secret, $options['oAuthToken'], $options['oAuthTokenSecret']); //prr($tum_oauth);
               $access_token = $tum_oauth->getAccToken($_GET['oauth_verifier']); prr($access_token);
               $options['accessToken'] = $access_token['oauth_token'];  $options['accessTokenSec'] = $access_token['oauth_token_secret'];              

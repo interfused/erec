@@ -78,6 +78,29 @@ class WP_Job_Manager_Settings {
 
 		$this->settings = apply_filters( 'job_manager_settings',
 			array(
+				'general' => array(
+					__( 'General', 'wp-job-manager' ),
+					array(
+						array(
+							'name'       => 'job_manager_date_format',
+							'std'        => 'relative',
+							'label'      => __( 'Date Format', 'wp-job-manager' ),
+							'desc'       => __( 'Choose how you want the published date for jobs to be displayed on the front-end.', 'wp-job-manager' ),
+							'type'       => 'radio',
+							'options'    => array(
+								'relative' => __( 'Relative to the current date (e.g., 1 day, 1 week, 1 month ago)', 'wp-job-manager' ),
+								'default'   => __( 'Default date format as defined in Settings', 'wp-job-manager' ),
+							)
+						),
+						array(
+							'name'       => 'job_manager_google_maps_api_key',
+							'std'        => '',
+							'label'      => __( 'Google Maps API Key', 'wp-job-manager' ),
+							'desc'       => sprintf( __( 'Google requires an API key to retrieve location information for job listings. Acquire an API key from the <a href="%s">Google Maps API developer site</a>.', 'wp-job-manager' ), 'https://developers.google.com/maps/documentation/geocoding/get-api-key' ),
+							'attributes' => array()
+						),
+					),
+				),
 				'job_listings' => array(
 					__( 'Job Listings', 'wp-job-manager' ),
 					array(
@@ -163,24 +186,6 @@ class WP_Job_Manager_Settings {
 							'type'       => 'checkbox',
 							'attributes' => array()
 						),
-						array(
-							'name'       => 'job_manager_date_format',
-							'std'        => 'relative',
-							'label'      => __( 'Date Format', 'wp-job-manager' ),
-							'desc'       => __( 'Choose how you want the published date for jobs to be displayed on the front-end.', 'wp-job-manager' ),
-							'type'       => 'radio',
-							'options'    => array(
-								'relative' => __( 'Relative to the current date (e.g., 1 day, 1 week, 1 month ago)', 'wp-job-manager' ),
-								'default'   => __( 'Default date format as defined in Settings', 'wp-job-manager' ),
-							)
-						),
-						array(
-							'name'       => 'job_manager_google_maps_api_key',
-							'std'        => '',
-							'label'      => __( 'Google Maps API Key', 'wp-job-manager' ),
-							'desc'       => sprintf( __( 'Google requires an API key to retrieve location information for job listings. Acquire an API key from the <a href="%s">Google Maps API developer site</a>.', 'wp-job-manager' ), 'https://developers.google.com/maps/documentation/geocoding/get-api-key' ),
-							'attributes' => array()
-						),
 					),
 				),
 				'job_submission' => array(
@@ -249,6 +254,20 @@ class WP_Job_Manager_Settings {
 							'attributes' => array()
 						),
 						array(
+							'name'       => 'job_manager_user_edit_published_submissions',
+							'std'        => 'yes',
+							'label'      => __( 'Allow Published Edits', 'wp-job-manager' ),
+							'cb_label'   => __( 'Allow editing of published listings', 'wp-job-manager' ),
+							'desc'       => __( 'Choose whether published job listings can be edited and if edits require admin approval. When moderation is required, the original job listings will be unpublished while edits await admin approval.', 'wp-job-manager' ),
+							'type'       => 'radio',
+							'options'    => array(
+								'no'             => __( 'Users cannot edit', 'wp-job-manager' ),
+								'yes'            => __( 'Users can edit without admin approval', 'wp-job-manager' ),
+								'yes_moderated'  => __( 'Users can edit, but edits require admin approval', 'wp-job-manager' ),
+							),
+							'attributes' => array()
+						),
+						array(
 							'name'       => 'job_manager_submission_duration',
 							'std'        => '30',
 							'label'      => __( 'Listing Duration', 'wp-job-manager' ),
@@ -266,6 +285,44 @@ class WP_Job_Manager_Settings {
 								'email' => __( 'Email addresses only', 'wp-job-manager' ),
 								'url'   => __( 'Website URLs only', 'wp-job-manager' ),
 							)
+						),
+					),
+				),
+				'recaptcha' => array(
+					__( 'reCAPTCHA', 'wp-job-manager' ),
+					array(
+						array(
+							'name'        => 'job_manager_recaptcha_label',
+							'std'         => __( 'Are you human?', 'wp-job-manager' ),
+							'placeholder' => '',
+							'label'       => __( 'Field Label', 'wp-job-manager' ),
+							'desc'        => __( 'The label used for the reCAPTCHA field on forms.', 'wp-job-manager' ),
+							'attributes'  => array()
+						),
+						array(
+							'name'        => 'job_manager_recaptcha_site_key',
+							'std'         => '',
+							'placeholder' => '',
+							'label'       => __( 'Site Key', 'wp-job-manager' ),
+							'desc'        => sprintf( __( 'You can retrieve your site key from <a href="%s">Google\'s reCAPTCHA admin dashboard</a>.', 'wp-job-manager' ), 'https://www.google.com/recaptcha/admin#list' ),
+							'attributes'  => array()
+						),
+						array(
+							'name'        => 'job_manager_recaptcha_secret_key',
+							'std'         => '',
+							'placeholder' => '',
+							'label'       => __( 'Secret Key', 'wp-job-manager' ),
+							'desc'        => sprintf( __( 'You can retrieve your secret key from <a href="%s">Google\'s reCAPTCHA admin dashboard</a>.', 'wp-job-manager' ), 'https://www.google.com/recaptcha/admin#list' ),
+							'attributes'  => array()
+						),
+						array(
+							'name'       => 'job_manager_enable_recaptcha_job_submission',
+							'std'        => '0',
+							'label'      => __( 'Job Submission Form', 'wp-job-manager' ),
+							'cb_label'   => __( 'Display a reCAPTCHA field on job submission form.', 'wp-job-manager' ),
+							'desc'       => sprintf( __( 'This will help prevent bots from submitting job listings. You must have entered a valid site key and secret key above.', 'wp-job-manager' ), 'https://www.google.com/recaptcha/admin#list' ),
+							'type'       => 'checkbox',
+							'attributes' => array()
 						),
 					)
 				),
