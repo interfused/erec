@@ -97,7 +97,12 @@ function pmpro_setOption($s, $v = NULL, $sanitize_function = 'sanitize_text_fiel
 {
 	//no value is given, set v to the p var
 	if($v === NULL && isset($_POST[$s]))
-		$v = call_user_func($sanitize_function, $_POST[$s]);
+	{	
+		if(is_array($_POST[$s]))
+			$v = array_map($sanitize_function, $_POST[$s]);
+		else
+			$v = call_user_func($sanitize_function, $_POST[$s]);
+	}
 
 	if(is_array($v))
 		$v = implode(",", $v);
@@ -151,11 +156,15 @@ function pmpro_url($page = NULL, $querystring = "", $scheme = NULL)
 	//figure out querystring
 	$querystring = str_replace("?", "", $querystring);
 	parse_str( $querystring, $query_args );
-	$url = esc_url_raw( add_query_arg( $query_args, $url ) );
+	
+	if(!empty($url)) {
+		
+		$url = esc_url_raw( add_query_arg( $query_args, $url ) );
 
-	//figure out scheme
-	if(is_ssl())
-		$url = str_replace("http:", "https:", $url);
+		//figure out scheme
+		if(is_ssl())
+			$url = str_replace("http:", "https:", $url);
+	}
 
 	return $url;
 }
@@ -1868,7 +1877,8 @@ function pmpro_getMembershipLevelsForUser($user_id = NULL, $include_inactive = f
 								UNIX_TIMESTAMP(enddate) as enddate
 							FROM {$wpdb->pmpro_membership_levels} AS l
 							JOIN {$wpdb->pmpro_memberships_users} AS mu ON (l.id = mu.membership_id)
-							WHERE mu.user_id = $user_id".($include_inactive?"":" AND mu.status = 'active'"));
+							WHERE mu.user_id = $user_id".($include_inactive?"":" AND mu.status = 'active'
+							GROUP BY ID"));
 	/**
 	 * pmpro_get_membership_levels_for_user filter.
 	 *
@@ -1972,6 +1982,11 @@ function pmpro_getLevelAtCheckout($level_id = NULL, $discount_code = NULL) {
 		$level_id = intval($_REQUEST['level']);
 	}
 	
+	//no level, check for a default level in the custom fields for this post
+	if(empty($level_id) && !empty($post)) {
+		$level_id = get_post_meta( $post->ID, "pmpro_default_level", true );
+	}
+	
 	//default to discount code passed in
 	if(empty($discount_code) && !empty($_REQUEST['discount_code'])) {
 		$discount_code = preg_replace( "/[^A-Za-z0-9\-]/", "", $_REQUEST['discount_code'] );
@@ -1982,7 +1997,7 @@ function pmpro_getLevelAtCheckout($level_id = NULL, $discount_code = NULL) {
 		$discount_code_id = $wpdb->get_var( "SELECT id FROM $wpdb->pmpro_discount_codes WHERE code = '" . $discount_code . "' LIMIT 1" );
 
 		//check code
-		$code_check = pmpro_checkDiscountCode( $discount_code, $level_id, true );
+		$code_check = pmpro_checkDiscountCode( $discount_code, $level_id, true );		
 		if ( $code_check[0] != false ) {			
 			$sqlQuery    = "SELECT l.id, cl.*, l.name, l.description, l.allow_signups FROM $wpdb->pmpro_discount_codes_levels cl LEFT JOIN $wpdb->pmpro_membership_levels l ON cl.level_id = l.id LEFT JOIN $wpdb->pmpro_discount_codes dc ON dc.id = cl.code_id WHERE dc.code = '" . $discount_code . "' AND cl.level_id = '" . $level_id . "' LIMIT 1";
 			$pmpro_level = $wpdb->get_row( $sqlQuery );
@@ -2004,12 +2019,6 @@ function pmpro_getLevelAtCheckout($level_id = NULL, $discount_code = NULL) {
 	//what level are they purchasing? (no discount code)
 	if ( empty( $pmpro_level ) && ! empty( $level_id ) ) {
 		$pmpro_level = $wpdb->get_row( "SELECT * FROM $wpdb->pmpro_membership_levels WHERE id = '" . esc_sql( $level_id ) . "' AND allow_signups = 1 LIMIT 1" );
-	} elseif ( empty( $pmpro_level ) && !empty( $post ) ) {
-		//check if a level is defined in custom fields
-		$default_level = get_post_meta( $post->ID, "pmpro_default_level", true );
-		if ( ! empty( $default_level ) ) {
-			$pmpro_level = $wpdb->get_row( "SELECT * FROM $wpdb->pmpro_membership_levels WHERE id = '" . esc_sql( $default_level ) . "' AND allow_signups = 1 LIMIT 1" );
-		}
 	}
 
 	//filter the level (for upgrades, etc)
@@ -2032,24 +2041,28 @@ function pmpro_getCheckoutButton($level_id, $button_text = NULL, $classes = NULL
 	{
 		//get level
 		$level = pmpro_getLevel($level_id);
-
-		//replace vars
-		$replacements = array(
-			"!!id!!" => $level->id,
-			"!!name!!" => $level->name,
-			"!!description!!" => $level->description,
-			"!!confirmation!!" => $level->confirmation,
-			"!!initial_payment!!" => $level->initial_payment,
-			"!!billing_amount!!" => $level->billing_amount,
-			"!!cycle_number!!" => $level->cycle_number,
-			"!!cycle_period!!" => $level->cycle_period,
-			"!!billing_limit!!" => $level->billing_limit,
-			"!!trial_amount!!" => $level->trial_amount,
-			"!!trial_limit!!" => $level->trial_limit,
-			"!!expiration_number!!" => $level->expiration_number,
-			"!!expiration_period!!" => $level->expiration_period
-		);
-		$button_text = str_replace(array_keys($replacements), $replacements, $button_text);
+		
+		if(empty($level))
+			$r = sprintf(__("Level #%s not found.", 'paid-memberships-pro' ), $level_id);
+		else {		
+			//replace vars
+			$replacements = array(
+				"!!id!!" => $level->id,
+				"!!name!!" => $level->name,
+				"!!description!!" => $level->description,
+				"!!confirmation!!" => $level->confirmation,
+				"!!initial_payment!!" => $level->initial_payment,
+				"!!billing_amount!!" => $level->billing_amount,
+				"!!cycle_number!!" => $level->cycle_number,
+				"!!cycle_period!!" => $level->cycle_period,
+				"!!billing_limit!!" => $level->billing_limit,
+				"!!trial_amount!!" => $level->trial_amount,
+				"!!trial_limit!!" => $level->trial_limit,
+				"!!expiration_number!!" => $level->expiration_number,
+				"!!expiration_period!!" => $level->expiration_period
+			);
+			$button_text = str_replace(array_keys($replacements), $replacements, $button_text);
+		}
 
 		//button text
 		$r = "<a href=\"" . pmpro_url("checkout", "?level=" . $level_id) . "\" class=\"" . $classes . "\">" . $button_text . "</a>";

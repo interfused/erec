@@ -35,6 +35,24 @@ class PgCache_Plugin_Admin {
 			add_filter( 'w3tc_usage_statistics_summary_from_history', array(
 					$this, 'w3tc_usage_statistics_summary_from_history' ), 10, 2 );
 		}
+
+		// cookie groups
+		add_filter( 'w3tc_admin_menu', array( $this, 'w3tc_admin_menu' ) );
+		add_action( 'admin_init_w3tc_pgcache_cookiegroups',	array(
+				'\W3TC\PgCache_Page_CookieGroups',
+				'admin_init_w3tc_pgcache_cookiegroups'
+			) );
+
+		add_action( 'w3tc_settings_page-w3tc_pgcache_cookiegroups',	array(
+				'\W3TC\PgCache_Page_CookieGroups',
+				'w3tc_settings_page_w3tc_pgcache_cookiegroups'
+			) );
+
+		add_action( 'w3tc_config_ui_save-w3tc_pgcache_cookiegroups', array(
+				'\W3TC\PgCache_Page_CookieGroups',
+				'w3tc_config_ui_save_w3tc_pgcache_cookiegroups'
+			), 10, 1 );
+
 	}
 
 	function cleanup() {
@@ -107,11 +125,13 @@ class PgCache_Plugin_Admin {
 		if ( $start == 0 ) {
 			$crons = _get_cron_array();
 
-			foreach ( $crons as $timestamp => $hooks ) {
-				foreach ( $hooks as $hook => $keys ) {
-					foreach ( $keys as $key => $data ) {
-						if ( $hook == 'w3_pgcache_prime' && count( $data['args'] ) ) {
-							return;
+			if ( is_array( $crons ) ) {
+				foreach ( $crons as $timestamp => $hooks ) {
+					foreach ( $hooks as $hook => $keys ) {
+						foreach ( $keys as $key => $data ) {
+							if ( $hook == 'w3_pgcache_prime' && count( $data['args'] ) ) {
+								return;
+							}
 						}
 					}
 				}
@@ -144,10 +164,10 @@ class PgCache_Plugin_Admin {
 
 
 
-		// use empty user-agent since by default we use W3TC-powered by
+		// use 'WordPress' since by default we use W3TC-powered by
 		// which blocks caching
 		foreach ( $queue as $url )
-			Util_Http::get( $url, array( 'user-agent' => '' ) );
+			Util_Http::get( $url, array( 'user-agent' => 'WordPress' ) );
 	}
 
 	/**
@@ -204,6 +224,20 @@ class PgCache_Plugin_Admin {
 				arsort( $locs );
 
 				$urls = array_keys( $locs );
+			} elseif ( preg_match_all( '~<rss[^>]*>(.*?)</rss>~is', $response['body'], $sitemap_matches ) ) {
+
+				// rss feed format
+				if ( preg_match_all( '~<link[^>]*>(.*?)</link>~is', $response['body'], $url_matches ) ) {
+					foreach ( $url_matches[1] as $url_match ) {
+						$url = trim( $url_match );
+						$cdata_matches = null;
+						if ( preg_match( '~<!\[CDATA\[(.*)\]\]>~is', $url, $cdata_matches ) ) {
+							$url = $cdata_matches[1];
+						}
+
+						$urls[] = $url;
+					}
+				}
 			}
 		}
 
@@ -221,7 +255,7 @@ class PgCache_Plugin_Admin {
 
 		// Make HTTP requests and prime cache
 		foreach ( $post_urls as $url ) {
-			$result = Util_Http::get( $url, array( 'user-agent' => '' ) );
+			$result = Util_Http::get( $url, array( 'user-agent' => 'WordPress' ) );
 			if ( is_wp_error( $result ) )
 				return false;
 		}
@@ -266,21 +300,31 @@ class PgCache_Plugin_Admin {
 		return $errors;
 	}
 
+	public function w3tc_admin_menu( $menu ) {
+		$menu['w3tc_pgcache_cookiegroups'] = array(
+			'page_title' => __( 'Cookie Groups', 'w3-total-cache' ),
+			'menu_text' => __( 'Cookie Groups', 'w3-total-cache' ),
+			'visible_always' => false,
+			'order' => 950
+		);
+
+		return $menu;
+	}
+
 	public function w3tc_usage_statistics_summary_from_history( $summary, $history ) {
 		// memcached servers
 		if ( $this->_config->get_string( 'pgcache.engine' ) == 'memcached' ) {
 			$summary['memcached_servers']['pgcache'] = array(
 				'servers' => $this->_config->get_array( 'pgcache.memcached.servers' ),
-				'username' => $this->_config->get_boolean( 'pgcache.memcached.username' ),
-				'password' => $this->_config->get_boolean( 'pgcache.memcached.password' ),
+				'username' => $this->_config->get_string( 'pgcache.memcached.username' ),
+				'password' => $this->_config->get_string( 'pgcache.memcached.password' ),
 				'name' => __( 'Page Cache', 'w3-total-cache' )
 			);
 		} elseif ( $this->_config->get_string( 'pgcache.engine' ) == 'redis' ) {
 			$summary['redis_servers']['pgcache'] = array(
 				'servers' => $this->_config->get_array( 'pgcache.redis.servers' ),
-				'username' => $this->_config->get_boolean( 'pgcache.redis.username' ),
-				'dbid' => $this->_config->get_boolean( 'pgcache.redis.dbid' ),
-				'password' => $this->_config->get_boolean( 'pgcache.redis.password' ),
+				'dbid' => $this->_config->get_integer( 'pgcache.redis.dbid' ),
+				'password' => $this->_config->get_string( 'pgcache.redis.password' ),
 				'name' => __( 'Page Cache', 'w3-total-cache' )
 			);
 		}

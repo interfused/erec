@@ -67,6 +67,10 @@ jQuery(document).ready(function($){
 		refresh_settings();
 	});
 
+	$('input[name=px_lookup_mode]').on('change', function(){
+		refresh_settings();
+	});
+
 	$('#form_backend_settings').on('submit', function(e){
 		if($('#enable_backend').is(':checked')){
 			if($('#bypass_code').val().length == 0){
@@ -82,16 +86,16 @@ jQuery(document).ready(function($){
 	$('#download').on('click', function(e){
 		e.preventDefault();
 
-		if ($('#database_name').val().length == 0 || $('#email_address').val().length == 0 || $('#password').val().length == 0){
+		if ($('#database_name').val().length == 0 || $('#token').val().length == 0){
 			$('#download_status').html('<div id="message" class="error"><p><strong>ERROR</strong>: Please make sure you have entered the login crendential.</p></div>');
 			return;
 		}
 
 		$('#download_status').html('');
-		$('#database_name,#email_address,#password,#download').prop('disabled', true);
+		$('#database_name,#token,#download').prop('disabled', true);
 		$('#ip2location-download-progress').show();
 
-		$.post(ajaxurl, { action: 'update_ip2location_country_blocker_database', database: $('#database_name').val(), email: $('#email_address').val(), password: $('#password').val() }, function(response) {
+		$.post(ajaxurl, { action: 'update_ip2location_country_blocker_database', database: $('#database_name').val(), token: $('#token').val() }, function(response) {
 			if (response == 'SUCCESS') {
 				alert('Download completed.');
 
@@ -108,10 +112,8 @@ jQuery(document).ready(function($){
 			}
 		}).always(function() {
 			$('#database_name').val('');
-			$('#email_address').val('');
-			$('#password').val('');
 			
-			$('#database_name,#email_address,#password,#download').prop('disabled', false);
+			$('#database_name,#token,#download').prop('disabled', false);
 			$('#ip2location-download-progress').hide();
 		});
 	});
@@ -131,6 +133,7 @@ jQuery(document).ready(function($){
 				$('#frontend_redirect_url').prop('disabled', true);
 			}
 
+			$('.disabled').prop('disabled', true);
 			toogleTagsInput(true);
 		}
 		else{
@@ -156,6 +159,7 @@ jQuery(document).ready(function($){
 				$('#backend_redirect_url').prop('disabled', true);
 			}
 
+			$('.disabled').prop('disabled', true);
 			toogleTagsInput(true);
 		}
 		else{
@@ -169,11 +173,32 @@ jQuery(document).ready(function($){
 	function refresh_settings(){
 		if($('#lookup_mode_bin').is(':checked')){
 			$('#bin_database').show();
+			$('#bin_download').show();
 			$('#ws_access').hide();
 		}
-		else{
+		else if($('#lookup_mode_ws').is(':checked')){
 			$('#bin_database').hide();
+			$('#bin_download').hide();
 			$('#ws_access').show();
+		}
+
+		if($('#px_lookup_mode_bin').is(':checked')){
+			$('#px_bin_database').show();
+			$('#bin_download').show();
+			$('#px_ws_access').hide();
+		}
+		else if($('#px_lookup_mode_ws').is(':checked')){
+			$('#px_bin_database').hide();
+			$('#bin_download').hide();
+			$('#px_ws_access').show();
+		}
+		else{
+			$('#px_bin_database').hide();
+			$('#px_ws_access').hide();
+		}
+
+		if($('#lookup_mode_bin').is(':checked') || $('#px_lookup_mode_bin').is(':checked')){
+			$('#bin_download').show();
 		}
 	}
 

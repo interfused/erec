@@ -102,7 +102,7 @@ register_activation_hook( __FILE__, 'create_viewed_db' );
 function create_reference_table() {
     global $wpdb;
     $charset_collate = $wpdb->get_charset_collate();
-    $table_name = $wpdb->prefix . 'er_references';
+    $table_name = $wpdb->prefix . 'reference_now';
     $sql = "CREATE TABLE $table_name (
         id int(9) NOT NULL AUTO_INCREMENT,
         ref_detail LONGTEXT,

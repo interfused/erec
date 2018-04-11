@@ -26,7 +26,7 @@ $post_types = apply_filters('pmpro_admin_pagesetting_post_type_array', array( 'p
 //check nonce for saving settings
 if (!empty($_REQUEST['savesettings']) && (empty($_REQUEST['pmpro_pagesettings_nonce']) || !check_admin_referer('savesettings', 'pmpro_pagesettings_nonce'))) {
 	$msg = -1;
-	$msgt = __("Are your sure you want to do that? Try again.", 'paid-memberships-pro' );
+	$msgt = __("Are you sure you want to do that? Try again.", 'paid-memberships-pro' );
 	unset($_REQUEST['savesettings']);
 }
 
@@ -65,7 +65,7 @@ if (!empty($_REQUEST['savesettings'])) {
 //check nonce for generating pages
 if (!empty($_REQUEST['createpages']) && (empty($_REQUEST['pmpro_pagesettings_nonce']) || !check_admin_referer('createpages', 'pmpro_pagesettings_nonce'))) {
 	$msg = -1;
-	$msgt = __("Are your sure you want to do that? Try again.", 'paid-memberships-pro' );
+	$msgt = __("Are you sure you want to do that? Try again.", 'paid-memberships-pro' );
 	unset($_REQUEST['createpages']);
 }
 
@@ -292,8 +292,8 @@ require_once(dirname(__FILE__) . "/admin_header.php");
                                 <a target="_blank" href="<?php echo get_permalink($pmpro_pages[$name]); ?>"
                                    class="button button-secondary pmpro_page_view"><?php _e('view page', 'paid-memberships-pro' ); ?></a>
                             <?php } else { ?>
-                                &nbsp;
-                                <a href="?page=pmpro-pagesettings&createpages=1&page_name=<?php echo $name; ?>"><?php _e('Generate Page', 'paid-memberships-pro' ); ?></a>
+                                &nbsp;				
+                                <a href="<?php echo wp_nonce_url( add_query_arg( array( 'page' => 'pmpro-pagesettings', 'createpages' => 1, 'page_name' => esc_attr( $name ) ), admin_url('admin.php') ), 'createpages', 'pmpro_pagesettings_nonce' ); ?>"><?php _e('Generate Page', 'paid-memberships-pro' ); ?></a>
                             <?php } ?>
 							<?php if(!empty($hint)) { ?>
 								<br/>

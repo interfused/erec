@@ -6,7 +6,7 @@ class easyFancyBox_Options extends easyFancyBox {
 
 	public static function load_defaults() {
 
-		$url = strtotime('now') <= strtotime('27-11-2016') ? "https://premium.status301.net/downloads/easy-fancybox-pro/?discount=BFCM30" : "https://premium.status301.net/downloads/easy-fancybox-pro/";
+		$url = "https://premium.status301.net/downloads/easy-fancybox-pro/";
 
 		parent::$options = array (
 
@@ -363,9 +363,12 @@ class easyFancyBox_Options extends easyFancyBox {
 							'default' =>  '0',
 							'sanitize_callback' => 'intval',
 							'options' => array(
-								'0' => translate('No')
-								),
-							'translations' => __('1 Day','easy-fancybox') . __('1 Week','easy-fancybox') . __('1 Month','easy-fancybox') . __('1 Year','easy-fancybox'),
+								'0' => translate('No'),
+								'1' => __('1 Day','easy-fancybox'),
+								'7' => __('1 Week','easy-fancybox'),
+								'30' => __('1 Month','easy-fancybox'),
+								'365' => __('1 Year','easy-fancybox')
+							),
 							'description' => ' <em><a href="'.$url.'">' . __('Make available &raquo;','easy-fancybox') . '</a></em>'
 							),
 						'p1' => array (
@@ -468,7 +471,7 @@ class easyFancyBox_Options extends easyFancyBox {
 					'input' => 'text',
 					'class' => 'regular-text',
 					'hide' => true,
-					'default' => '.jpg .jpeg .png',
+					'default' => '.jpg .jpeg .png .webp',
 					'selector' => 'href*=',
 					'description' => ' <em>' . __('Example:','easy-fancybox') . ' .jpg .jpeg .png .gif</em><br />'
 					),
@@ -686,8 +689,7 @@ class easyFancyBox_Options extends easyFancyBox {
 					'id' => 'fancybox_autoSelector',
 					'hide' => true,
 					'input' => 'hidden',
-					'default' => 'div.gallery ', // add div.tiled-gallery for Tiled Galleries support
-					'translations' => __('Galleries per Section (below)','easy-fancybox') . __('This applies when <em>Apply to</em> is set to <em>Limited to Sections</em> and/or <em>Autogallery</em> is set to <em>Galleries per Section</em>. Adapt it to conform with your theme.','easy-fancybox') . __('Examples: If your theme wraps post content in a div with class post, change this value to "div.post". If you only want to group images in a WordPress gallery together, use "div.gallery". If you want to include images in a sidebar with ID primary, add ", #primary".','easy-fancybox') . __('Hide/show title on mouse hover action works best with Overlay title position.','easy-fancybox') . __('Auto-rotation uses a fixed 3, 6, 9 or 12 second pause per image.','easy-fancybox') . __('(3 seconds)','easy-fancybox') . __('(6 seconds)','easy-fancybox') . __('(9 seconds)','easy-fancybox') . __('(12 seconds)','easy-fancybox')
+					'default' => 'div.gallery ' // add div.tiled-gallery for Tiled Galleries support
 					),
 				'onComplete' => array (
 					'id' => '',
@@ -860,7 +862,7 @@ class easyFancyBox_Options extends easyFancyBox {
 						'html' => __('Object tag (plus fall-back link)','easy-fancybox'),
 						'iframe' => __('iFrame tag (let browser decide)','easy-fancybox')
 						),
-					'default' => 'html',
+					'default' => 'iframe',
 					'description' => ' <em><a href="'.$url.'">' . __('More options &raquo;','easy-fancybox') . '</a></em><br/><br/>'
 					),
 				'width' => array (

@@ -24,6 +24,7 @@ class Fep_Pro_Info
 			add_filter( 'fep_admin_settings_tabs', array($this, 'admin_settings_tabs' ) );
 			add_filter( 'fep_settings_fields', array($this, 'settings_fields' ) );
 			add_action('fep_admin_settings_field_output_oa_admins', array($this, 'field_output_oa_admins' ) );
+			add_action('fep_admin_settings_field_output_rtr_block', array($this, 'field_output_rtr_block' ) );
     	}
 	
 	function email_legends( $where = 'newmessage', $post = '', $value = 'description', $user_email = '' ){
@@ -120,6 +121,13 @@ class Fep_Pro_Info
 				'section_page'		=> 'fep_settings_recipient',
 				'section_callback'	=> array($this, 'section_callback' ),
 				'priority'			=> 15,
+				'tab_output'		=> false
+				);
+		$tabs['rtr_block'] =  array(
+				'section_title'			=> __('Role to Role Block', 'front-end-pm'),
+				'section_page'		=> 'fep_settings_security',
+				'section_callback'	=> array($this, 'section_callback' ),
+				'priority'			=> 35,
 				'tab_output'		=> false
 				);
 				
@@ -292,24 +300,6 @@ class Fep_Pro_Info
 				'label' => __( 'Send Attachments', 'front-end-pm' ),
 				'cb_label' => __( 'Send attachments with announcement email?', 'front-end-pm' )
 				);
-			$fields['mr-can-send-to-users'] =   array(
-				'type'	=>	'checkbox',
-				'class'	=> '',
-				'section'	=> 'mr_multiple_recipients',
-				'value' => fep_get_option('mr-can-send-to-users', 1 ),
-				//'description' => __( 'Can users send message to other users.', 'front-end-pm' ),
-				'label' => __( 'Can send to users', 'front-end-pm' ),
-				'cb_label' => __( 'Can users send message to other users.', 'front-end-pm' )
-				);
-			$fields['mr-can-admin-send-to-users'] =   array(
-				'type'	=>	'checkbox',
-				'class'	=> '',
-				'section'	=> 'mr_multiple_recipients',
-				'value' => fep_get_option('mr-can-admin-send-to-users', 1 ),
-				//'description' => __( 'Can users send message to other users.', 'front-end-pm' ),
-				'label' => __( 'Can admin send to users', 'front-end-pm' ),
-				'cb_label' => __( 'Can admin send new message to other users.', 'front-end-pm' )
-				);
 			$fields['mr-max-recipients'] =   array(
 				'type'	=>	'number',
 				'section'	=> 'mr_multiple_recipients',
@@ -349,18 +339,24 @@ class Fep_Pro_Info
 				'section'	=> 'oa_admins',
 				'value' => fep_get_option('oa_admins', array()),
 				'description' => __( 'Do not forget to save.', 'front-end-pm' ),
-				'label' => 'Admins'
+				'label' => __( 'Admins', 'front-end-pm' )
 				);
 			$fields['oa_admins_frontend'] =   array(
 				'type'	=>	'select',
 				'section'	=> 'oa_admins',
-				'value' => fep_get_option('oa_admins_frontend', 'select' ),
+				'value' => fep_get_option('oa_admins_frontend', 'dropdown' ),
 				'description' => __( 'Select how you want to see in frontend.', 'front-end-pm' ),
 				'label' => __( 'Show in front end as', 'front-end-pm' ),
 				'options'	=> array(
-					'select'	=> __( 'Select', 'front-end-pm' ),
-					'radio'	=> __( 'Radio', 'front-end-pm' )
+					'dropdown'	=> __( 'Dropdown', 'front-end-pm' ),
+					'radio'	=> __( 'Radio Button', 'front-end-pm' )
 					)
+				);
+			$fields['rtr_block'] =   array(
+				'type'	=>	'rtr_block',
+				'section'	=> 'rtr_block',
+				'value' => fep_get_option('rtr_block', array()),
+				'description' => __( 'Do not forget to save.', 'front-end-pm' ),
 				);
 								
 			return $fields;
@@ -373,7 +369,27 @@ class Fep_Pro_Info
 			<div>
 				<span><input type="text" placeholder="<?php esc_attr_e( 'Display as', 'front-end-pm' ); ?>" value=""/></span>
 				<span><input type="text" placeholder="<?php esc_attr_e( 'Username', 'front-end-pm' ); ?>" value=""/></span>
-				<span><input type="button" class="button button-small" value="<?php esc_attr_e( 'Remove' ); ?>" /></span>
+				<span><input type="button" class="button button-small" value="<?php esc_attr_e( 'Remove', 'front-end-pm' ); ?>" /></span>
+			</div>
+			<div><input type="button" class="button" value="<?php esc_attr_e( 'Add More', 'front-end-pm' ); ?>" /></div>
+		<?php
+		
+		}
+		function field_output_rtr_block( $field ){
+		
+		?>
+			<table>
+				<th><?php _e( 'From Role', 'front-end-pm' );?></th>
+				<th><?php _e( 'To Role', 'front-end-pm' );?></th>
+				<th><?php _e( 'Block For', 'front-end-pm' );?></th>
+				<th><?php _e( 'Remove', 'front-end-pm' );?></th>
+			</table>
+			
+			<div>
+				<span><select><option value=""><?php _e( 'Select Role', 'front-end-pm' ); ?></option></select></span>
+				<span><select><option value=""><?php _e( 'Select Role', 'front-end-pm' ); ?></option></select></span>
+				<span><select><option value=""><?php _e( 'Select For', 'front-end-pm' ); ?></option></select></span>
+				<span><input type="button" class="button button-small" value="<?php esc_attr_e( 'Remove', 'front-end-pm' ); ?>" /></span>
 			</div>
 			<div><input type="button" class="button" value="<?php esc_attr_e( 'Add More', 'front-end-pm' ); ?>" /></div>
 		<?php

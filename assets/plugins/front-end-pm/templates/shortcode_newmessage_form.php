@@ -8,7 +8,7 @@ if( ! empty( $heading )){
 ?><h2><?php echo $heading; ?></h2><?php
 }
 
-if ( ! fep_current_user_can( 'send_new_message_to', $to ) ) {
+if ( ! fep_current_user_can( 'send_new_message_to', $to_id ) ) {
 	echo "<div class='fep-error'>".__("You do not have permission to send message to this receiver!", 'front-end-pm')."</div>";
 } elseif( isset($_POST['fep_action']) && 'shortcode-newmessage' == $_POST['fep_action'] ) {
 	if( fep_errors()->get_error_messages() ) {
@@ -20,7 +20,7 @@ if ( ! fep_current_user_can( 'send_new_message_to', $to ) ) {
 	echo Fep_Form::init()->form_field_output( 'shortcode-newmessage', '', array( 'message_to' => $to, 'message_title' => $subject ) );
 }
 
-if( ! empty( $enable_ajax )){
+if( ! empty( $ajax )){
 	echo '<div class="fep-ajax-response"></div>';
 }
 
