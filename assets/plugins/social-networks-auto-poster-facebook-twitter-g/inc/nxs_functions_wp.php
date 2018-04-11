@@ -579,7 +579,7 @@ function nxs_ogtgCallback($content){ global $post, $nxs_SNAP;
     $ogLoc = strtolower(esc_attr(get_locale())); if (strlen($ogLoc)==2) $ogLoc .= "_".strtoupper($ogLoc);
     $ogLoc = '<meta property="og:locale" content="'.$ogLoc.'" />'."\r\n"; $iss = is_home();  
     
-    if (!empty($accs['fb']) && count($accs['fb'])>0) { $kx = array_slice($accs['fb'], 0, 1); $k = array_shift($kx); $ogappID = (!empty($k) && !empty($k['appKey']))  ? ('<meta property="fb:app_id" content="'.$k['appKey'].'"/>'."\r\n"):'';
+    if (!empty($accs['fb']) && count($accs['fb'])>0) { $kx = array_slice($accs['fb'], 0, 1); $k = array_shift($kx); $ogappID = (!empty($k) && !empty($k['appKey']))  ? ('<meta property="fb:app_id" content="'.nxs_gak($k['appKey']).'"/>'."\r\n"):'';
       $fbURL = (!empty($k) && !empty($k['pgID']))  ? ('https://www.facebook.com/'.$k['pgID'].'/'):'';
     } else { $ogappID = ''; $fbURL = ''; } if (empty($options['ogAuthorFB']) && !empty($fbURL)) $options['ogAuthorFB'] = $fbURL;    
     if (!empty($options['ogAuthorFB'])) {
@@ -672,6 +672,38 @@ if (!function_exists('nxs_postFromForm')){ function nxs_postFromForm($post, $net
     if (!empty($post['qpid'])) { $metaArr = get_post_meta($post['qpid'], '_nxs_snap_data', true ); $metaArr['nts'] = $nts; $metaArr['posts'][] = $postResultsArr;  update_post_meta($post['qpid'], '_nxs_snap_data', $metaArr); }    
     if (!$isSilent) echo $out; else return $out; }
 }}
+
+if (!function_exists('nxs_doNewBPPost')){ function nxs_doNewBPPost($aid, $user_id, $content){ //prr($user_id); prr($content); die();    
+    global $nxs_SNAP, $wpdb; $postResults = '';  $currTime = time() + ( get_option( 'gmt_offset' ) * HOUR_IN_SECONDS );  $content = stripslashes($content); $pt = 't';
+    $networks = array(); $isSilent = false; if (empty($nxs_SNAP)) $nxs_SNAP = new nxs_SNAP();
+    foreach ($nxs_SNAP->nxs_acctsU as $act=>$acc) foreach ($acc as $ii=>$ac) {
+      if (is_array($ac)&&is_array($ac['fltrs'])&&!empty($ac['fltrs']['nxs_post_type'])&&is_array($ac['fltrs']['nxs_post_type'])&&in_array('BuddyPress_Activity',$ac['fltrs']['nxs_post_type']) ) $networks[] = $act.'--'.$ii; 
+    }                                                                                       
+    if (!empty($networks) && is_array($networks)) { nxs_addToLogN('S', '-=== New BuddyPress Post ===-', 'Form', count($networks).' Networks', print_r($networks, true));
+      $message = array('title'=>'', 'text'=>'', 'siteName'=>'', 'url'=>'', 'imageURL'=>'', 'videoURL'=>'', 'tags'=>'', 'urlDescr'=>'', 'urlTitle'=>'', 'urlCaption'=>'');  
+      //## Check if Extended Post
+      if (!empty($_POST['data']) && !empty($_POST['data']['bpfb_link_url'])) { $message['url'] =  $_POST['data']['bpfb_link_url']; $pt = 'a';
+          $content = $_POST['content']."\r\n".$message['url'];  if (!empty($_POST['data']['bpfb_link_body'])) $message['urlDescr'] = $_POST['data']['bpfb_link_body'];  if (!empty($_POST['data']['bpfb_link_title'])) $message['urlTitle'] =  $_POST['data']['bpfb_link_title'];
+          if (!empty($_POST['data']['bpfb_link_image'])) $message['imageURL'] =  $_POST['data']['bpfb_link_image'];
+      }
+      if (!empty($_POST['data']) && !empty($_POST['data']['bpfb_photos'])) { $content = $_POST['content'];  $message['imageURL'] =  $_POST['data']['bpfb_photos'][0]; $pt = 'i'; }
+      $nts = array();  $postResultsArr = array('date'=> time(), 'errors'=>0, 'ok'=>0, 'data'=>array());          
+      foreach ($networks as $ntC){ $ntA = explode('--',$ntC); $ntOpts = $nxs_SNAP->nxs_acctsU[$ntA[0]][$ntA[1]]; $nts[] = $ntA[0].$ntA[1];
+        if (!empty($ntOpts) && is_array($ntOpts)) { $logNT = $ntA[0];  $clName = 'nxs_class_SNAP_'.strtoupper($logNT);                  
+          $logNT = '<span style="color:#800000">'.strtoupper($logNT).'</span> - '.$ntOpts['nName']; 
+          $message['pText'] = nxs_doSpin($content); // prr($message);
+          $ntOpts['postType'] = $pt; $ntToPost = new $clName(); $ret = $ntToPost->doPostToNT($ntOpts, $message);
+          if (!is_array($ret) || empty($ret['isPosted']) || $ret['isPosted']!='1') { //## Error 
+             nxs_addToLogN('E', 'Error', $logNT, '-=ERROR=- '.print_r($ret, true), ''); $postResults .= $logNT ." - Error (Please see log)<br/>";   $postResultsArr['errors']++;
+          } else {  // ## All Good - log it.            
+             if (!empty($ret['postURL'])) $extInfo = '<a href="'.$ret['postURL'].'" target="_blank">Post Link</a>'; //$extInfo .= ' | '.print_r($message, true).' | '.print_r($ntOpts, true);
+             nxs_addToLogN('S', 'Posted', $logNT, 'OK - Message Posted ', $extInfo); $postResults .= $logNT ." - OK - ".$extInfo."<br/>";    
+             $postResultsArr['data'][] = array('nName'=>$logNT, 'link'=>(!empty($ret['postURL']))?$ret['postURL']:'');  $postResultsArr['ok']++;
+          }
+        }
+    } $out = "Done. Results:<br/> ".$postResults; if (!$isSilent) echo $out; else return $out; }
+}}
+add_action( 'bp_activity_posted_update', 'nxs_doNewBPPost', 10, 3 );
 
 if (!class_exists('nxs_snapPostResults')) { class nxs_snapPostResults { var $info = array();  var $summary = ''; var $details = '';     
     function __construct($info) { foreach ($info as $inf){ $this->createSummary($inf); $this->createDetailedList($inf); }}

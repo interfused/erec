@@ -38,16 +38,16 @@ class WP_Job_Manager_Admin {
 	public function __construct() {
 		global $wp_version;
 
-		include_once( 'class-wp-job-manager-cpt.php' );
+		include_once( dirname( __FILE__ ) . '/class-wp-job-manager-cpt.php' );
 		if ( version_compare( $wp_version, '4.7.0', '<' ) ) {
-			include_once( 'class-wp-job-manager-cpt-legacy.php' );
+			include_once( dirname( __FILE__ ) . '/class-wp-job-manager-cpt-legacy.php' );
 			WP_Job_Manager_CPT_Legacy::instance();
 		} else {
 			WP_Job_Manager_CPT::instance();
 		}
-		include_once( 'class-wp-job-manager-settings.php' );
-		include_once( 'class-wp-job-manager-writepanels.php' );
-		include_once( 'class-wp-job-manager-setup.php' );
+		include_once( dirname( __FILE__ ) . '/class-wp-job-manager-settings.php' );
+		include_once( dirname( __FILE__ ) . '/class-wp-job-manager-writepanels.php' );
+		include_once( dirname( __FILE__ ) . '/class-wp-job-manager-setup.php' );
 
 		$this->settings_page = WP_Job_Manager_Settings::instance();
 
@@ -61,7 +61,41 @@ class WP_Job_Manager_Admin {
 	 * Set up actions during admin initialization.
 	 */
 	public function admin_init() {
-		include_once( 'class-wp-job-manager-taxonomy-meta.php' );
+		global $wp_version;
+
+		include_once( dirname( __FILE__ ) . '/class-wp-job-manager-taxonomy-meta.php' );
+
+		if ( version_compare( $wp_version, JOB_MANAGER_MINIMUM_WP_VERSION, '<' ) ) {
+			add_action( 'admin_notices', array( $this, 'wp_version_admin_notice' ) );
+			add_filter( 'plugin_action_links_' . JOB_MANAGER_PLUGIN_BASENAME, array( $this, 'wp_version_plugin_action_notice' ) );
+		}
+	}
+
+	/**
+	 * Display notice if WordPress core is out-of-date in admin notice section.
+	 */
+	public function wp_version_admin_notice() {
+		// We only want to show the notices on the plugins page and WPJM admin pages.
+		$screen = get_current_screen();
+		$valid_screens = array( 'plugins', 'edit-job_listing', 'job_listing_page_job-manager-settings', 'edit-job_listing_type', 'edit-job_listing_category', 'job_listing' );
+		if ( null === $screen || ! in_array( $screen->id, $valid_screens ) ) {
+			return;
+		}
+
+		echo '<div class="error">';
+		echo '<p>' . sprintf( __( 'The upcoming release of <strong>WP Job Manager 1.31.0</strong> will require a more recent version of WordPress. <a href="%s">Please update WordPress</a> before updating WP Job Manager.', 'wp-job-manager' ), esc_url( self_admin_url( 'update-core.php' ) ) ) . '</p>';
+		echo '</div>';
+	}
+
+	/**
+	 * Add admin notice when WP upgrade is required.
+	 *
+	 * @param array $actions
+	 * @return array
+	 */
+	public function wp_version_plugin_action_notice( $actions ) {
+		$actions[] = sprintf( __( '<a href="%s" style="color: red">WordPress Update Required</a>', 'wp-job-manager' ), esc_url( self_admin_url( 'update-core.php' ) ) );
+		return $actions;
 	}
 
 	/**
@@ -86,18 +120,21 @@ class WP_Job_Manager_Admin {
 
 		$screen = get_current_screen();
 
-		if ( in_array( $screen->id, apply_filters( 'job_manager_admin_screen_ids', array( 'edit-job_listing', 'job_listing', 'job_listing_page_job-manager-settings', 'job_listing_page_job-manager-addons' ) ) ) ) {
+		if ( in_array( $screen->id, apply_filters( 'job_manager_admin_screen_ids', array( 'edit-job_listing', 'plugins', 'job_listing', 'job_listing_page_job-manager-settings', 'job_listing_page_job-manager-addons' ) ) ) ) {
 			$jquery_version = isset( $wp_scripts->registered['jquery-ui-core']->ver ) ? $wp_scripts->registered['jquery-ui-core']->ver : '1.9.2';
 
 			wp_enqueue_style( 'jquery-ui-style', '//code.jquery.com/ui/' . $jquery_version . '/themes/smoothness/jquery-ui.css', array(), $jquery_version );
 			wp_enqueue_style( 'job_manager_admin_css', JOB_MANAGER_PLUGIN_URL . '/assets/css/admin.css', array(), JOB_MANAGER_VERSION );
 			wp_register_script( 'jquery-tiptip', JOB_MANAGER_PLUGIN_URL. '/assets/js/jquery-tiptip/jquery.tipTip.min.js', array( 'jquery' ), JOB_MANAGER_VERSION, true );
-			wp_enqueue_script( 'job_manager_admin_js', JOB_MANAGER_PLUGIN_URL. '/assets/js/admin.min.js', array( 'jquery', 'jquery-tiptip', 'jquery-ui-datepicker' ), JOB_MANAGER_VERSION, true );
+			wp_enqueue_script( 'job_manager_datepicker_js', JOB_MANAGER_PLUGIN_URL. '/assets/js/datepicker.min.js', array( 'jquery', 'jquery-ui-datepicker' ), JOB_MANAGER_VERSION, true );
+			wp_enqueue_script( 'job_manager_admin_js', JOB_MANAGER_PLUGIN_URL. '/assets/js/admin.min.js', array( 'jquery', 'jquery-tiptip' ), JOB_MANAGER_VERSION, true );
 
-			wp_localize_script( 'job_manager_admin_js', 'job_manager_admin', array(
-				/* translators: jQuery date format, see http://api.jqueryui.com/datepicker/#utility-formatDate */
-				'date_format' => _x( 'yy-mm-dd', 'Date format for jQuery datepicker.', 'wp-job-manager' )
-			) );
+			if ( ! function_exists( 'wp_localize_jquery_ui_datepicker' ) || ! has_action( 'admin_enqueue_scripts', 'wp_localize_jquery_ui_datepicker' ) ) {
+				wp_localize_script( 'job_manager_datepicker_js', 'job_manager_datepicker', array(
+					/* translators: jQuery date format, see http://api.jqueryui.com/datepicker/#utility-formatDate */
+					'date_format' => _x( 'yy-mm-dd', 'Date format for jQuery datepicker.', 'wp-job-manager' )
+				) );
+			}
 		}
 
 		wp_enqueue_style( 'job_manager_admin_menu_css', JOB_MANAGER_PLUGIN_URL . '/assets/css/menu.css', array(), JOB_MANAGER_VERSION );
@@ -109,7 +146,7 @@ class WP_Job_Manager_Admin {
 	public function admin_menu() {
 		add_submenu_page( 'edit.php?post_type=job_listing', __( 'Settings', 'wp-job-manager' ), __( 'Settings', 'wp-job-manager' ), 'manage_options', 'job-manager-settings', array( $this->settings_page, 'output' ) );
 
-		if ( apply_filters( 'job_manager_show_addons_page', true ) )
+		if ( WP_Job_Manager_Helper::instance()->has_licenced_products() || apply_filters( 'job_manager_show_addons_page', true ) )
 			add_submenu_page(  'edit.php?post_type=job_listing', __( 'WP Job Manager Add-ons', 'wp-job-manager' ),  __( 'Add-ons', 'wp-job-manager' ) , 'manage_options', 'job-manager-addons', array( $this, 'addons_page' ) );
 	}
 

@@ -1,17 +1,17 @@
-=== Facebook Auto Publish ===
+=== WP Facebook Auto Publish ===
 Contributors: f1logic
 Donate link: https://xyzscripts.com/donate/
-Tags:  facebook, facebook auto publish, publish post to facebook, add link to facebook, facebook publishing, post to facebook, post to fb, social media auto publish, social media publishing, social network auto publish, social media, social network
+Tags:  facebook, facebook auto publish,wp facebook auto publish,publish post to facebook, add link to facebook, facebook publishing, post to facebook, post to fb, social media auto publish, social media publishing, social network auto publish, social media, social network
 Requires at least: 3.0																				
 Tested up to: 4.9.4
-Stable tag: 1.4.7
+Stable tag: 1.4.8
 License: GPLv2 or later
 
 Publish posts automatically to Facebook page or profile.
 
 == Description ==
 
-A quick look into Facebook Auto Publish :
+A quick look into WP Facebook Auto Publish :
 
 	★ Publish message to Facebook with image
 	★ Attach post or share link  to Facebook
@@ -21,11 +21,11 @@ A quick look into Facebook Auto Publish :
 	★ Customizable  message formats for Facebook
 
 
-= Facebook Auto Publish Features in Detail =
+= WP Facebook Auto Publish Features in Detail =
 
-The Facebook Auto Publish lets you publish posts automatically from your blog to Facebook. You can publish your posts to Facebook as simple text message, text message with image or as attached link to your blog. The plugin supports filtering posts based on  custom post-types as well as categories.
+The WP Facebook Auto Publish lets you publish posts automatically from your blog to Facebook. You can publish your posts to Facebook as simple text message, text message with image or as attached link to your blog. The plugin supports filtering posts based on  custom post-types as well as categories.
 
-The prominent features of  the Facebook Auto Publish plugin are highlighted below.
+The prominent features of  the WP Facebook Auto Publish plugin are highlighted below.
 
 = Supported Mechanisms =
 
@@ -62,31 +62,31 @@ The supported post elements which can be published are given below.
 
 = About =
 
-Facebook Auto Publish is developed and maintained by [XYZScripts](https://xyzscripts.com/ "xyzscripts.com"). For any support, you may [contact us](https://xyzscripts.com/support/ "XYZScripts Support").
+WP Facebook Auto Publish is developed and maintained by [XYZScripts](https://xyzscripts.com/ "xyzscripts.com"). For any support, you may [contact us](https://xyzscripts.com/support/ "XYZScripts Support").
 
-★ [Facebook Auto Publish User Guide](http://help.xyzscripts.com/docs/facebook-auto-publish/user-guide/ "Facebook Auto Publish User Guide")
-★ [Facebook Auto Publish FAQ](http://help.xyzscripts.com/docs/facebook-auto-publish/faq/ "Facebook Auto Publish FAQ")
+★ [WP Facebook Auto Publish User Guide](http://help.xyzscripts.com/docs/facebook-auto-publish/user-guide/ "WP Facebook Auto Publish User Guide")
+★ [WP Facebook Auto Publish FAQ](http://help.xyzscripts.com/docs/facebook-auto-publish/faq/ "WP Facebook Auto Publish FAQ")
 
 == Installation ==
 
-★ [Facebook Auto Publish User Guide](http://help.xyzscripts.com/docs/facebook-auto-publish/user-guide/ "Facebook Auto Publish User Guide")
-★ [Facebook Auto Publish FAQ](http://help.xyzscripts.com/docs/facebook-auto-publish/faq/ "Facebook Auto Publish FAQ")
+★ [WP Facebook Auto Publish User Guide](http://help.xyzscripts.com/docs/facebook-auto-publish/user-guide/ "WP Facebook Auto Publish User Guide")
+★ [WP Facebook Auto Publish FAQ](http://help.xyzscripts.com/docs/facebook-auto-publish/faq/ "WP Facebook Auto Publish FAQ")
 
 1. Extract `facebook-auto-publish.zip` to your `/wp-content/plugins/` directory.
-2. In the admin panel under plugins activate Facebook Auto Publish.
-3. You can configure the settings from Facebook Auto Publish menu. (Make sure to Authorize Facebook application after saving the settings.)
+2. In the admin panel under plugins activate WP Facebook Auto Publish.
+3. You can configure the settings from WP Facebook Auto Publish menu. (Make sure to Authorize Facebook application after saving the settings.)
 4. Once these are done, posts should get automatically published based on your filter settings.
 
 If you need any further help, you may contact our [support desk](https://xyzscripts.com/support/ "XYZScripts Support").
 
 == Frequently Asked Questions ==
 
-★ [Facebook Auto Publish User Guide](http://help.xyzscripts.com/docs/facebook-auto-publish/user-guide/ "Facebook Auto Publish User Guide")
-★ [Facebook Auto Publish FAQ](http://help.xyzscripts.com/docs/facebook-auto-publish/faq/ "Facebook Auto Publish FAQ")
+★ [WP Facebook Auto Publish User Guide](http://help.xyzscripts.com/docs/facebook-auto-publish/user-guide/ "WP Facebook Auto Publish User Guide")
+★ [WP Facebook Auto Publish FAQ](http://help.xyzscripts.com/docs/facebook-auto-publish/faq/ "WP Facebook Auto Publish FAQ")
 
-= 1. The Facebook Auto Publish is not working properly. =
+= 1. The WP Facebook Auto Publish is not working properly. =
 
-Please check the wordpress version you are using. Make sure it meets the minimum version recommended by us. Make sure all files of the `facebook auto publish` plugin are uploaded to the folder `wp-content/plugins/`
+Please check the wordpress version you are using. Make sure it meets the minimum version recommended by us. Make sure all files of the `wp facebook auto publish` plugin are uploaded to the folder `wp-content/plugins/`
 
 
 = 2. Can I post to Facebook pages instead of profile ? =
@@ -125,6 +125,9 @@ SSL peer verification may not be functioning in your server. Please turn off SSL
 2. Publishing options while creating a post.
 
 == Changelog ==
+
+= WP Facebook Auto Publish 1.4.8 =
+* Plugin name changed to WP Facebook Auto Publish, as per wordpress guidelines 
 
 = Facebook Auto Publish 1.4.7 =
 * Fixed facebook authorisation issue
@@ -232,8 +235,8 @@ First official launch.
 
 == More Information ==
 
-★ [Facebook Auto Publish User Guide](http://help.xyzscripts.com/docs/facebook-auto-publish/ "Facebook Auto Publish User Guide")
-★ [Facebook Auto Publish FAQ](http://help.xyzscripts.com/docs/facebook-auto-publish/faq/ "Facebook Auto Publish FAQ")
+★ [WP Facebook Auto Publish User Guide](http://help.xyzscripts.com/docs/facebook-auto-publish/ "WP Facebook Auto Publish User Guide")
+★ [WP Facebook Auto Publish FAQ](http://help.xyzscripts.com/docs/facebook-auto-publish/faq/ "WP Facebook Auto Publish FAQ")
 
 = Troubleshooting =
 
@@ -246,4 +249,4 @@ Please read the FAQ first if you are having problems.
 
 = Feedback =
 
-We would like to receive your feedback and suggestions about Facebook Auto Publish plugin. You may submit them at our [support desk](https://xyzscripts.com/support/ "XYZScripts Support").
+We would like to receive your feedback and suggestions about WP Facebook Auto Publish plugin. You may submit them at our [support desk](https://xyzscripts.com/support/ "XYZScripts Support").

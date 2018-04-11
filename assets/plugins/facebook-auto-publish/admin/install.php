@@ -24,11 +24,11 @@ function fbap_install_free()
 {
 	/*$pluginName = 'xyz-wp-smap/xyz-wp-smap.php';
 	if (is_plugin_active($pluginName)) {
-		wp_die( "The plugin Facebook Auto Publish cannot be activated unless the premium version of this plugin is deactivated. Back to <a href='".admin_url()."plugins.php'>Plugin Installation</a>." );
+		wp_die( "The plugin WP Facebook Auto Publish cannot be activated unless the premium version of this plugin is deactivated. Back to <a href='".admin_url()."plugins.php'>Plugin Installation</a>." );
 	}*/
 	if (version_compare(PHP_VERSION, '5.4.0', '<')) {
 	
-		wp_die( "The plugin Facebook Auto Publish  requires PHP version 5.4 or higher. Back to <a href='".admin_url()."plugins.php'>Plugin Installation</a>." );
+		wp_die( "The plugin WP Facebook Auto Publish  requires PHP version 5.4 or higher. Back to <a href='".admin_url()."plugins.php'>Plugin Installation</a>." );
 	
 	}
 	

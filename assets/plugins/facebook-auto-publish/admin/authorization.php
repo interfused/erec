@@ -3,6 +3,8 @@ if( !defined('ABSPATH') ){ exit();}
 $app_id = get_option('xyz_fbap_application_id');
 $app_secret = get_option('xyz_fbap_application_secret');
 $redirecturl=admin_url('admin.php?page=facebook-auto-publish-settings&auth=1');
+// 	if(is_ssl()===false)
+// 		$redirecturl=preg_replace("/^http:/i", "https:", $redirecturl);
 $my_url=urlencode($redirecturl);
 if(isset($_POST) && isset($_POST['fb_auth'] ))
 {

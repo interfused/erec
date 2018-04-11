@@ -1,4 +1,3 @@
-/* global job_manager_admin */
 jQuery(document).ready(function($) {
 	// Tooltips
 	$( '.tips, .help_tip' ).tipTip({
@@ -13,22 +12,6 @@ jQuery(document).ready(function($) {
 		$(this).closest( 'p' ).find('.current-author').hide();
 		$(this).closest( 'p' ).find('.change-author').show();
 		return false;
-	});
-
-	// Datepicker
-	$( 'input.job-manager-datepicker, input#_job_expires' ).datepicker({
-		altFormat  : 'yy-mm-dd',
-		dateFormat : job_manager_admin.date_format,
-	});
-
-	$( 'input.job-manager-datepicker, input#_job_expires' ).each( function(){
-		if ( $(this).val() ) {
-			var dateParts = $(this).val().split("-");
-			if ( 3 === dateParts.length ) {
-				var selectedDate = new Date(parseInt(dateParts[0], 10), (parseInt(dateParts[1], 10) - 1), parseInt(dateParts[2], 10));
-				$(this).datepicker('setDate', selectedDate);
-			}
-		}
 	});
 
 	// Uploading files

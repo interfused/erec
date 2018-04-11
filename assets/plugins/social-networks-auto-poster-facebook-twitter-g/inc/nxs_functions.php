@@ -189,12 +189,16 @@ if (!function_exists("nxs_mbConvertCaseUTF8var")){ function nxs_mbConvertCaseUTF
 if (!function_exists("nxs_ucwords")){ function nxs_ucwords($str) { if (function_exists("mb_convert_case")) return nxs_mbConvertCaseUTF8var($str); else return ucwords($str); }}
 
 if (!function_exists('nxs_doProcessTags')){ function nxs_doProcessTags($tags){ $tagsA = array(); if (!is_array($tags)) { $tags = explode(',', $tags); 
+  global $nxs_SNAP; $tagsExclFrmHT = $nxs_SNAP->nxs_options['tagsExclFrmHT']; $tagsExclFrmHT = explode(',',$tagsExclFrmHT); foreach ($tagsExclFrmHT as $i=>$t) $tagsExclFrmHT[$i] = trim(strtolower($t));
   foreach ($tags as $tg) $tagsA[] = trim($tg); } else $tagsA = $tags; $tagsA = array_unique($tagsA);  $tags = array(); 
   //foreach ($tagsA as $tg) { $tags['tagsA'][] = $tg; $tags['htagsA'][] = "#".trim(str_replace(' ', '', preg_replace('/[^a-zA-Z0-9\p{L}\p{N}\s]/u', '', trim(ucwords(str_ireplace('&', '', str_ireplace('&amp;','',$tg))))))); } 
-  foreach ($tagsA as $tg) { $tags['tagsA'][] = $tg; $tags['htagsA'][] = "#".trim(str_replace(' ', '', nxs_clean_string(trim(ucwords(str_ireplace('&', '', str_ireplace('&amp;','',$tg))))))); }   
+  foreach ($tagsA as $tg) if (!in_array(strtolower($tg), $tagsExclFrmHT)) { $tags['tagsA'][] = $tg; $tags['htagsA'][] = "#".trim(str_replace(' ', '', nxs_clean_string(trim(ucwords(str_ireplace('&', '', str_ireplace('&amp;','',$tg))))))); }   
   $tags['tags'] =  implode(', ', $tags['tagsA']); $tags['htags'] = implode(', ', $tags['htagsA']);
   return $tags;
 }}
+
+if (!function_exists('nxs_gak')){ function nxs_gak($key){ if (!empty($key)) $key = (substr($key, 0, 5)=='x5g9a')?nsx_doDecode(substr($key, 5)):$key; return $key; }}
+if (!function_exists('nxs_gas')){ function nxs_gas($sec){ if (!empty($sec)) $sec = (substr($sec, 0, 5)=='d3h0a')?nsx_doDecode(substr($sec, 5)):$sec; return $sec; }}
 
 if (!function_exists('nxs_snapCleanHTML')){ function nxs_snapCleanHTML($html) { 
     $html = preg_replace('/<script\b[^>]*>(.*?)<\/script>/is', "", $html); $html = preg_replace('/<!--(.*)-->/Uis', "", $html); return $html;
@@ -304,8 +308,9 @@ class NXS_HtmlFixer { public $dirtyhtml; public $fixedhtml; public $allowed_styl
 }
 
 //## URL Shortener
-if (!function_exists("nxs_mkShortURL")) { function nxs_mkShortURL($url, $postID=''){ $rurl = '';  global $nxs_SNAP;  if (!isset($nxs_SNAP)) return; $options = $nxs_SNAP->nxs_options; 
-    ///$ar = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT,3); $ar = print_r($ar, true); nxs_LogIt('W','SURLX','','','SURLX',$ar); echo '<pre>'; echo $ar; echo '</pre>'; nxs_LogIt('W','SURL','','','SURL','NUI'); 
+if (!function_exists("nxs_mkShortURL")) { function nxs_mkShortURL($url, $postID=''){ $rurl = '';  global $nxs_SNAP;  if (!isset($nxs_SNAP)) return; $options = $nxs_SNAP->nxs_options; if (empty($options['nxsURLShrtnr'])) $options['nxsURLShrtnr'] = 'G'; $exSLinks = array();
+    ///$ar = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT,3); $ar = print_r($ar, true); nxs_LogIt('W','SURLX','','','SURLX',$ar); echo '<pre>'; echo $ar; echo '</pre>'; nxs_LogIt('W','SURL','','','SURL','NUI');     
+    $murl =  md5($options['nxsURLShrtnr'].'-'.$url); $exSLinks = get_post_meta( $postID, '_nxs_slinks', true ); if (!empty($exSLinks) && is_array($exSLinks) && !empty($exSLinks[$murl])) return $exSLinks[$murl];    
     if ($options['nxsURLShrtnr']=='B' && trim($options['bitlyUname']!='') && trim($options['bitlyAPIKey']!='')) {      
       $response  = nxs_remote_get('http://api-ssl.bitly.com/v3/shorten?login='.$options['bitlyUname'].'&apiKey='.$options['bitlyAPIKey'].'&longUrl='.urlencode($url), nxs_mkRemOptsArr('')); 
       if (is_nxs_error($response)) { nxs_LogIt('E', 'bit.ly', '', '', '-=ERROR=- '.print_r($response, true),'');  return $url; }
@@ -337,7 +342,7 @@ if (!function_exists("nxs_mkShortURL")) { function nxs_mkShortURL($url, $postID=
     if ($options['nxsURLShrtnr']=='R') { $urlR =   'https://api.rebrandly.com/v1/links/new?destination='.urlencode($url).'&domain[fullName]='.$options['rblyDomain']; 
       $hdrsArr = array('Content-Type'=>'application/json', 'apikey'=>$options['rblyAPIKey']); $advSet = nxs_mkRemOptsArr($hdrsArr); $response  = nxs_remote_get($urlR, $advSet);
       if (is_nxs_error($response)) { nxs_addToLogN('E', 'Rebrandly', '', '-=ERROR (SYS)=- '.print_r($response, true)); return $url; }  $rtr = json_decode($response['body'],true); // prr($rtr);
-      if (!is_array($rtr) || empty($rtr['shortUrl']) ) {   nxs_addToLogN('E', 'goo.gl', '', '-=ERROR=- '.print_r($response, true));  return $url; } $rurl = 'http://'.$rtr['shortUrl'];
+      if (!is_array($rtr) || empty($rtr['shortUrl']) ) {   nxs_addToLogN('E', 'rebrandly', '', '-=ERROR=- '.print_r($response, true));  return $url; } $rurl = 'http://'.$rtr['shortUrl'];
     }
     
     if ($options['nxsURLShrtnr']=='P' && trim($options['postAPIKey']!='')) {      
@@ -350,18 +355,18 @@ if (!function_exists("nxs_mkShortURL")) { function nxs_mkShortURL($url, $postID=
       $flds = array('signature'=>$signature, 'action' => 'shorturl', 'url'=>$url, 'format'=>'json', 'timestamp'=>$timestamp);  
       $response  = nxs_remote_post(($options['YOURLSURL']), array('body' => $flds)); 
       if (is_nxs_error($response)) {  nxs_addToLogN('E', 'YOURLS', '', '-=ERROR=- '.print_r($response, true)); return $url; } 
-      $rtr = json_decode($response['body'],true);  if (!is_array($rtr) || !isset($rtr['shorturl']) ) {   nxs_addToLogN('E', 'goo.gl', '', '-=ERROR=- '.print_r($response, true));  return $url; }      
+      $rtr = json_decode($response['body'],true);  if (!is_array($rtr) || !isset($rtr['shorturl']) ) {   nxs_addToLogN('E', 'YOURLS', '', '-=ERROR=- '.print_r($response, true));  return $url; }      
       $rurl = $rtr['shorturl'];
     
     }   
-    if ($options['nxsURLShrtnr']=='O' || $options['nxsURLShrtnr']=='' || $options['nxsURLShrtnr']=='G') { $hdrsArr = array('Content-Type'=>'application/json', 'Referer'=>'http://'.$_SERVER['HTTP_HOST']); 
-      $advSet = nxs_mkRemOptsArr($hdrsArr,'','{"longUrl": "'.$url.'"}'); $response  = nxs_remote_post('https://www.googleapis.com/urlshortener/v1/url'.($options['gglAPIKey']!=''?'?key='.$options['gglAPIKey']:''), $advSet); 
-      if (is_nxs_error($response)) {   nxs_addToLogN('E', 'goo.gl', '', '-=ERROR=- '.print_r($response, true));  return $url; } 
-      $rtr = json_decode($response['body'],true); if (!is_array($rtr) || isset($rtr['error']) || !isset($rtr['id']) ) {   nxs_addToLogN('E', 'goo.gl', '', '-=ERROR=- '.print_r($response, true));  return $url; }      
-      $rurl = $rtr['id'];
+    if ($options['nxsURLShrtnr']=='O' || $options['nxsURLShrtnr']=='' || $options['nxsURLShrtnr']=='G') { //IS.GD/V.GD
+      $advSet = nxs_mkRemOptsArr(nxs_makeHeaders()); $response  = nxs_remote_post('https://is.gd/create.php?format=simple&url='.urlencode($url), $advSet); //   nxs_addToLogN('E', 'is.gd', '', '-=URLS=- '.print_r($response['body'], true)); 
+      if (is_nxs_error($response)) {   nxs_addToLogN('E', 'is.gd', '', '-=ERROR=- '.print_r($response, true));  return $url; } 
+      $rtr = $response['body']; if (stripos($rtr, 'Error')!==false)  {   nxs_addToLogN('E', 'is.gd', '', '-=ERROR=- '.print_r($response, true));  return $url; }      
+      $rurl = $rtr;
     }    
-    //if ($rurl=='') { $response  = nxs_remote_get('http://gd.is/gtq/'.$url); if ((is_array($response) && ($response['response']['code']=='200'))) $rurl = $response['body']; }
-    if ($rurl!='') $url = $rurl;  return $url;
+    //if ($rurl=='') { $response  = nxs_remote_get('http://gd.is/gtq/'.$url); if ((is_array($response) && ($response['response']['code']=='200'))) $rurl = $response['body']; }    
+    if (!empty($rurl)) { $url = $rurl; $exSLinks[$murl] = $rurl; update_post_meta( $postID, '_nxs_slinks', $exSLinks ); } return $url;
 }}
 
 //## Format Message (API)

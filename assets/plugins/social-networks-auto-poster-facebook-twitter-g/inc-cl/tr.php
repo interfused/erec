@@ -28,7 +28,7 @@ if (!class_exists("nxs_snapClassTR")) { class nxs_snapClassTR extends nxs_snapCl
   function checkIfSetupFinished($options) { return !empty($options['pgID']) && !empty($options['accessToken']); }
   public function doAuth() { $ntInfo = $this->ntInfo; global $nxs_snapSetPgURL;     
     if ( isset($_GET['auth']) && $_GET['auth']=='tr'){ $this->showAuthTop(); require_once('apis/trOAuth.php'); $options = $this->nt[$_GET['acc']]; 
-      $consumer_key = $options['appKey']; $consumer_secret = $options['appSec']; $callback_url = $nxs_snapSetPgURL."&auth=tra&acc=".$_GET['acc'];
+      $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']); $callback_url = $nxs_snapSetPgURL."&auth=tra&acc=".$_GET['acc'];
       $tum_oauth = new TumblrOAuth($consumer_key, $consumer_secret); prr($tum_oauth ); $request_token = $tum_oauth->getRequestToken($callback_url); echo "####"; prr($request_token);
       $options['oAuthToken'] = $request_token['oauth_token']; $options['oAuthTokenSecret'] = $request_token['oauth_token_secret'];// prr($tum_oauth ); die();
       switch ($tum_oauth->http_code) { case 200: $url = $tum_oauth->getAuthorizeURL($options['oAuthToken']); nxs_save_glbNtwrks($ntInfo['lcode'],$_GET['acc'],$options,'*');
@@ -37,14 +37,14 @@ if (!class_exists("nxs_snapClassTR")) { class nxs_snapClassTR extends nxs_snapCl
       } die('</div></div>');
     }
     if ( isset($_GET['auth']) && $_GET['auth']=='tra'){ $this->showAuthTop(); require_once('apis/trOAuth.php'); $options = $this->nt[$_GET['acc']]; prr($options);
-      $consumer_key = $options['appKey']; $consumer_secret = $options['appSec'];  
+      $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']);  
       $tum_oauth = new TumblrOAuth($consumer_key, $consumer_secret, $options['oAuthToken'], $options['oAuthTokenSecret']); 
       $options['accessToken'] = $tum_oauth->getAccessToken($_REQUEST['oauth_verifier']);  prr($tum_oauth, '**tum_oauth ==1== **');  
       prr($options['accessToken'], '**GOT ACCESS TOKEN **'); $options['accessTokenSec'] =  $options['accessToken']['oauth_token_secret']; $options['accessToken'] =  $options['accessToken']['oauth_token'];
       $tum_oauth = new TumblrOAuth($consumer_key, $consumer_secret,  $options['accessToken'], $options['accessTokenSec']);            
       $userinfo = $tum_oauth->get('http://api.tumblr.com/v2/user/info'); prr($tum_oauth, '**tum_oauth ==2== **'); prr($userinfo, '**USERINFO**'); // prr($url); die();
       if ($userinfo->meta->status=='401') die("<span style='color:red;'>ERROR #1: Authorized USER don't have access to the specified blog: <span style='color:darkred; font-weight: bold;'>".$options['pgID']."</span></span></div>");
-      if (is_array($userinfo->response->user->blogs)) { $options['authUser'] = $userinfo->response->user->name; $blogs = ''; $opNm = 'nxs_snap_tr_'.sha1('nxs_snap_tr'.$options['authUser'].$options['appKey']);
+      if (is_array($userinfo->response->user->blogs)) { $options['authUser'] = $userinfo->response->user->name; $blogs = ''; $opNm = 'nxs_snap_tr_'.sha1('nxs_snap_tr'.$options['authUser'].nxs_gak($options['appKey']));
         foreach ($userinfo->response->user->blogs as $blog){ if (!empty($blog->uuid)) $uuid = $blog->uuid; else $uuid = rtrim(str_ireplace('http://','',str_ireplace('https://','',$blog->url)), '/');  if (empty($options['pgID'])) $options['pgID'] = $uuid;
           $blogs .= '<option '.($options['pgID']==$uuid ? 'selected="selected"':'').' value="'.$uuid.'">'.$blog->name.' ('.$uuid.')</option>'; 
         } nxs_save_glbNtwrks($ntInfo['lcode'],$_GET['acc'],$options,'*'); $opVal['blogList'] = $blogs;  nxs_saveOption($opNm, $opVal);       
@@ -56,11 +56,11 @@ if (!class_exists("nxs_snapClassTR")) { class nxs_snapClassTR extends nxs_snapCl
   function getListOfBlogs($networks){ $opVal = array(); $opNm = 'nxs_snap_tr_'.sha1('nxs_snap_tr'.$_POST['u'].$_POST['p']); $opVal = nxs_getOption($opNm); $ii = $_POST['ii']; 
      $currPstAs = !empty($_POST['cBlog'])?$_POST['cBlog']:(!empty($networks['tr'][$ii])?$networks['tr'][$ii]['pgID']:'');
      if (empty($_POST['force']) && !empty($opVal['blogList']) ) $pgs = $opVal['blogList']; else { $options = $networks['tr'][$ii]; require_once('apis/trOAuth.php'); 
-       $tum_oauth = new TumblrOAuth($options['appKey'], $options['appSec'],  $options['accessToken'], $options['accessTokenSec']); $userinfo = $tum_oauth->get('http://api.tumblr.com/v2/user/info');// prr($userinfo);
+       $tum_oauth = new TumblrOAuth(nxs_gak($options['appKey']), nxs_gas($options['appSec']),  $options['accessToken'], $options['accessTokenSec']); $userinfo = $tum_oauth->get('http://api.tumblr.com/v2/user/info');// prr($userinfo);
        if ($userinfo->meta->status=='401') { $outMsg = '<b style="color:red;">'.__('Auth Problem').' HTTP-401 (Not Authorized) &nbsp;-&nbsp;</b>'; if (!empty($_POST['isOut'])) echo $outMsg; return $outMsg; }
        if (is_array($userinfo->response->user->blogs)) { $options['authUser'] = $userinfo->response->user->name; $pgs = ''; 
         foreach ($userinfo->response->user->blogs as $blog){ if (!empty($blog->uuid)) $uuid = $blog->uuid; else $uuid = rtrim(str_ireplace('http://','',str_ireplace('https://','',$blog->url)), '/'); 
-          $res = nxs_remote_get( "https://api.tumblr.com/v2/blog/".$uuid."/info?api_key=".$options['appKey'], nxs_mkRemOptsArr(nxs_getNXSHeaders())); $replRet = json_decode($res['body'], true); 
+          $res = nxs_remote_get( "https://api.tumblr.com/v2/blog/".$uuid."/info?api_key=".nxs_gak($options['appKey']), nxs_mkRemOptsArr(nxs_getNXSHeaders())); $replRet = json_decode($res['body'], true); 
           if (!empty($replRet) && !empty($replRet['meta']) && $replRet['meta']['status']=='200') $pgs .= '<option '.($options['pgID']==$uuid ? 'selected="selected"':'').' value="'.$uuid.'">'.$blog->name.' ('.$uuid.')</option>';       
         }
        } else { $outMsg = '<b style="color:red;">'.__('Auth Problem').' #2&nbsp;-&nbsp;'.$loginError.'</b>'; if (!empty($_POST['isOut'])) echo $outMsg; return $outMsg; }
@@ -70,9 +70,9 @@ if (!class_exists("nxs_snapClassTR")) { class nxs_snapClassTR extends nxs_snapCl
   }
   
   function accTab($ii, $options, $isNew=false){ global $nxs_snapSetPgURL; $ntInfo = $this->ntInfo; $nt = $ntInfo['lcode']; if (empty($options['authUser'])) $options['authUser'] = ''; // prr($options); 
-    $opNm = 'nxs_snap_tr_'.sha1('nxs_snap_tr'.$options['authUser'].$options['appKey']); $opVal = nxs_getOption($opNm); 
+    $opNm = 'nxs_snap_tr_'.sha1('nxs_snap_tr'.$options['authUser'].nxs_gak($options['appKey'])); $opVal = nxs_getOption($opNm); 
     if (empty($opVal) && !empty($options['authUser'])) { 
-      $tPST = (!empty($_POST))?$_POST:'';  $_POST['cBlog'] = $options['pgID']; $_POST['u'] = $options['authUser']; $_POST['p'] = $options['appKey']; $_POST['ii'] = $ii; $ntw[$nt][$ii]=$options; $opVal = $this->getListOfBlogs($ntw); $_POST = $tPST; 
+      $tPST = (!empty($_POST))?$_POST:'';  $_POST['cBlog'] = $options['pgID']; $_POST['u'] = $options['authUser']; $_POST['p'] = nxs_gak($options['appKey']); $_POST['ii'] = $ii; $ntw[$nt][$ii]=$options; $opVal = $this->getListOfBlogs($ntw); $_POST = $tPST; 
     } if (!empty($opVal) & !is_array($opVal)) $options['uMsg'] = $opVal; else { if (!empty($opVal) & is_array($opVal)) $options = array_merge($options, $opVal); } 
   ?><br/ ><div style="width:100%;"><b><?php _e('Where to Post', 'nxs_snap'); ?></b>&nbsp;(<?php _e('Please select your blog', 'nxs_snap'); ?>)</div>
     <?php if (!empty($options['authUser'])) {?>

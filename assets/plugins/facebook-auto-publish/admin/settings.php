@@ -158,7 +158,7 @@ function dethide_fbap(id)
 <div style="width: 100%">
 
 	<h2>
-		 <img src="<?php echo plugins_url()?>/facebook-auto-publish/images/facebook-logo.png" height="16px"> Facebook Settings
+		 <img src="<?php echo plugins_url()?>/facebook-auto-publish/images/fbap.png" height="16px"> Facebook Settings
 	</h2>
 	<?php
 	$af=get_option('xyz_fbap_af');

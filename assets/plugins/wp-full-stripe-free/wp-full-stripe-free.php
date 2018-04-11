@@ -4,7 +4,7 @@ Plugin Name: WP Full Stripe Free
 Plugin URI: https://paymentsplugin.com
 Description: Free version of WP Full Stripe, a Stripe payments plugin.
 Author: Mammothology
-Version: 1.5.1
+Version: 1.6.1
 Author URI: https://paymentsplugin.com
 Text Domain: wp-full-stripe-free
 Domain Path: /languages

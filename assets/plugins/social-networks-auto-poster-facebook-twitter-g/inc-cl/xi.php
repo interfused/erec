@@ -20,7 +20,7 @@ if (!class_exists("nxs_snapClassXI")) { class nxs_snapClassXI extends nxs_snapCl
   function checkIfSetupFinished($options) { return true;  return ((!empty($options['appAppUserID']) && !empty($options['accessToken'])) || !empty($options['uName']) );   }
   public function doAuth() { $ntInfo = $this->ntInfo; global $nxs_snapSetPgURL; if (isset($_GET['acc'])) $options = $this->nt[$_GET['acc']];
     if ( isset($_GET['auth']) && $_GET['auth']==$ntInfo['lcode']){
-      $consumer_key = $options['appKey']; $consumer_secret = $options['appSec']; $callback_url = $nxs_snapSetPgURL."&auth=".$ntInfo['lcode']."a&acc=".$_GET['acc'];
+      $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']); $callback_url = $nxs_snapSetPgURL."&auth=".$ntInfo['lcode']."a&acc=".$_GET['acc'];
       $tum_oauth = new nxs_OAuthBaseCl($consumer_key, $consumer_secret); $tum_oauth->baseURL = 'https://api.xing.com'; $tum_oauth->request_token_path = '/v1/request_token';
       $request_token = $tum_oauth->getReqToken($callback_url); $options['oAuthToken'] = $request_token['oauth_token']; $options['oAuthTokenSecret'] = $request_token['oauth_token_secret']; 
       prr($tum_oauth); prr($options);               
@@ -29,7 +29,7 @@ if (!class_exists("nxs_snapClassXI")) { class nxs_snapClassXI extends nxs_snapCl
         default: echo '<br/><b style="color:red">Could not connect to XING. Refresh the page or try again later.</b>'; die();
       } die();
     }
-    if ( isset($_GET['auth']) && $_GET['auth']==$ntInfo['lcode'].'a'){ $consumer_key = $options['appKey']; $consumer_secret = $options['appSec']; 
+    if ( isset($_GET['auth']) && $_GET['auth']==$ntInfo['lcode'].'a'){ $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']); 
       $tum_oauth = new nxs_OAuthBaseCl($consumer_key, $consumer_secret, $options['oAuthToken'], $options['oAuthTokenSecret']); //prr($tum_oauth);
       $tum_oauth->baseURL = 'https://api.xing.com'; $tum_oauth->access_token_path = '/v1/access_token'; $access_token = $tum_oauth->getAccToken($_GET['oauth_verifier']); prr($access_token);
       $options['accessToken'] = $access_token['oauth_token'];  $options['accessTokenSec'] = $access_token['oauth_token_secret'];  

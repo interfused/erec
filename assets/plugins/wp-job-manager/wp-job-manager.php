@@ -3,11 +3,11 @@
  * Plugin Name: WP Job Manager
  * Plugin URI: https://wpjobmanager.com/
  * Description: Manage job listings from the WordPress admin panel, and allow users to post jobs directly to your site.
- * Version: 1.28.0
+ * Version: 1.30.2
  * Author: Automattic
  * Author URI: https://wpjobmanager.com/
- * Requires at least: 4.1
- * Tested up to: 4.8
+ * Requires at least: 4.5.0
+ * Tested up to: 4.9
  * Text Domain: wp-job-manager
  * Domain Path: /languages/
  * License: GPL2+
@@ -58,28 +58,31 @@ class WP_Job_Manager {
 	 */
 	public function __construct() {
 		// Define constants
-		define( 'JOB_MANAGER_VERSION', '1.28.0' );
+		define( 'JOB_MANAGER_VERSION', '1.30.2' );
+		define( 'JOB_MANAGER_MINIMUM_WP_VERSION', '4.7' );
 		define( 'JOB_MANAGER_PLUGIN_DIR', untrailingslashit( plugin_dir_path( __FILE__ ) ) );
 		define( 'JOB_MANAGER_PLUGIN_URL', untrailingslashit( plugins_url( basename( plugin_dir_path( __FILE__ ) ), basename( __FILE__ ) ) ) );
+		define( 'JOB_MANAGER_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
 
 		// Includes
-		include_once( 'includes/class-wp-job-manager-install.php' );
-		include_once( 'includes/class-wp-job-manager-post-types.php' );
-		include_once( 'includes/class-wp-job-manager-ajax.php' );
-		include_once( 'includes/class-wp-job-manager-shortcodes.php' );
-		include_once( 'includes/class-wp-job-manager-api.php' );
-		include_once( 'includes/class-wp-job-manager-forms.php' );
-		include_once( 'includes/class-wp-job-manager-geocode.php' );
-		include_once( 'includes/class-wp-job-manager-cache-helper.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-install.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-post-types.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-ajax.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-shortcodes.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-api.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-forms.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-geocode.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-cache-helper.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/helper/class-wp-job-manager-helper.php' );
 
 		add_action( 'rest_api_init', array( $this, 'rest_api' ) );
 
 		if ( is_admin() ) {
-			include_once( 'includes/admin/class-wp-job-manager-admin.php' );
+			include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/admin/class-wp-job-manager-admin.php' );
 		}
 
 		// Load 3rd party customizations
-		include_once( 'includes/3rd-party/3rd-party.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/3rd-party/3rd-party.php' );
 
 		// Init classes
 		$this->forms      = WP_Job_Manager_Forms::instance();
@@ -103,6 +106,9 @@ class WP_Job_Manager {
 		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ) );
 		add_action( 'admin_init', array( $this, 'updater' ) );
 		add_action( 'wp_logout', array( $this, 'cleanup_job_posting_cookies' ) );
+
+		add_action( 'init', array( $this, 'usage_tracking_init' ) );
+		register_deactivation_hook( __FILE__, array( $this, 'usage_tracking_cleanup' ) );
 
 		// Defaults for WPJM core actions
 		add_action( 'wpjm_notify_new_user', 'wp_job_manager_notify_new_user', 10, 2 );
@@ -146,9 +152,8 @@ class WP_Job_Manager {
 	 */
 	public function rest_api() {
 		if ( null === $this->rest_api ) {
-			include( 'includes/rest-api/class-wp-job-manager-rest-api.php' );
+			include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/rest-api/class-wp-job-manager-rest-api.php' );
 			$this->rest_api = new WP_Job_Manager_REST_API( dirname( __FILE__ ) );
-			$this->rest_api->init();
 		}
 		return $this->rest_api;
 	}
@@ -157,18 +162,38 @@ class WP_Job_Manager {
 	 * Loads plugin's core helper template functions.
 	 */
 	public function include_template_functions() {
-		include_once( 'wp-job-manager-deprecated.php' );
-		include_once( 'wp-job-manager-functions.php' );
-		include_once( 'wp-job-manager-template.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/wp-job-manager-deprecated.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/wp-job-manager-functions.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/wp-job-manager-template.php' );
 	}
 
 	/**
 	 * Loads plugin's widgets.
 	 */
 	public function widgets_init() {
-		include_once( 'includes/class-wp-job-manager-widget.php' );
-		include_once( 'includes/widgets/class-wp-job-manager-widget-recent-jobs.php' );
-		include_once( 'includes/widgets/class-wp-job-manager-widget-featured-jobs.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-widget.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/widgets/class-wp-job-manager-widget-recent-jobs.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/widgets/class-wp-job-manager-widget-featured-jobs.php' );
+	}
+
+	/**
+	 * Initialize the Usage Tracking system.
+	 */
+	public function usage_tracking_init() {
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-usage-tracking.php' );
+		include_once( JOB_MANAGER_PLUGIN_DIR . '/includes/class-wp-job-manager-usage-tracking-data.php' );
+
+		WP_Job_Manager_Usage_Tracking::get_instance()->set_callback(
+			array( 'WP_Job_Manager_Usage_Tracking_Data', 'get_usage_data' )
+		);
+		WP_Job_Manager_Usage_Tracking::get_instance()->schedule_tracking_task();
+	}
+
+	/**
+	 * Cleanup the Usage Tracking system for plugin deactivation.
+	 */
+	public function usage_tracking_cleanup() {
+		WP_Job_Manager_Usage_Tracking::get_instance()->unschedule_tracking_task();
 	}
 
 	/**
@@ -204,6 +229,39 @@ class WP_Job_Manager {
 	public function frontend_scripts() {
 		global $post;
 
+		/**
+		 * Starting in WP Job Manager 1.32.0, the chosen JS library and core frontend WPJM CSS will only be enqueued
+		 * when used on a particular page. Theme and plugin authors as well as people who have overloaded WPJM's default
+		 * template files should test this upcoming behavior.
+		 *
+		 * To test this behavior before 1.32.0, add this to your `wp-config.php`:
+		 * define( 'JOB_MANAGER_TEST_NEW_ASSET_BEHAVIOR', true );
+		 *
+		 * Unless this constant is defined, WP Job Manager will default to its old behavior: chosen JS library and
+		 * frontend styles are always enqueued.
+		 *
+		 * If your theme or plugin depend on the `frontend.css` or chosen JS library from WPJM core, you can use the
+		 * `job_manager_chosen_enabled` and `job_manager_enqueue_frontend_style` filters.
+		 *
+		 * Example code for a custom shortcode that depends on the chosen library:
+		 *
+		 * add_filter( 'job_manager_chosen_enabled', function( $chosen_used_on_page ) {
+		 *   global $post;
+		 *   if ( is_singular()
+		 *        && is_a( $post, 'WP_Post' )
+		 *        && has_shortcode( $post->post_content, 'resumes' )
+		 *   ) {
+		 *     $chosen_used_on_page = true;
+		 *   }
+		 *   return $chosen_used_on_page;
+		 * } );
+		 *
+		 */
+		if ( ! defined( 'JOB_MANAGER_TEST_NEW_ASSET_BEHAVIOR' ) || true !== JOB_MANAGER_TEST_NEW_ASSET_BEHAVIOR ) {
+			add_filter( 'job_manager_chosen_enabled', '__return_true' );
+			add_filter( 'job_manager_enqueue_frontend_style', '__return_true' );
+		}
+
 		$ajax_url         = WP_Job_Manager_Ajax::get_endpoint();
 		$ajax_filter_deps = array( 'jquery', 'jquery-deserialize' );
 		$ajax_data 		  = array(
@@ -221,7 +279,19 @@ class WP_Job_Manager {
 		 */
 		$ajax_data['lang'] = apply_filters( 'wpjm_lang', null );
 
-		if ( apply_filters( 'job_manager_chosen_enabled', true ) ) {
+		$chosen_shortcodes = array( 'submit_job_form', 'job_dashboard', 'jobs' );
+		$chosen_used_on_page = has_wpjm_shortcode( null, $chosen_shortcodes );
+
+		/**
+		 * Filter the use of the chosen library.
+		 *
+		 * NOTE: See above. Before WP Job Manager 1.32.0 is released, `job_manager_enqueue_frontend_style` will be filtered to `true` by default.
+		 *
+		 * @since 1.19.0
+		 *
+		 * @param bool $chosen_used_on_page Defaults to only when there are known shortcodes on the page.
+		 */
+		if ( apply_filters( 'job_manager_chosen_enabled', $chosen_used_on_page ) ) {
 			wp_register_script( 'chosen', JOB_MANAGER_PLUGIN_URL . '/assets/js/jquery-chosen/chosen.jquery.min.js', array( 'jquery' ), '1.1.0', true );
 			wp_register_script( 'wp-job-manager-term-multiselect', JOB_MANAGER_PLUGIN_URL . '/assets/js/term-multiselect.min.js', array( 'jquery', 'chosen' ), JOB_MANAGER_VERSION, true );
 			wp_register_script( 'wp-job-manager-multiselect', JOB_MANAGER_PLUGIN_URL . '/assets/js/multiselect.min.js', array( 'jquery', 'chosen' ), JOB_MANAGER_VERSION, true );
@@ -235,7 +305,7 @@ class WP_Job_Manager {
 			);
 		}
 
-		if ( apply_filters( 'job_manager_ajax_file_upload_enabled', true ) ) {
+		if ( job_manager_user_can_upload_file_via_ajax() ) {
 			wp_register_script( 'jquery-iframe-transport', JOB_MANAGER_PLUGIN_URL . '/assets/js/jquery-fileupload/jquery.iframe-transport.js', array( 'jquery' ), '1.8.3', true );
 			wp_register_script( 'jquery-fileupload', JOB_MANAGER_PLUGIN_URL . '/assets/js/jquery-fileupload/jquery.fileupload.js', array( 'jquery', 'jquery-iframe-transport', 'jquery-ui-widget' ), '9.11.2', true );
 			wp_register_script( 'wp-job-manager-ajax-file-upload', JOB_MANAGER_PLUGIN_URL . '/assets/js/ajax-file-upload.min.js', array( 'jquery', 'jquery-fileupload' ), JOB_MANAGER_VERSION, true );
@@ -274,9 +344,21 @@ class WP_Job_Manager {
 			'i18n_confirm_delete' => __( 'Are you sure you want to delete this listing?', 'wp-job-manager' ),
 		) );
 
-		wp_enqueue_style( 'wp-job-manager-frontend', JOB_MANAGER_PLUGIN_URL . '/assets/css/frontend.css', array(), JOB_MANAGER_VERSION );
-		if ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'submit_job_form' ) ) {
-			wp_enqueue_style( 'wp-job-manager-job-submission', JOB_MANAGER_PLUGIN_URL . '/assets/css/job-submission.css', array(), JOB_MANAGER_VERSION );
+
+		/**
+		 * Filter whether to enqueue WPJM core's frontend scripts. By default, they will only be enqueued on WPJM related
+		 * pages.
+		 *
+		 * NOTE: See above. Before WP Job Manager 1.32.0 is released, `job_manager_enqueue_frontend_style` will be filtered to `true` by default.
+		 *
+		 * @since 1.30.0
+		 *
+		 * @param bool $is_frontend_style_enabled
+		 */
+		if ( apply_filters( 'job_manager_enqueue_frontend_style', is_wpjm() ) ) {
+			wp_enqueue_style( 'wp-job-manager-frontend', JOB_MANAGER_PLUGIN_URL . '/assets/css/frontend.css', array(), JOB_MANAGER_VERSION );
+		} else {
+			wp_register_style( 'wp-job-manager-job-listings', JOB_MANAGER_PLUGIN_URL . '/assets/css/job-listings.css', array(), JOB_MANAGER_VERSION );
 		}
 	}
 }

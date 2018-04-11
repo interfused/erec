@@ -16,10 +16,10 @@ if (!class_exists("nxs_class_SNAP_FB")) { class nxs_class_SNAP_FB {
       if (!is_array($options)) { $badOut['Error'] = 'No Options'; return $badOut; }      
       if (empty($options['accessToken']) && empty($options['pageAccessToken']) && empty($options['tpt'])) { $badOut['Error'] = 'No Auth Token Found/Not configured'; return $badOut; }
       //## Make Post
-      if (!empty($options['accessToken'])) if (!isset($options['pageAccessToken']) || trim($options['pageAccessToken'])=='') $options['pageAccessToken'] = $options['accessToken'];      
+      if (!empty($options['accessToken'])&& empty($options['pageAccessToken'])) $options['pageAccessToken'] = $options['accessToken'];      
       //## Get URL info.              
       if ($options['postType']!='I' && $options['postType']!='T'){ $url=$message['url']; //#### Let's ask FB to scrape/re-scrape it.
-        $flds=array('id'=>$url, 'scrape'=>'true', 'access_token'=>$options['accessToken'], 'method'=>'post', 'limit'=>250); if (empty($options['tpt'])) $flds['appsecret_proof'] = hash_hmac('sha256', $options['accessToken'], $options['appSec']); sleep(2); 
+        $flds=array('id'=>$url, 'scrape'=>'true', 'access_token'=>$options['accessToken'], 'method'=>'post', 'limit'=>250); if (empty($options['tpt'])) $flds['appsecret_proof'] = hash_hmac('sha256', $options['accessToken'], nxs_gas($options['appSec'])); sleep(2); 
         $advSet = nxs_mkRemOptsArr(nxs_getNXSHeaders(), '',$flds);  $response =  nxs_remote_post('https://graph.facebook.com', $advSet);
         
         if (is_nxs_error($response)) $badOut['Error'] = "Error(URL-Info): ". print_r($response, true); else { $response = json_decode($response['body'], true);
@@ -45,7 +45,7 @@ if (!class_exists("nxs_class_SNAP_FB")) { class nxs_class_SNAP_FB {
       //## Own App Post
       if (empty($msg)) { if (function_exists('nxs_LogIt')) nxs_LogIt('W', 'Warning','FB - '.$options['nName'],'','Your FB message is empty.','','snap');  $msg = html_entity_decode("&#12288;");  }       //    $msg = html_entity_decode("&#128078;");
       if (!empty($options['pageAccessToken'])) { $mssg = array('access_token'=>$options['pageAccessToken'], 'method'=>'post', 'message'=>$msg);                                                             
-        if (empty($options['tpt'])) $mssg['appsecret_proof'] = hash_hmac('sha256', $options['pageAccessToken'], $options['appSec']); //prr($mssg);
+        if (empty($options['tpt'])) $mssg['appsecret_proof'] = hash_hmac('sha256', $options['pageAccessToken'], nxs_gas($options['appSec'])); //prr($mssg);
         
         if ($options['postType']=='I' && trim($imgURL)=='') $options['postType']='T';
         if ($options['postType']=='A' && !(preg_match("/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i", $message['url']))) { 
@@ -56,7 +56,7 @@ if (!class_exists("nxs_class_SNAP_FB")) { class nxs_class_SNAP_FB {
         } elseif ($options['postType']=='I') { /* $facebook->setFileUploadSupport(true); */ $fbWhere = 'photos'; $mssg['url'] = $imgURL;  $mssg['caption'] =  $mssg['message']; 
           if ($options['imgUpl']=='T') { //## Try to Post to TImeline
           
-            $aacct = array('access_token'=>$options['pageAccessToken'], 'method'=>'get'); if (empty($options['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $options['pageAccessToken'], $options['appSec']); 
+            $aacct = array('access_token'=>$options['pageAccessToken'], 'method'=>'get'); if (empty($options['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $options['pageAccessToken'], nxs_gas($options['appSec'])); 
             $res = nxs_remote_get( "https://graph.facebook.com/$page_id/albums?".http_build_query($aacct, null, '&'), nxs_mkRemOptsArr(nxs_getNXSHeaders())); 
             if (is_nxs_error($res) || empty($res['body'])) $badOut['Error'] = ' [ERROR(Albums)] '.print_r($res, true); else {
               $albums = json_decode($res['body'], true);  if (empty($albums)) $badOut['Error'] .= "JSON ERROR (Albums): ".print_r($res, true); else { 
@@ -67,7 +67,7 @@ if (!class_exists("nxs_class_SNAP_FB")) { class nxs_class_SNAP_FB {
           }        
         }  if (!empty($mssg['name']) && function_exists('mb_strcut')) { mb_internal_encoding('UTF-8'); $mssg['name'] = mb_strcut($mssg['name'], 0, 250); }
         //## Actual Post                
-        $destURL = "https://graph.facebook.com/$page_id/".$fbWhere; //  prr($destURL);  prr($mssg); prr(urlencode($mssg['link'])); prr(urlencode($mssg['message'])); //prr(http_build_query($mssg));die();
+        $destURL = "https://graph.facebook.com/$page_id/".$fbWhere;  // prr($destURL);  prr($mssg); prr(urlencode($mssg['link'])); prr(urlencode($mssg['message'])); //prr(http_build_query($mssg));die();
         //$mssg = http_build_query($mssg);
         $response = nxs_remote_post( $destURL, nxs_mkRemOptsArr(nxs_getNXSHeaders('',true),'', $mssg) ); // prr($response);
       }     

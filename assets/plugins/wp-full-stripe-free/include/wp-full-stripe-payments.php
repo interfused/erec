@@ -105,10 +105,19 @@ class MM_WPFSF_Stripe {
 		return $resolved_message;
 	}
 
+	/**
+	 * @param $amount
+	 * @param $card
+	 * @param $description
+	 * @param null $metadata
+	 * @param null $stripeEmail
+	 *
+	 * @return \Stripe\Charge
+	 */
 	function charge( $amount, $card, $description, $metadata = null, $stripeEmail = null ) {
 		$options = get_option( 'fullstripe_options_f' );
 
-		$charge = array(
+		$data = array(
 			'card'          => $card,
 			'amount'        => $amount,
 			'currency'      => $options['currency'],
@@ -117,11 +126,11 @@ class MM_WPFSF_Stripe {
 		);
 
 		if ( $metadata ) {
-			$charge['metadata'] = $metadata;
+			$data['metadata'] = $metadata;
 		}
 
-		$result = \Stripe\Charge::create( $charge );
+		$charge = \Stripe\Charge::create( $data );
 
-		return $result;
+		return $charge;
 	}
 }

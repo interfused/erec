@@ -114,7 +114,23 @@ if (!class_exists("nxs_snapClassGP")) { class nxs_snapClassGP extends nxs_snapCl
       jQuery('#apGPPass<?php echo $ii; ?>').change(function() { var u = jQuery('#apGPUName<?php echo $ii; ?>').val();  var p = jQuery(this).val(); if( u!='' && p!='' ) { nxs_gpGetAllInfo(<?php echo $ii; ?>,0); }  });
     </script> <?php $this->elemMsgFormat($ii,'Message Format','msgFormat',$options['msgFormat']); 
   }
-  function advTab($ii, $options){ $this->askForSURL( $this->ntInfo['lcode'], $ii, $options); }
+  function advTab($ii, $options){$this->askForSURL( $this->ntInfo['lcode'], $ii, $options); return; ?>
+  
+   <div style="width:100%;"><strong style="font-size: 16px;"><?php _e('Facebook Comments:', 'social-networks-auto-poster-facebook-twitter-g'); ?></strong> </div>
+   <div style="margin-bottom: 5px; margin-left: 10px; ">
+   <p style="font-size: 11px; margin: 0px;"><?php _e('Plugin could grab comments from Facebook and import them as Wordpress Comments', 'social-networks-auto-poster-facebook-twitter-g'); ?></p>
+   
+   <?php global $nxs_SNAP; $gOptions = $nxs_SNAP->nxs_options; if ( !empty($gOptions['riActive']) && $gOptions['riActive'] == '1' ) { ?>
+   <input value="1"  id="apFBMsgAFrmtA<?php echo $ii; ?>" <?php if (!empty($options['riComments']) && trim($options['riComments'])=='1') echo "checked"; ?> type="checkbox" name="<?php echo  $this->ntInfo['lcode']; ?>[<?php echo $ii; ?>][riComments]"/> <strong><?php _e('Import Facebook Comments', 'social-networks-auto-poster-facebook-twitter-g'); ?></strong>
+   <br/>
+   
+   <div style="margin-bottom: 5px; margin-left: 10px; ">
+     <input value="1"  id="apFBMsgAFrmtA<?php echo $ii; ?>" <?php if (!empty($options['riCommentsAA']) && trim($options['riCommentsAA'])=='1') echo "checked"; ?> type="checkbox" name="<?php echo  $this->ntInfo['lcode']; ?>[<?php echo $ii; ?>][riCommentsAA]"/> <strong><?php _e('Auto-approve imported comments', 'social-networks-auto-poster-facebook-twitter-g'); ?></strong></div>   
+     <?php } else { echo "<br/>"; _e('Please activate the "Comments Import" from SNAP Settings Tab', 'social-networks-auto-poster-facebook-twitter-g'); } ?>
+   
+   </div><?php
+  
+  }
   //#### Set Unit Settings from POST
   function setNTSettings($post, $options){ 
     foreach ($post as $ii => $pval){       
@@ -124,6 +140,10 @@ if (!class_exists("nxs_snapClassGP")) { class nxs_snapClassGP extends nxs_snapCl
         if (isset($pval['postAs']))  $options[$ii]['postAs'] = trim($pval['postAs']);  if (isset($pval['postAsNm']))  $options[$ii]['postAsNm'] = trim($pval['postAsNm']);                                
         if (isset($pval['commCat']))  $options[$ii]['commCat'] = trim($pval['commCat']);                
         if (isset($pval['postType']))  $options[$ii]['postType'] = trim($pval['postType']); else $options[$ii]['postType'] = 'A';
+        
+        if (isset($pval['riComments'])) $options[$ii]['riComments'] = $pval['riComments']; else $options[$ii]['riComments'] = 0;        
+        if (isset($pval['riCommentsAA'])) $options[$ii]['riCommentsAA'] = $pval['riCommentsAA']; else $options[$ii]['riCommentsAA'] = 0;                
+        
       } elseif ( count($pval)==1 ) if (isset($pval['do'])) $options[$ii]['do'] = $pval['do']; else $options[$ii]['do'] = 0; 
     } return $options;
   }
@@ -168,7 +188,7 @@ if (!class_exists("nxs_snapClassGP")) { class nxs_snapClassGP extends nxs_snapCl
    </div><?php
         // ## Select Image & URL 
         nxs_showImgToUseDlg($nt, $ii, $imgToUse, !($ntOpt['postType'] == 'I'));            
-        nxs_showURLToUseDlg($nt, $ii, $urlToUse); 
+        nxs_showURLToUseDlg($nt, $ii, $urlToUse);  $this->nxs_tmpltImportComments($post, $ntOpt,  $ii); 
   }
   //#### Save Meta Tags to the Post
   function adjMetaOpt($optMt, $pMeta){ $optMt = $this->adjMetaOptG($optMt, $pMeta);     
@@ -179,6 +199,61 @@ if (!class_exists("nxs_snapClassGP")) { class nxs_snapClassGP extends nxs_snapCl
   function adjPublishWP(&$options, &$message, $postID){ 
       
   } 
+  
+  function importComments($options='', $postID='', $po='', $fbID='') { $ci = 0; if (empty($postID)) $postID = $_POST['pid']; //die('Yo'); // $fbID = '1019404527_10212971242848671';
+    if (empty($options)) {  global $nxs_SNAP; $options = $nxs_SNAP->nxs_options; } if (isset($_POST['ii'])) $options = $options[$_POST['nt']][$_POST['ii']];  
+    if (empty($po)) { $po =  maybe_unserialize(get_post_meta($postID, 'snap'.strtoupper($_POST['nt']), true)); $po = $po[$_POST['ii']]; }   
+    
+    
+    $email = $options['uName'];  $pass = (substr($options['uPass'], 0, 5)=='n5g9a' || substr($options['uPass'], 0, 5)=='g9c1a')?nsx_doDecode(substr($options['uPass'], 5)):$options['uPass'];    
+    $nt = new nxsAPI_GP(); if(!empty($options['ck'])) $nt->ck = $options['ck'];  $nt->debug = false;  $loginError = $nt->connect($email, $pass); //  die('STOP IT');
+      if (!$loginError){ 
+          $nt-> getComments($url, $postID);
+      }
+    
+    die('Yok');
+    
+     
+    if (empty($options) || empty($options['pageAccessToken'])) return; $ptype =  get_post_type( $postID ); 
+    $aacct = array('access_token'=>$options['pageAccessToken'], 'method'=>'get'); if (empty($options['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $options['pageAccessToken'], nxs_gas($options['appSec']));
+    $res = nxs_remote_get( "https://graph.facebook.com/".$po['pgID']."/comments?filter=toplevel&limit=250&".http_build_query($aacct, null, '&'), nxs_mkRemOptsArr(nxs_getNXSHeaders()));
+    if (is_nxs_error($res) || empty($res['body'])) $badOut['Error'] = ' [ERROR] '.print_r($res, true); else { //prr($res);
+    $ret = json_decode($res['body'], true); if (empty($ret)) $badOut['Error'] .= "JSON ERROR: ".print_r($res, true); else { //   prr($ret);    
+      $impCmnts = get_post_meta($postID, 'snapImportedFBComments', true); if (!is_array($impCmnts)) $impCmnts = array(); // prr($impCmnts);   
+      if (is_array($ret) && !empty($ret['data']) && is_array($ret['data'])) foreach ($ret['data'] as $comment){ $cid = $comment['id']; if (empty($cid)) continue;
+      if (!empty($comment['message']) && !in_array('fbxcw'.$cid, $impCmnts)) { // prr($comment);
+          if ($ptype=='topic'){ $my_post = array('post_title' => '', 'post_content' => $comment['message'], 'post_status' => 'publish', 'post_parent' => $postID, 'post_author' => 0, 'post_type' => 'reply');
+              $wpCid = wp_insert_post($my_post); add_post_meta($wpCid, '_bbp_anonymous_name', $comment['from']['name']); $fid = get_post_meta($postID, '_bbp_forum_id', true);
+              add_post_meta($wpCid, '_bbp_anonymous_email', $comment['from']['id'].'@facebook.com'); add_post_meta($wpCid, '_bbp_anonymous_website', 'http://www.facebook.com/'.$comment['from']['id']);
+              add_post_meta($wpCid, '_bbp_topic_id', $postID); add_post_meta($wpCid, '_bbp_forum_id', $fid);
+              
+          } else { $commentdata = array( 'comment_post_ID' => $postID, 'comment_author' => $comment['from']['name'], 'comment_author_email' => $comment['from']['id'].'@facebook.com', 
+              'comment_author_url' => 'https://www.facebook.com/'.$comment['from']['id'], 'comment_content' => $comment['message'], 'comment_date_gmt' => date('Y-m-d H:i:s', strtotime( $comment['created_time'] ) ), 'comment_type' => '');             
+            $wpCid = nxs_postNewComment($commentdata, $options['riCommentsAA']=='1'); // prr($commentdata);
+          } $ci++; $impCmnts[$wpCid] = 'fbxcw'.$cid; 
+      } else $wpCid = array_search('fbxcw'.$cid, $impCmnts);            
+      $res = nxs_remote_get( "https://graph.facebook.com/".$cid."/comments?".http_build_query($aacct, null, '&'), nxs_mkRemOptsArr(nxs_getNXSHeaders())); $replRet = json_decode($res['body'], true);
+      if (is_array($replRet) && is_array($replRet['data'])) foreach ($replRet['data'] as $rComment){ $rCid = $rComment['id']; 
+        if (!empty($rCid) && !empty($comment['message']) && !in_array('fbxcw'.$rCid, $impCmnts)) {  // prr($impCmnts);          
+          if ($ptype=='topic'){ $my_post = array('post_title' => '', 'post_content' => $rComment['message'], 'post_status' => 'publish', 'post_parent' => $postID, 'post_author' => 0, 'post_type' => 'reply');
+              $wpCid = wp_insert_post($my_post); add_post_meta($wpCid, '_bbp_anonymous_name', $rComment['from']['name']); $fid = get_post_meta($postID, '_bbp_forum_id', true);
+              add_post_meta($wpCid, '_bbp_anonymous_email', $rComment['from']['id'].'@facebook.com'); add_post_meta($wpCid, '_bbp_anonymous_website', 'http://www.facebook.com/'.$rComment['from']['id']);
+              add_post_meta($wpCid, '_bbp_topic_id', $postID); add_post_meta($wpCid, '_bbp_forum_id', $fid);              
+          } else {
+            $commentdata = array( 'comment_parent' => $wpCid, 'comment_post_ID' => $postID, 'comment_author' => $rComment['from']['name'], 'comment_author_email' => $rComment['from']['id'].'@facebook.com', 
+              'comment_author_url' => 'https://www.facebook.com/'.$rComment['from']['id'], 'comment_content' => $rComment['message'], 'comment_date_gmt' => date('Y-m-d H:i:s', strtotime( $rComment['created_time'] ) ), 'comment_type' => '');
+            // prr($commentdata);
+            nxs_postNewComment($commentdata, $options['riCommentsAA']=='1'); 
+          } $ci++; $impCmnts[] = 'fbxcw'.$rCid; 
+        }
+      }        
+    }    
+    delete_post_meta($postID, 'snapImportedFBComments'); add_post_meta($postID, 'snapImportedFBComments', $impCmnts ); 
+    //## if Importing manually from Button echo result.
+    if (isset($_POST['pid']) && $_POST['pid']!='') printf( _n( '%d comment has been imported.', '%d comments has been imported.', $ci, 'social-networks-auto-poster-facebook-twitter-g'), $ci );
+   }}
+  }
+  
   //## GP Specific
   function getListOfPages($networks){ $opVal = array(); $pass = 'g9c1a'.nsx_doEncode($_POST['p']); $opNm = 'nxs_snap_gp_'.sha1('nxs_snap_gp'.$_POST['u'].$pass); $opVal = nxs_getOption($opNm); $ii = $_POST['ii']; $nt = new nxsAPI_GP(); // prr($opVal);
      $currPstAs = !empty($_POST['pstAs'])?$_POST['pstAs']:(!empty($networks['gp'][$ii])?$networks['gp'][$ii]['postAs']:'');

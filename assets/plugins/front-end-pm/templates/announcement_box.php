@@ -5,12 +5,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 echo fep_info_output();
-
+/*
 if( ! $total_announcements ) {
 	echo "<div class='fep-error'>".apply_filters('fep_filter_announcement_empty', __("No announcements found.", 'front-end-pm') )."</div>";
 	return;
 }
-
+*/
 do_action('fep_display_before_announcementbox');
 	  
 	  	?><form class="fep-message-table form" method="post" action="">
@@ -39,7 +39,10 @@ do_action('fep_display_before_announcementbox');
 				</div>
 			</div>
 		</div>
-		<?php if( $announcements->have_posts() ) { ?>
+		<?php if( $announcements->have_posts() ) { 
+			wp_enqueue_script( 'fep-cb-check-uncheck-all' ); ?>
+			<div class="fep-cb-check-uncheck-all-div"><label><input type="checkbox" class="fep-cb-check-uncheck-all" /><?php _e('Check/Uncheck all', 'front-end-pm'); ?></label></div>
+			
 		<div id="fep-table" class="fep-table fep-odd-even"><?php
 			while ( $announcements->have_posts() ) { 
 				$announcements->the_post(); ?>
@@ -51,9 +54,13 @@ do_action('fep_display_before_announcementbox');
 				<?php
 			} //endwhile
 			?></div><?php
-			echo fep_pagination( Fep_Announcement::init()->get_user_announcement_count( empty($g_filter) ? 'total' : $g_filter ), fep_get_option('announcements_page', 15) );
+			echo fep_pagination( $total_announcements, fep_get_option('announcements_page', 15) );
 		} else {
-			?><div class="fep-error"><?php _e('No announcements found. Try different filter.', 'front-end-pm'); ?></div><?php 
+			if( !$g_filter || 'show-all' == $g_filter ){
+				?><div class="fep-error"><?php _e('No announcements found.', 'front-end-pm'); ?></div><?php	
+			} else {
+				?><div class="fep-error"><?php _e('No announcements found. Try different filter.', 'front-end-pm'); ?></div><?php
+			}
 		}
 		?></form><?php 
 		wp_reset_postdata();

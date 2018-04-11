@@ -19,7 +19,7 @@ add_action("admin_enqueue_scripts","xyz_fbap_add_admin_scripts");
 
 function xyz_fbap_menu()
 {
-	add_menu_page('Facebook Auto Publish - Manage settings', 'Facebook Auto Publish', 'manage_options', 'facebook-auto-publish-settings', 'xyz_fbap_settings',plugin_dir_url( XYZ_FBAP_PLUGIN_FILE ) . 'images/facebook.png');
+	add_menu_page('Facebook Auto Publish - Manage settings', 'WP Facebook Auto Publish', 'manage_options', 'facebook-auto-publish-settings', 'xyz_fbap_settings',plugin_dir_url( XYZ_FBAP_PLUGIN_FILE ) . 'images/fbap.png');
 	add_submenu_page('facebook-auto-publish-settings', 'Facebook Auto Publish - Manage settings', ' Settings', 'manage_options', 'facebook-auto-publish-settings' ,'xyz_fbap_settings'); // 8 for admin
 	add_submenu_page('facebook-auto-publish-settings', 'Facebook Auto Publish - Logs', 'Logs', 'manage_options', 'facebook-auto-publish-log' ,'xyz_fbap_logs');
 	add_submenu_page('facebook-auto-publish-settings', 'Facebook Auto Publish - About', 'About', 'manage_options', 'facebook-auto-publish-about' ,'xyz_fbap_about'); // 8 for admin

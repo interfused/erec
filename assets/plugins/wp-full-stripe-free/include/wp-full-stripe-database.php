@@ -1,8 +1,9 @@
 <?php
 
 class MM_WPFSF_Database {
-	const paymentsTable = 'fullstripe_payments';
-	const paymentFormsTable = 'fullstripe_payment_forms';
+	
+	const TABLE_PAYMENTS = 'fullstripe_payments';
+	const TABLE_PAYMENT_FORMS = 'fullstripe_payment_forms';
 
 	public static function fullstripe_setup_db() {
 		//require for dbDelta()
@@ -10,7 +11,7 @@ class MM_WPFSF_Database {
 
 		global $wpdb;
 
-		$table = $wpdb->prefix . self::paymentsTable;
+		$table = $wpdb->prefix . self::TABLE_PAYMENTS;
 
 		$sql = "CREATE TABLE " . $table . " (
         paymentID INT NOT NULL AUTO_INCREMENT,
@@ -33,7 +34,7 @@ class MM_WPFSF_Database {
 		//database write/update
 		dbDelta( $sql );
 
-		$table = $wpdb->prefix . self::paymentFormsTable;
+		$table = $wpdb->prefix . self::TABLE_PAYMENT_FORMS;
 
 		$sql = "CREATE TABLE " . $table . " (
         paymentFormID INT NOT NULL AUTO_INCREMENT,
@@ -68,7 +69,7 @@ class MM_WPFSF_Database {
 				'amount'    => 1000 //$10.00
 			);
 			$formats = array( '%s', '%s', '%d' );
-			$wpdb->insert( $wpdb->prefix . self::paymentFormsTable, $data, $formats );
+			$wpdb->insert( $wpdb->prefix . self::TABLE_PAYMENT_FORMS, $data, $formats );
 		}
 
 		do_action( 'fullstripe_setup_db' );
@@ -92,27 +93,27 @@ class MM_WPFSF_Database {
 			'created'      => date( 'Y-m-d H:i:s', $payment->created )
 		);
 
-		$wpdb->insert( $wpdb->prefix . self::paymentsTable, apply_filters( 'fullstripe_insert_payment_data', $data ) );
+		$wpdb->insert( $wpdb->prefix . self::TABLE_PAYMENTS, apply_filters( 'fullstripe_insert_payment_data', $data ) );
 	}
 
 	function insert_payment_form( $form ) {
 		global $wpdb;
-		$wpdb->insert( $wpdb->prefix . self::paymentFormsTable, $form );
+		$wpdb->insert( $wpdb->prefix . self::TABLE_PAYMENT_FORMS, $form );
 	}
 
 	function update_payment_form( $id, $form ) {
 		global $wpdb;
-		$wpdb->update( $wpdb->prefix . self::paymentFormsTable, $form, array( 'paymentFormID' => $id ) );
+		$wpdb->update( $wpdb->prefix . self::TABLE_PAYMENT_FORMS, $form, array( 'paymentFormID' => $id ) );
 	}
 
 	function delete_payment_form( $id ) {
 		global $wpdb;
-		$wpdb->query( 'DELETE FROM ' . $wpdb->prefix . self::paymentFormsTable . " WHERE paymentFormID='" . $id . "';" );
+		$wpdb->query( 'DELETE FROM ' . $wpdb->prefix . self::TABLE_PAYMENT_FORMS . " WHERE paymentFormID='" . $id . "';" );
 	}
 
 	function get_payment_form_by_name( $name ) {
 		global $wpdb;
 
-		return $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . self::paymentFormsTable . " WHERE name='" . $name . "';" );
+		return $wpdb->get_row( "SELECT * FROM " . $wpdb->prefix . self::TABLE_PAYMENT_FORMS . " WHERE name='" . $name . "';" );
 	}
 }

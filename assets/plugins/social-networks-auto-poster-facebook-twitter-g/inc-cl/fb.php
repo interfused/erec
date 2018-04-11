@@ -40,10 +40,10 @@ if (!class_exists("nxs_snapClassFB")) { class nxs_snapClassFB extends nxs_snapCl
     if ( !empty($_GET['code']) && isset($_GET['state']) && substr($_GET['state'], 0, 7) == 'nxs-fb-'){ $this->showAuthTop(); echo "--== Auth ==--"; $at = $_GET['code'];  $ii = str_replace('nxs-fb-','',$_GET['state']); $gGet = array();     
       if (!empty($_SERVER['QUERY_STRING'])) parse_str($_SERVER['QUERY_STRING'], $gGet); elseif (!empty($_SERVER['argv'][0])) parse_str($_SERVER['argv'][0], $gGet); else { $gGet = $_GET; prr($_GET); unset($gGet['post_type']);} prr($gGet);  unset($gGet['code']); unset($gGet['state']); prr($gGet);
       $sturl = explode('?',$nxs_snapSetPgURL); $nxs_snapSetPgURL = $sturl[0].((!empty($gGet))?'?'.http_build_query($gGet):''); $fbo = $this->nt[$ii]; $advSet = nxs_mkRemOptsArr(nxs_getNXSHeaders()); prr($fbo); $fbo['uMsg'] = ''; 
-      $tknURL = 'https://graph.facebook.com/oauth/access_token?client_id='.$fbo['appKey'].'&state=nxs-fb-'.$ii.'&redirect_uri='.urlencode($nxs_snapSetPgURL).'&client_secret='.$fbo['appSec'].'&code='.$at; $response  = nxs_remote_get($tknURL, $advSet); echo "<br/>TKN URL: "; prr($tknURL);   
+      $tknURL = 'https://graph.facebook.com/oauth/access_token?client_id='.nxs_gak($fbo['appKey']).'&state=nxs-fb-'.$ii.'&redirect_uri='.urlencode($nxs_snapSetPgURL).'&client_secret='.nxs_gas($fbo['appSec']).'&code='.$at; $response  = nxs_remote_get($tknURL, $advSet); echo "<br/>TKN URL: "; prr($tknURL);   
       if ( (is_object($response) && (isset($response->errors))) || (is_array($response) && stripos($response['body'],'"error":')!==false )) { prr($response); die('</div></div>'); }      
       if (substr($response['body'],0,1)=='{') $params = json_decode($response['body'], true); else parse_str($response['body'], $params);  $at = $params['access_token']; echo "<br/>TKN PARAMS: "; prr($params); echo "<br/>TKN RESP: "; prr($response);  
-      $response  = nxs_remote_get('https://graph.facebook.com/oauth/access_token?client_secret='.$fbo['appSec'].'&client_id='.$fbo['appKey'].'&grant_type=fb_exchange_token&fb_exchange_token='.$at, $advSet); 
+      $response  = nxs_remote_get('https://graph.facebook.com/oauth/access_token?client_secret='.nxs_gas($fbo['appSec']).'&client_id='.nxs_gak($fbo['appKey']).'&grant_type=fb_exchange_token&fb_exchange_token='.$at, $advSet); 
       if ((is_object($response) && isset($response->errors))) {  prr($response); die('</div></div>');}
       if (substr($response['body'],0,1)=='{') $params = json_decode($response['body'], true); else parse_str($response['body'], $params);  $at = $params['access_token']; $fbo['accessToken'] = $at; 
       /* What is it? What I tried??
@@ -53,14 +53,14 @@ if (!class_exists("nxs_snapClassFB")) { class nxs_snapClassFB extends nxs_snapCl
       if (substr($response['body'],0,1)=='{') $params = json_decode($response['body'], true); else parse_str($response['body'], $params);  $at = $params['access_token']; $fbo['accessTokenUser'] = $at;       
       prr($response); //die();
       */           
-      $aacct = array('access_token'=>$fbo['accessToken'], 'appsecret_proof'=>hash_hmac('sha256', $fbo['accessToken'], $fbo['appSec']), 'method'=>'get');        
+      $aacct = array('access_token'=>$fbo['accessToken'], 'appsecret_proof'=>hash_hmac('sha256', $fbo['accessToken'], nxs_gas($fbo['appSec'])), 'method'=>'get');        
       //$uurl = "https://graph.facebook.com/".$fbo['appKey'].'?'.http_build_query($aacct, null, '&'); prr($uurl); $res = nxs_remote_get( $uurl, $advSet); prr($res); die('</div></div>'); 
       $uurl = "https://graph.facebook.com/me?".http_build_query($aacct, null, '&'); prr($uurl); $res = nxs_remote_get( $uurl, $advSet); 
       if (is_nxs_error($res) || empty($res['body'])) {  echo "Can't get Facebook User."; prr($res); die('</div></div>');} else {
         $user = json_decode($res['body'], true); if (empty($user)) {echo "Can't get Facebook User. JSON Error. "; prr($res); die('</div></div>');} else {
           if (!empty($user['id'])) {  echo "<b>-= Got user: </b>"; $fbo['authUser'] = $user['id'];  $fbo['authUserName'] = $user['name'].(!empty($user['username'])?" (".$user['username'].")":'');  prr($user); 
             if (empty($fbo['pgID'])) $fbo['pgID'] = $user['id']; else { $advSet = nxs_mkRemOptsArr(nxs_getNXSHeaders()); $aacct = array('access_token'=>$fbo['accessToken'], 'method'=>'get', 'metadata'=>'1', 'limit'=>250); 
-              if (empty($fbo['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $fbo['accessToken'], $fbo['appSec']); $resP = nxs_remote_get('https://graph.facebook.com/'.$fbo['pgID'].'?'.http_build_query($aacct, null, '&'), $advSet); $resP = json_decode($resP['body'], true);
+              if (empty($fbo['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $fbo['accessToken'], nxs_gas($fbo['appSec'])); $resP = nxs_remote_get('https://graph.facebook.com/'.$fbo['pgID'].'?'.http_build_query($aacct, null, '&'), $advSet); $resP = json_decode($resP['body'], true);
               if (!empty($resP['metadata']) && !empty($resP['metadata']['type']) && $resP['metadata']['type']=='page') { echo "<br/>---==== GETTING TOKEN FOR ALREADY SELECTED PAGE - ID: ".$fbo['pgID'].'<br/>';
                 $fbo = $this->getPageToken($fbo); if (!empty($fbo['uMsg'])) { echo '<b style="color:red">';  prr($fbo['uMsg']); if (!empty($user['id'])) nxs_save_glbNtwrks($ntInfo['lcode'],$ii,$fbo,'*');  die("<br/>---==== Can't get TOKEN for selected PAGE ID: ".$fbo['pgID'].'</b>'); } 
                   else  echo "<br/>---====OK. GOT TOKEN SUCCESSFULLY<br/><br/>";
@@ -81,13 +81,13 @@ if (!class_exists("nxs_snapClassFB")) { class nxs_snapClassFB extends nxs_snapCl
       if (!empty($fbo['pgID'])) { unset($fbo['fbURL']); nxs_save_glbNtwrks($this->ntInfo['lcode'],$ii,$fbo,'*'); }
     } return $fbo;
   }    
-  function getPageInfo($fbo){  $advSet = nxs_mkRemOptsArr(nxs_getNXSHeaders()); $aacct = array('access_token'=>$fbo['accessToken'], 'method'=>'get', 'metadata'=>'1', 'limit'=>250); if (empty($fbo['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $fbo['accessToken'], $fbo['appSec']);
+  function getPageInfo($fbo){  $advSet = nxs_mkRemOptsArr(nxs_getNXSHeaders()); $aacct = array('access_token'=>$fbo['accessToken'], 'method'=>'get', 'metadata'=>'1', 'limit'=>250); if (empty($fbo['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $fbo['accessToken'], nxs_gas($fbo['appSec']));
       $resP = nxs_remote_get('https://graph.facebook.com/'.$fbo['pgID'].'?'.http_build_query($aacct, null, '&'), $advSet); if ((is_object($resP) && isset($resP->errors))) return 'Error  PG_INFO #1: '.print_r($resP, true);
       $page = json_decode($resP['body'], true); if ( is_array($page) && !empty($page['error']) ) return 'Error PG_INFO #2: '.(!empty($page['error'])?print_r($page['error'], true):''); return $page;
   }
   function getPageToken($fbo){ $advSet = nxs_mkRemOptsArr(nxs_getNXSHeaders()); $errMsg = ''; $fbPgID = $fbo['pgID'];      
-      $aacct = array('access_token'=>$fbo['accessToken'], 'method'=>'get', 'limit'=>250); if (empty($fbo['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $fbo['accessToken'], $fbo['appSec']);
-      $res = nxs_remote_get( "https://graph.facebook.com/$fbPgID?fields=access_token&".http_build_query($aacct, null, '&'), $advSet); // prr($res);
+      $aacct = array('access_token'=>$fbo['accessToken'], 'method'=>'get', 'limit'=>250); if (empty($fbo['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $fbo['accessToken'], nxs_gas($fbo['appSec']));
+      $res = nxs_remote_get( "https://graph.facebook.com/$fbPgID?fields=access_token&".http_build_query($aacct, null, '&'), $advSet); // prr($fbPgID); prr($res);
       if (is_nxs_error($res) || empty($res['body']) || $res['response']['code']!='200') { $errMsg = "Can't get Page Token. ".print_r($res, true); $fbo['uMsg'] = $errMsg; return $fbo; } else {
         $token = json_decode($res['body'], true); if (empty($token)) { $errMsg =  "Can't get Page Token. JSON Error. ".print_r($res, true); $fbo['uMsg'] = $errMsg; return $fbo; } else {
           if (!empty($token['error'])) if (!empty($token['error']['message'])) { $errMsg = $token['error']['message'];
@@ -104,14 +104,14 @@ if (!class_exists("nxs_snapClassFB")) { class nxs_snapClassFB extends nxs_snapCl
   function getListOfPages($networks){ $opVal = array(); $opNm = 'nxs_snap_fb_'.sha1('nxs_snap_fb'.$_POST['u'].$_POST['p']); $opVal = nxs_getOption($opNm); $ii = $_POST['ii']; $pgs = ''; if (empty($options['pgID'])) $options['pgID'] = '';
      $currPstAs = !empty($_POST['pgID'])?$_POST['pgID']:(!empty($networks['fb'][$ii])?$networks['fb'][$ii]['pgID']:'');
      if (empty($_POST['force']) && !empty($opVal['pageList']) ) $pgs = $opVal['pageList']; else { $options = $networks['fb'][$ii];        
-       $advSet = nxs_mkRemOptsArr(nxs_getNXSHeaders()); $aacct = array('access_token'=>$options['accessToken'], 'method'=>'get', 'limit'=>250); if (empty($options['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $options['accessToken'], $options['appSec']); 
+       $advSet = nxs_mkRemOptsArr(nxs_getNXSHeaders()); $aacct = array('access_token'=>$options['accessToken'], 'method'=>'get', 'limit'=>250); if (empty($options['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $options['accessToken'], nxs_gas($options['appSec'])); 
        //## Account Info 
        $resP = nxs_remote_get('https://graph.facebook.com/'.$options['authUser'].'/?'.http_build_query($aacct, null, '&'), $advSet);  //prr($resP, 'ACCOUNT'); 
        if (is_nxs_error($resP) || empty($resP['body'])) { $outMsg= 'Auth Error Account #1: '.print_r($resP, true);  if (!empty($_POST['isOut'])) echo $outMsg; return $outMsg; }
        $accInfo = json_decode($resP['body'], true); if ((is_array($accInfo) && !empty($accInfo['error']))) { $outMsg = 'Auth Error Account #2: '.print_r($accInfo['error'], true); if (!empty($_POST['isOut'])) echo $outMsg; return $outMsg; }       
        $pgs .= '<option class="nxsTeal" '.($options['pgID']==$accInfo['id'] ? 'selected="selected"':'').' value="'.$accInfo['id'].'">Profile: '.$accInfo['name'].' ('.$accInfo['id'].')</option>'; 
        //## List of pages       
-       $resP = nxs_remote_get('https://graph.facebook.com/'.$options['authUser'].'/accounts?'.http_build_query($aacct, null, '&'), $advSet); 
+       $resP = nxs_remote_get('https://graph.facebook.com/'.$options['authUser'].'/accounts?'.http_build_query($aacct, null, '&'), $advSet);// prr($resP, 'PAGES'); 
        if (is_nxs_error($resP) || empty($resP['body'])) { $outMsg= 'Auth Error #1: '.print_r($resP, true);  if (!empty($_POST['isOut'])) echo $outMsg; return $outMsg; }
        $pages = json_decode($resP['body'], true); if ((is_array($pages) && !empty($pages['error']))) { $outMsg = 'Auth Error #2: '.print_r($pages['error'], true); if (!empty($_POST['isOut'])) echo $outMsg; return $outMsg; }       
        if (!empty($pages['data'])) { $pages = $pages['data']; $opVal = array();
@@ -149,11 +149,11 @@ if (!class_exists("nxs_snapClassFB")) { class nxs_snapClassFB extends nxs_snapCl
   function pgCmp($a, $b) { return strcasecmp ($a['nm'],$b['nm']); }
  
   
-  function accTab($ii, $options, $isNew=false){ global $nxs_snapSetPgURL; $ntInfo = $this->ntInfo; $nt = $ntInfo['lcode']; $ntU = $ntInfo['code']; if (empty($options['uMsg'])) $options['uMsg'] = ''; // prr($options); 
+  function accTab($ii, $options, $isNew=false){ global $nxs_snapSetPgURL; $ntInfo = $this->ntInfo; $nt = $ntInfo['lcode']; $ntU = $ntInfo['code']; if (empty($options['uMsg'])) $options['uMsg'] = ''; //  prr($options); 
     if (!empty($options['accessToken']) && !empty($options['authUser'])) { if (empty($options['authUser'])) $options['authUser'] = ''; $options = $this->fbURLToPageID($options, $ii);       
       if (!is_numeric($options['pgID'])) { $pgInfo = $this->getPageInfo($options); /* prr($pgInfo, "PAGE INFO"); */  if (!is_array($pgInfo)) $options['uMsg'].=$options; else $options['pgID'] = $pgInfo['id']; }          
-      $opNm = 'nxs_snap_fb_'.sha1('nxs_snap_fb'.$options['authUser'].$options['appKey']); $opVal = nxs_getOption($opNm);// prr($opVal);
-      if (empty($opVal)) { $tPST = (!empty($_POST))?$_POST:'';  $_POST['pgID'] = $options['pgID']; $_POST['u'] = $options['authUser']; $_POST['p'] = $options['appKey']; $_POST['ii'] = $ii; $ntw[$nt][$ii]=$options; $opVal = $this->getListOfPages($ntw); $_POST = $tPST; }
+      $opNm = 'nxs_snap_fb_'.sha1('nxs_snap_fb'.$options['authUser'].nxs_gak($options['appKey'])); $opVal = nxs_getOption($opNm);// prr($opVal);
+      if (empty($opVal)) { $tPST = (!empty($_POST))?$_POST:'';  $_POST['pgID'] = $options['pgID']; $_POST['u'] = $options['authUser']; $_POST['p'] = nxs_gak($options['appKey']); $_POST['ii'] = $ii; $ntw[$nt][$ii]=$options; $opVal = $this->getListOfPages($ntw); $_POST = $tPST; }
       if (!empty($opVal) & !is_array($opVal)) $options['uMsg'] .= $opVal; else { if (!empty($opVal) & is_array($opVal)) $options = array_merge($options, $opVal); } 
       ?><br/ ><div style="width:100%; font-size: 14px;"><b><?php _e('Where to Post', 'nxs_snap'); ?></b>.&nbsp;<?php _e('Please select your profile/page/group', 'social-networks-auto-poster-facebook-twitter-g'); ?>.<span style="color:#580058; font-size: 12px;">&nbsp;(<?php _e('Please see ', 'social-networks-auto-poster-facebook-twitter-g'); ?> - <a href="http://nxs.fyi/fb-not-in-the-list" target="_blank"><?php _e('Why Page/Group is not in the list and how to add it', 'social-networks-auto-poster-facebook-twitter-g'); ?>)</a></span></div>
        <div id="nxsFBInfoDiv<?php echo $ii; ?>">
@@ -351,7 +351,7 @@ if (!class_exists("nxs_snapClassFB")) { class nxs_snapClassFB extends nxs_snapCl
     if (empty($options)) {  global $nxs_SNAP; $options = $nxs_SNAP->nxs_options; } if (isset($_POST['ii'])) $options = $options[$_POST['nt']][$_POST['ii']];  
     if (empty($po)) { $po =  maybe_unserialize(get_post_meta($postID, 'snap'.strtoupper($_POST['nt']), true)); $po = $po[$_POST['ii']]; }    
     if (empty($options) || empty($options['pageAccessToken'])) return; $ptype =  get_post_type( $postID ); 
-    $aacct = array('access_token'=>$options['pageAccessToken'], 'method'=>'get'); if (empty($options['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $options['pageAccessToken'], $options['appSec']);
+    $aacct = array('access_token'=>$options['pageAccessToken'], 'method'=>'get'); if (empty($options['tpt'])) $aacct['appsecret_proof'] = hash_hmac('sha256', $options['pageAccessToken'], nxs_gas($options['appSec']));
     $res = nxs_remote_get( "https://graph.facebook.com/".$po['pgID']."/comments?filter=toplevel&limit=250&".http_build_query($aacct, null, '&'), nxs_mkRemOptsArr(nxs_getNXSHeaders()));
     if (is_nxs_error($res) || empty($res['body'])) $badOut['Error'] = ' [ERROR] '.print_r($res, true); else { //prr($res);
     $ret = json_decode($res['body'], true); if (empty($ret)) $badOut['Error'] .= "JSON ERROR: ".print_r($res, true); else { //   prr($ret);    

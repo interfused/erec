@@ -1,6 +1,11 @@
 <?php
 
-//deals with customer front-end input i.e. payment forms submission
+/**
+ * Class MM_WPFSF_Customer
+ *
+ * Deals with customer front-end input i.e. payment forms submission.
+ *
+ */
 class MM_WPFSF_Customer {
 	private $stripe = null;
 
@@ -16,133 +21,168 @@ class MM_WPFSF_Customer {
 	}
 
 	function fullstripe_payment_charge() {
-		//get POST data from form
-		$valid                = true;
-		$card                 = $_POST['stripeToken'];
-		$name                 = sanitize_text_field( $_POST['fullstripe_name'] );
-		$amount               = $_POST['amount'];
-		$formName             = $_POST['formName'];
-		$isCustom             = $_POST['isCustom'];
-		$doRedirect           = $_POST['formDoRedirect'];
-		$redirectPostID       = $_POST['formRedirectPostID'];
-		$redirectUrl          = $_POST['formRedirectUrl'];
-		$redirectToPageOrPost = $_POST['formRedirectToPageOrPost'];
-		$showAddress          = $_POST['showAddress'];
-		$sendReceipt          = $_POST['sendEmailReceipt'];
-		$options              = get_option( 'fullstripe_options_f' );
 
-		if ( $isCustom == 1 ) {
-			$amount = $_POST['fullstripe_custom_amount'];
-			if ( ! is_numeric( trim( $amount ) ) ) {
-				$valid  = false;
-				$return = array(
-					'success' => false,
-					'msg'     => __( 'The payment amount is invalid, please only use numbers and a decimal point.', 'wp-full-stripe-free' )
-				);
-			} else {
-				$amount = $amount * 100; //Stripe expects amounts in cents
-			}
-		}
+		$formName = isset( $_POST['formName'] ) ? $_POST['formName'] : null;
 
-		$address1 = isset( $_POST['fullstripe_address_line1'] ) ? sanitize_text_field( $_POST['fullstripe_address_line1'] ) : '';
-		$address2 = isset( $_POST['fullstripe_address_line2'] ) ? sanitize_text_field( $_POST['fullstripe_address_line2'] ) : '';
-		$city     = isset( $_POST['fullstripe_address_city'] ) ? sanitize_text_field( $_POST['fullstripe_address_city'] ) : '';
-		$state    = isset( $_POST['fullstripe_address_state'] ) ? sanitize_text_field( $_POST['fullstripe_address_state'] ) : '';
-		$zip      = isset( $_POST['fullstripe_address_zip'] ) ? sanitize_text_field( $_POST['fullstripe_address_zip'] ) : '';
+		if ( ! is_null( $formName ) ) {
+			$paymentForm = $this->db->get_payment_form_by_name( $formName );
+			if ( isset( $paymentForm ) ) {
 
-		if ( $showAddress == 1 ) {
-			if ( $address1 == '' || $city == '' || $zip == '' ) {
-				$valid  = false;
-				$return = array(
-					'success' => false,
-					'msg'     => __( 'Please enter a valid billing address.', 'wp-full-stripe-free' )
-				);
-			}
-		}
+				$useCustomAmount      = $paymentForm->customAmount;
+				$doRedirect           = $paymentForm->redirectOnSuccess;
+				$redirectPostID       = $paymentForm->redirectPostID;
+				$redirectUrl          = $paymentForm->redirectUrl;
+				$redirectToPageOrPost = $paymentForm->redirectToPageOrPost;
+				$showAddress          = $paymentForm->showAddress;
+				$sendEmailReceipt     = $paymentForm->sendEmailReceipt;
+				$showEmailInput       = $paymentForm->showEmailInput;
 
-		$email = 'n/a';
-		if ( isset( $_POST['fullstripe_email'] ) ) {
-			$email = $_POST['fullstripe_email'];
-			if ( ! filter_var( $email, FILTER_VALIDATE_EMAIL ) ) {
-				$valid  = false;
-				$return = array(
-					'success' => false,
-					'msg'     => __( 'Please enter a valid email address.', 'wp-full-stripe-free' )
-				);
-			}
-		}
-
-		if ( $valid ) {
-			$customInput = isset( $_POST['fullstripe_custom_input'] ) ? $_POST['fullstripe_custom_input'] : 'n/a';
-			$description = "Payment from $name on form: $formName \nCustom Data: $customInput";
-			$metadata    = array(
-				'customer_name'         => $name,
-				'customer_email'        => $email,
-				'billing_address_line1' => $address1,
-				'billing_address_line2' => $address2,
-				'billing_address_city'  => $city,
-				'billing_address_state' => $state,
-				'billing_address_zip'   => $zip
-			);
-
-			try {
-				//check email
-				$sendPluginEmail = true;
-				if ( $sendReceipt == 1 && isset( $_POST['fullstripe_email'] ) ) {
-					$sendPluginEmail = false;
+				$stripeToken   = $_POST['stripeToken'];
+				$customerName  = sanitize_text_field( $_POST['fullstripe_name'] );
+				$customerEmail = 'n/a';
+				if ( isset( $_POST['fullstripe_email'] ) ) {
+					$customerEmail = sanitize_text_field( $_POST['fullstripe_email'] );
 				}
 
-				//try the charge
-				do_action( 'fullstripe_before_payment_charge', $amount );
-				$result = $this->stripe->charge( $amount, $card, $description, $metadata, ( $sendPluginEmail == false ? $email : null ) );
-				do_action( 'fullstripe_after_payment_charge', $result );
+				$amount = null;
+				if ( $useCustomAmount == 1 ) {
+					$amount = sanitize_text_field( trim( $_POST['fullstripe_custom_amount'] ) );
+					if ( is_numeric( $amount ) ) {
+						$amount = $amount * 100;
+					}
+				} else {
+					$amount = $paymentForm->amount;
+				}
 
-				//save the payment
-				$address = array(
-					'line1' => $address1,
-					'line2' => $address2,
-					'city'  => $city,
-					'state' => $state,
-					'zip'   => $zip
-				);
-				$this->db->fullstripe_insert_payment( $result, $address );
+				$billingAddressLine1 = isset( $_POST['fullstripe_address_line1'] ) ? sanitize_text_field( $_POST['fullstripe_address_line1'] ) : '';
+				$billingAddressLine2 = isset( $_POST['fullstripe_address_line2'] ) ? sanitize_text_field( $_POST['fullstripe_address_line2'] ) : '';
+				$billingAddressCity  = isset( $_POST['fullstripe_address_city'] ) ? sanitize_text_field( $_POST['fullstripe_address_city'] ) : '';
+				$billingAddressState = isset( $_POST['fullstripe_address_state'] ) ? sanitize_text_field( $_POST['fullstripe_address_state'] ) : '';
+				$billingAddressZip   = isset( $_POST['fullstripe_address_zip'] ) ? sanitize_text_field( $_POST['fullstripe_address_zip'] ) : '';
 
-				$return = array( 'success' => true, 'msg' => __( 'Payment Successful!', 'wp-full-stripe-free' ) );
-				if ( $doRedirect == 1 ) {
-					if ( $redirectToPageOrPost == 1 ) {
-						if ( $redirectPostID != 0 ) {
-							$return['redirect']    = true;
-							$return['redirectURL'] = get_page_link( $redirectPostID );
-						} else {
-							error_log( "Inconsistent form data: formName=$formName, doRedirect=$doRedirect, redirectPostID=$redirectPostID" );
-						}
-					} else {
-						$return['redirect']    = true;
-						$return['redirectURL'] = $redirectUrl;
+				$customInput = isset( $_POST['fullstripe_custom_input'] ) ? $_POST['fullstripe_custom_input'] : 'n/a';
+
+				$valid = true;
+				if ( ! is_numeric( trim( $amount ) ) || $amount <= 0 ) {
+					$valid  = false;
+					$return = array(
+						'success' => false,
+						'msg'     => __( 'The payment amount is invalid, please only use numbers and a decimal point.', 'wp-full-stripe-free' )
+					);
+				}
+
+				if ( $valid && $showAddress == 1 ) {
+					if ( $billingAddressLine1 == '' || $billingAddressCity == '' || $billingAddressZip == '' ) {
+						$valid  = false;
+						$return = array(
+							'success' => false,
+							'msg'     => __( 'Please enter a valid billing address.', 'wp-full-stripe-free' )
+						);
 					}
 				}
 
-			} catch ( \Stripe\Error\Card $e ) {
-				$message = $this->stripe->resolve_error_message_by_code( $e->getCode() );
-				if ( is_null( $message ) ) {
-					$message = MM_WPFSF::translate_label( $e->getMessage() );
+				if ( $valid && $showEmailInput && ! filter_var( $customerEmail, FILTER_VALIDATE_EMAIL ) ) {
+					$valid  = false;
+					$return = array(
+						'success' => false,
+						'msg'     => __( 'Please enter a valid email address.', 'wp-full-stripe-free' )
+					);
 				}
+
+				if ( $valid ) {
+
+					$description = "Payment from {$customerName} on form: {$formName} \nCustom Data: {$customInput}";
+					$metadata    = array(
+						'customer_name'         => $customerName,
+						'customer_email'        => $customerEmail,
+						'billing_address_line1' => $billingAddressLine1,
+						'billing_address_line2' => $billingAddressLine2,
+						'billing_address_city'  => $billingAddressCity,
+						'billing_address_state' => $billingAddressState,
+						'billing_address_zip'   => $billingAddressZip
+					);
+
+					try {
+
+						$sendPluginEmail = true;
+						if ( $sendEmailReceipt == 1 && isset( $customerEmail ) ) {
+							$sendPluginEmail = false;
+						}
+
+						do_action( 'fullstripe_before_payment_charge', $amount );
+						$charge = $this->stripe->charge( $amount, $stripeToken, $description, $metadata, ( $sendPluginEmail == false ? $customerEmail : null ) );
+						do_action( 'fullstripe_after_payment_charge', $charge );
+
+						$billingAddress = array(
+							'line1' => $billingAddressLine1,
+							'line2' => $billingAddressLine2,
+							'city'  => $billingAddressCity,
+							'state' => $billingAddressState,
+							'zip'   => $billingAddressZip
+						);
+						$this->db->fullstripe_insert_payment( $charge, $billingAddress );
+
+						$return = array(
+							'success' => true,
+							'msg'     => __( 'Payment Successful!', 'wp-full-stripe-free' )
+						);
+
+						if ( $doRedirect == 1 ) {
+							if ( $redirectToPageOrPost == 1 ) {
+								if ( $redirectPostID != 0 ) {
+									$return['redirect']    = true;
+									$return['redirectURL'] = get_page_link( $redirectPostID );
+								} else {
+									error_log( "Inconsistent form data: formName=$formName, doRedirect=$doRedirect, redirectPostID=$redirectPostID" );
+								}
+							} else {
+								$return['redirect']    = true;
+								$return['redirectURL'] = $redirectUrl;
+							}
+						}
+
+					} catch ( \Stripe\Error\Card $e ) {
+						$message = $this->stripe->resolve_error_message_by_code( $e->getCode() );
+						if ( is_null( $message ) ) {
+							$message = MM_WPFSF::translate_label( $e->getMessage() );
+						}
+						$return = array(
+							'success' => false,
+							'msg'     => $message
+						);
+					} catch ( Exception $e ) {
+						$return = array(
+							'success' => false,
+							'msg'     => MM_WPFSF::translate_label( $e->getMessage() )
+						);
+					}
+				} else {
+					if ( ! isset( $return ) ) {
+						$return = array(
+							'success' => false,
+							'msg'     => __( 'Incorrect data submitted.', 'wp-full-stripe-free' )
+						);
+					}
+
+				}
+
+			} else {
 				$return = array(
 					'success' => false,
-					'msg'     => $message
-				);
-			} catch ( Exception $e ) {
-				//show notification of error
-				$return = array(
-					'success' => false,
-					'msg'     => MM_WPFSF::translate_label( $e->getMessage() )
+					'msg'     => __( 'Invalid form name or form nonce or form not found', 'wp-full-stripe-free' )
 				);
 			}
+
+		} else {
+			$return = array(
+				'success' => false,
+				'msg'     => __( 'Invalid form name or form nonce', 'wp-full-stripe-free' )
+			);
 		}
 
-		//correct way to return JS results in wordpress
 		header( "Content-Type: application/json" );
 		echo json_encode( apply_filters( 'fullstripe_payment_charge_return_message', $return ) );
 		exit;
 	}
+
 }

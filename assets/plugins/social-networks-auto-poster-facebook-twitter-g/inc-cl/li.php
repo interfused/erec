@@ -50,7 +50,7 @@ if (!class_exists("nxs_snapClassLI")) { class nxs_snapClassLI extends nxs_snapCl
       $gGet = $_GET; unset($gGet['code']); unset($gGet['state']); unset($gGet['post_type']); unset($gGet['activated']); unset($gGet['stylesheet']);  $sturl = explode('?',$nxs_snapSetPgURL); $nxs_snapSetPgURL = $sturl[0].((!empty($gGet))?'?'.http_build_query($gGet):'');       
       $nto = $this->nt[$ii]; $wprg = array();  $wprg['sslverify'] = false;
       if (isset($nto['appKey'])){ echo "-="; prr($nto);// die();
-        $tknURL = 'https://www.linkedin.com/uas/oauth2/accessToken?grant_type=authorization_code&code='.$at.'&redirect_uri='.urlencode($nxs_snapSetPgURL).'&client_id='.$nto['appKey'].'&client_secret='.$nto['appSec'];         
+        $tknURL = 'https://www.linkedin.com/uas/oauth2/accessToken?grant_type=authorization_code&code='.$at.'&redirect_uri='.urlencode($nxs_snapSetPgURL).'&client_id='.nxs_gak($nto['appKey']).'&client_secret='.nxs_gas($nto['appSec']);
         $response  = nxs_remote_post($tknURL, $wprg); prr($tknURL);      
         if((is_object($response)&&(isset($response->errors)))){ prr($response); die('</div></div>'); }
         if (is_array($response)&& stripos($response['body'],'"error":')!==false){ prr($response['body']); prr(json_decode($response['body'],true)); die('</div></div>'); }
@@ -65,14 +65,14 @@ if (!class_exists("nxs_snapClassLI")) { class nxs_snapClassLI extends nxs_snapCl
           $gURL = 'https://api.linkedin.com/v1/companies?format=json&is-company-admin=true&oauth2_access_token='.$nto['accessToken']; $response = nxs_remote_get( $gURL, nxs_mkRemOptsArr(nxs_getNXSHeaders()) );  
           prr($response);  $userPages = json_decode($response['body'], true); prr($userPages, 'USER PAGES:'); $pgs = '';
           if (!empty($userPages['values'])) foreach ($userPages['values'] as $up) $pgs .= '<option '.($up['id']==$nto['pgID'] ? 'selected="selected"':'').' value="'.$up['id'].'">'.$up['name'].' ('.$up['id'].')</option>';
-          $opVal = array(); $opNm = 'nxs_snap_li_'.sha1('nxs_snap_li'.$nto['liUserID'].$nto['appKey']); $opVal['pgList'] = $pgs; nxs_saveOption($opNm, $opVal); 
+          $opVal = array(); $opNm = 'nxs_snap_li_'.sha1('nxs_snap_li'.$nto['liUserID'].nxs_gak($nto['appKey'])); $opVal['pgList'] = $pgs; nxs_saveOption($opNm, $opVal); 
           echo '<div style="text-align:center;color:green; font-weight: bold; font-size:20px;"> ALL OK. You have been authorized.</div><script type="text/javascript">setTimeout(function(){ window.location = "'.$nxs_snapSetPgURL.'"; }, 1000);</script>';
         }        
       } die('</div></div>');
     }
     // V1 Auth
     if ( isset($_GET['auth']) && $_GET['auth']=='li'){ $this->showAuthTop(); require_once('apis/liOAuth.php'); $options = $this->nt[$_GET['acc']]; $ii = $_GET['acc'];
-       $api_key = $options['appKey']; $api_secret = $options['appSec']; $callback_url = $nxs_snapSetPgURL."&auth=lia&acc=".$_GET['acc'];
+       $api_key = nxs_gak($options['appKey']); $api_secret = nxs_gas($options['appSec']); $callback_url = $nxs_snapSetPgURL."&auth=lia&acc=".$_GET['acc'];
        $li_oauth = new nsx_LinkedIn($api_key, $api_secret, $callback_url);  $request_token = $li_oauth->getRequestToken(); //echo "####"; prr($request_token); die();
        if (!is_object($request_token)) { echo "### LinkedIn Authorization Error:"; prr($request_token);
           if (is_string($request_token) && stripos($request_token, 'timestamp')!==false) { echo "Your Server Time: ".date('m/d/Y h:i:s a'); echo " Correct Time: ".date('m/d/Y h:i:s a', nxs_ntp_time('t1.timegps.net')); } die('</div></div>');
@@ -82,7 +82,7 @@ if (!class_exists("nxs_snapClassLI")) { class nxs_snapClassLI extends nxs_snapCl
           default: echo '<br/><b style="color:red">Could not connect to LinkedIn. Refresh the page or try again later.</b>'; die('</div></div>');
        } die('</div></div>');
     }
-    if ( isset($_GET['auth']) && $_GET['auth']=='lia'){ $this->showAuthTop();  require_once('apis/liOAuth.php'); $ii = $_GET['acc']; $options = $this->nt[$_GET['acc']]; $api_key = $options['appKey']; $api_secret = $options['appSec'];
+    if ( isset($_GET['auth']) && $_GET['auth']=='lia'){ $this->showAuthTop();  require_once('apis/liOAuth.php'); $ii = $_GET['acc']; $options = $this->nt[$_GET['acc']]; $api_key = nxs_gak($options['appKey']); $api_secret = nxs_gas($options['appSec']);
        $li_oauth = new nsx_LinkedIn($api_key, $api_secret); $li_oauth->request_token = new nsx_trOAuthConsumer($options['oAuthToken'], $options['oAuthTokenSecret'], 1);              
        $li_oauth->oauth_verifier = $_REQUEST['oauth_verifier'];  $li_oauth->getAccessToken($_REQUEST['oauth_verifier']); $options['oAuthVerifier'] = $_REQUEST['oauth_verifier'];
        $options['accessToken'] = $li_oauth->access_token->key; $options['accessTokenSec'] = $li_oauth->access_token->secret;                            
@@ -166,8 +166,8 @@ if (!class_exists("nxs_snapClassLI")) { class nxs_snapClassLI extends nxs_snapCl
       </div>
       
       <?php if (empty($options['liUserID'])) $options['liUserID'] = ''; //## List of Pages
-    $opNm = 'nxs_snap_li_'.sha1('nxs_snap_li'.$options['liUserID'].$options['appKey']); $opVal = nxs_getOption($opNm); 
-    if (empty($opVal)) { $tPST = (!empty($_POST))?$_POST:'';  $_POST['pgID'] = $options['pgID']; $_POST['u'] = $options['liUserID']; $_POST['p'] = $options['appKey']; $_POST['ii'] = $ii; $ntw[$nt][$ii]=$options; $opVal = $this->getListOfPagesLIV2($ntw); $_POST = $tPST; }
+    $opNm = 'nxs_snap_li_'.sha1('nxs_snap_li'.$options['liUserID'].nxs_gak($options['appKey'])); $opVal = nxs_getOption($opNm); 
+    if (empty($opVal)) { $tPST = (!empty($_POST))?$_POST:'';  $_POST['pgID'] = $options['pgID']; $_POST['u'] = $options['liUserID']; $_POST['p'] = nxs_gak($options['appKey']); $_POST['ii'] = $ii; $ntw[$nt][$ii]=$options; $opVal = $this->getListOfPagesLIV2($ntw); $_POST = $tPST; }
     if (!empty($opVal) & !is_array($opVal)) $options['uMsg'] = $opVal; else { if (!empty($opVal) & is_array($opVal)) $options = array_merge($options, $opVal); } 
   ?><br/ ><div style="width:100%;"><b><?php _e('Where to Post', 'nxs_snap'); ?></b>&nbsp;(<?php _e('Please select your Profile or Company Page', 'nxs_snap'); ?>)</div>
     <div id="nxsLIInfoDiv<?php echo $ii; ?>" style="<?php echo empty($options['accessToken'])?'display:none;':''; ?>">

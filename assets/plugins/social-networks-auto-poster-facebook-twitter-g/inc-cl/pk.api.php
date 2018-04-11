@@ -19,7 +19,7 @@ if (!class_exists("nxs_class_SNAP_PK")) { class nxs_class_SNAP_PK {
       //## Format
       if (!empty($message['pText'])) $msg = $message['pText']; else $msg = nxs_doFormatMsg($options['msgFormat'], $message);       
       //## Post    
-      require_once('apis/plurkOAuth.php'); $consumer_key = $options['appKey']; $consumer_secret = $options['appSec'];
+      require_once('apis/plurkOAuth.php'); $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']);
       $tum_oauth = new wpPlurkOAuth($consumer_key, $consumer_secret, $options['accessToken'], $options['accessTokenSec']); 
       $pkURL = trim(str_ireplace('http://', '', $options['pkURL'])); if (substr($pkURL,-1)=='/') $pkURL = substr($pkURL,0,-1);     
       if ($options['pkCat']=='') $options['pkCat'] = ':';    

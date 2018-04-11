@@ -1,9 +1,9 @@
 <?php
 /*
- Plugin Name: Facebook Auto Publish
+ Plugin Name: WP Facebook Auto Publish
 Plugin URI: https://xyzscripts.com/wordpress-plugins/facebook-auto-publish/
 Description:   Publish posts automatically from your blog to Facebook social media. You can publish your posts to Facebook as simple text message, text message with image or as attached link to your blog. The plugin supports filtering posts by custom post-types and categories.
-Version: 1.4.7
+Version: 1.4.8
 Author: xyzscripts.com
 Author URI: https://xyzscripts.com/
 License: GPLv2 or later
@@ -65,7 +65,7 @@ if(get_option('xyz_credit_link')=="fbap"){
 
 }
 function xyz_fbap_credit() {
-	$content = '<div style="clear:both;width:100%;text-align:center; font-size:11px; "><a target="_blank" title="Facebook Auto Publish" href="https://xyzscripts.com/wordpress-plugins/facebook-auto-publish/details" >Facebook Auto Publish</a> Powered By : <a target="_blank" title="PHP Scripts & Programs" href="http://www.xyzscripts.com" >XYZScripts.com</a></div>';
+	$content = '<div style="clear:both;width:100%;text-align:center; font-size:11px; "><a target="_blank" title="WP Facebook Auto Publish" href="https://xyzscripts.com/wordpress-plugins/facebook-auto-publish/details" >WP Facebook Auto Publish</a> Powered By : <a target="_blank" title="PHP Scripts & Programs" href="http://www.xyzscripts.com" >XYZScripts.com</a></div>';
 	echo $content;
 }
 if(!function_exists('get_post_thumbnail_id'))

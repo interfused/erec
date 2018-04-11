@@ -23,7 +23,7 @@ if (!class_exists("nxs_class_SNAP_TR")) { class nxs_class_SNAP_TR {
       
       //## Post    
       if (empty($options['pgID'])) { $options['trURL'] = trim(str_ireplace('http://', '', $options['trURL'])); if (substr($options['trURL'],-1)=='/') $options['pgID'] = substr($options['trURL'], 0, -1);}
-      require_once('apis/trOAuth.php'); $consumer_key = $options['appKey']; $consumer_secret = $options['appSec'];
+      require_once('apis/trOAuth.php'); $consumer_key = nxs_gak($options['appKey']); $consumer_secret = nxs_gas($options['appSec']);
       $tum_oauth = new TumblrOAuth($consumer_key, $consumer_secret, $options['accessToken'], $options['accessTokenSec']); //prr($options);    
       $postArr = array('tags'=>$message['tags'], 'date'=>$message['postDate']); if ($options['fillSrcURL']=='1') $postArr['source_url'] = $message['url'];  
       if (isset($message['imageURL'])) $imgURL = trim(nxs_getImgfrOpt($message['imageURL'], $options['imgSize'])); else $imgURL = '';

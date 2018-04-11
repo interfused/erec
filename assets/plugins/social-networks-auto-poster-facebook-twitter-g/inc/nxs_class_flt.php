@@ -19,7 +19,7 @@ class nxs_Filters {
         if($od || ( !empty($screen) && ( stripos($screen->id,'NextScripts_SNAP')!==false || stripos($screen->id,'nxssnap')!==false || stripos($screen->id, '_page_nxs')!==false ))) { 
             $builtin_types     = get_post_types( array( 'public' => true, '_builtin' => true ) );
             $custom_types      = get_post_types( array( 'public' => true, '_builtin' => false ) );            
-            self::$posts_types = array_merge( $builtin_types, $custom_types ); self::$posts_types[] = 'nxs_qp';
+            self::$posts_types = array_merge( $builtin_types, $custom_types ); self::$posts_types[] = 'nxs_qp'; self::$posts_types[] = 'BuddyPress_Activity';
             natsort( self::$posts_types );
             
             $builtin_taxonomies       = get_taxonomies( array( 'public' => true, '_builtin' => true ) );
@@ -591,9 +591,9 @@ class nxs_Filters {
        echo '<h4 onclick="jQuery(\'#nxs_sec_postsPages\').toggle();"; style="cursor:pointer; background-image: url(\''.NXS_PLURL.'img/icons/post24.png\');background-repeat: no-repeat; padding-top: 2px; padding-left: 28px; height:24px;">'. 
          __( 'Exact Posts and Pages', 'social-networks-auto-poster-facebook-twitter-g' ) .'&nbsp;&nbsp;&gt;&gt; </h4><div id="nxs_sec_postsPages" class="nxsLftPad" style="display:'.($isVis?'block':'none').';">';
         
-       $post_names = array(); //$users = get_users();     //   prr($users); //## Not Good when we have a lot of subscribers.
-       global $wpdb; $posts = $wpdb->get_results("SELECT ID, post_title FROM $wpdb->posts WHERE 1=1 ORDER BY post_title ASC LIMIT 50"); //prr($users);
-        
+        $post_names = array(); //$users = get_users();     //   prr($users); //## Not Good when we have a lot of subscribers.
+        global $wpdb; // $posts = $wpdb->get_results("SELECT ID, post_title FROM $wpdb->posts WHERE 1=1 ORDER BY post_title ASC LIMIT 500"); //prr($users);       
+        $posts = get_posts( array('orderby'=>'title', 'post_status' => array( 'pending', 'publish', 'future' ), 'post_type' =>  'any', 'posts_per_page'=>100, 'post__in' => (!empty($metaSettings['nxs_post_ids'])?$metaSettings['nxs_post_ids']:array( ))) );          
         if( $posts ) foreach( $posts as $post )  $post_names[$post->ID] = "[ID: ".$post->ID."] ".$post->post_title;
         if( !empty( $post_names ) ) {            
             echo '<div><label class="field_title" for="'. 'nxs_post_ids">'. __( 'Post/Page/Custom Post Type', 'social-networks-auto-poster-facebook-twitter-g' ) . ':</label>&nbsp;&nbsp;<span class="description">'. __( '' ) .'</span><br/>';
