@@ -36,23 +36,25 @@ if ($result->num_rows > 0) {
           
         </a>
         <div class="contact_info">
-          <p class="userid">USER ID: <span id="userid"><?php echo $row["id"]; ?></span></p>
-          <p class="email"><a href="mailto:<?php echo $row["email"]; ?>"><?php echo $row["email"]; ?></a></p>
-          <p class="phone">P: <?php echo $row['phone'];?></p>
+          <div id="overview">
+            <p class="userid">USER ID: <span id="userid"><?php echo $row["id"]; ?></span></p>
+            <p class="email"><a href="mailto:<?php echo $row["email"]; ?>"><?php echo $row["email"]; ?></a></p>
+            <p class="phone">P: <?php echo $row['phone'];?></p>
 
-          <p class="industry">Industry: <?php echo $row['industry'];?></p>
-          <p class="contact_source">Contact Source: <?php echo $row['contact_source'];?></p>
+            <p class="industry">Industry: <?php echo $row['industry'];?></p>
+            <p class="contact_source">Contact Source: <?php echo $row['contact_source'];?></p>
 
-          <p class="zip">Zip: <?php echo $row['zip'];?></p>
+            <p class="zip">Zip: <?php echo $row['zip'];?></p>
 
-          <p class="desired_salary_range">Desired Salary Range: <?php echo $row['desired_salary_range'];?></p>
-          
-          <?php if($row["resume_location"]){ ?>
-          <p class="res"><a href="<?php echo $row["resume_location"]; ?>" class="download"><i class="fa fa-download"></i> download resume</a></p>
-          <?php }else{ ?>
-          <p class="res not_available"><em>Resume not uploaded</em></p>
-          <?php }//endif ?>
-          
+            <p class="desired_salary_range">Desired Salary Range: <?php echo $row['desired_salary_range'];?></p>
+            
+            <?php if($row["resume_location"]){ ?>
+            <p class="res"><a href="<?php echo $row["resume_location"]; ?>" class="download"><i class="fa fa-download"></i> download resume</a></p>
+            <?php }else{ ?>
+            <p class="res not_available"><em>Resume not uploaded</em></p>
+            <?php }//endif ?>
+          </div>
+            
           <div id="q_and_a">
             <h3>Questions and Answers</h3>
             <?php
@@ -116,10 +118,6 @@ if ($result->num_rows > 0) {
       }else{
         console.log('empty');
         $('.user_list li').show();
-      }
-      
-      
-      
-      
+      }      
     })
   </script>
