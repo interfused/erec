@@ -1,15 +1,5 @@
 <?php
-function temp_er_add_leads($url, $myvars){
-	
-	$ch = curl_init( $url );
-	curl_setopt( $ch, CURLOPT_POST, 1);
-	curl_setopt( $ch, CURLOPT_POSTFIELDS, $myvars);
-	curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
-	curl_setopt( $ch, CURLOPT_HEADER, 0);
-	curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
 
-	$response = curl_exec( $ch );
-}
 /*login user */
 function ey_login__user(){
 
@@ -187,10 +177,10 @@ function ey_seeker_user(){
 	    $info['first_name'] 		= $_POST['fname'];
 	    $info['last_name']			= $_POST['lname'];
 	    $info['display_name']		= $_POST['fname'] .''.$_POST['lname'];
-		$info['nickname']			= $_POST['fname'];
+			$info['nickname']			= $_POST['fname'];
 	    $info['role']				= 'candidate';
 	    
-	   if(email_exists( $_POST['email'] )){
+	    if(email_exists( $_POST['email'] )){
 	    	$data = json_encode(array('createuser'=>false, 'message'=>__('It seems like your request is already in process. We are reviewing your details and will respond you shortly.')));
 
 	    }else{
@@ -269,16 +259,7 @@ function ey_seeker_user(){
 				//ADD TO SENDINBLUE LIST
 		    $mailin->create_update_user($data);
 		    
-		    //TEMPORARY ADD TO SEEKERS LEADS LIST
-		    $url = 'http://eyerecruit.com/__lists/seeker-leads/add2.php';
-				$myvars = 'first_name=' . $_POST['fname'] 
-									. '&last_name=' . $_POST['lname']
-									. '&email=' . $_POST['email']
-									. '&phone=' . $_POST['cell_phone']
-									. '&contact_source=EyeRecruit+Seeker+PreLaunch' ;
-				
-				temp_er_add_leads($url, $myvars);
-		    
+		  
 		    //EMAIL NOTIFICATIONS
 
 		    $subject 					= get_option('founder_options_jobseeker')['jobseeker_subject'];
@@ -307,10 +288,53 @@ function ey_seeker_user(){
         
 				
 		       $data = json_encode(array('createuser'=>true, 'message'=>__('Thank you for connecting us we will contact to you soon')));
+		       
+		       //TEMPORARY ADD TO SEEKERS LEADS LIST
+		       $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD,DB_NAME);
+
+		       if ($conn->connect_error) {
+    				//die("Connection failed: " . $conn->connect_error);
+		       	$data_sib = array('error' => 'DB connection failed');
+						//    throw new Exception('DB connection!');
+		       }else{
+    				//insert record
+		       	$last_name = addslashes($_POST['lname']);
+		       	$first_name = addslashes($_POST['fname']);
+
+		       	$conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD,DB_NAME);
+		       	$charset = 'utf8mb4';
+		       	$dsn = "mysql:host=".DB_HOST.";dbname=".DB_NAME.";charset=$charset";
+		       	$opt = [
+		       		PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+		       		PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+		       		PDO::ATTR_EMULATE_PREPARES   => false,
+		       	];
+		       	$pdo = new PDO($dsn, DB_USER, DB_PASSWORD, $opt);
+		       	
+		       	$sql = "INSERT INTO `__leads-seeker` ( first_name, last_name, email, phone) VALUES (?,?,?,?)";
+		       	
+		       	if (
+		       		$pdo->prepare($sql)->execute([$first_name, $last_name, $_POST['email'], $_POST['cell_phone'] ])
+		       	) {
+		       		$tmp = 'yes';
+
+					    //  echo "New record created successfully";
+		       	} else {
+      				//die( "Error: " . $sql . "<br>" . $conn->error);
+		       		$data_sib = array('error' => "Error: " . $sql . "<br>"  );
+		       	}
+
+		       }
+
+		       $conn->close();
+		       ////END TEMPORARY
+		       
 		    }
 	   }
 
-	 echo $data; die();
+	 echo $data;
+	 
+	 die();
 
     }
 
